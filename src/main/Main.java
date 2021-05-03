@@ -6,9 +6,9 @@ public class Main {
 
 	public static void main(String[] args) {
 		CustomerListImpl customerList = new CustomerListImpl();
-		customerList.insert(new Customer("¼ÒÇÏ·Î38", "5kso3", "±è¼ÒÃ¶", "01071300465"));
+		customerList.insert(new Customer("ê²½ê¸°ë„ ê´‘ëª…ì‹œ", "5kso3", "ê¹€ì†Œì² ", "01071300465"));
 		System.out.println(customerList.select("5kso3").getName());
-		customerList.updateNameById("5kso3", "±è¹ÎÅÂ");
+		customerList.updateNameById("5kso3", "ê¹€ë¯¼íƒœ");
 		System.out.println(customerList.delete("5kso3"));
 		System.out.println(customerList.delete("5kso3"));
 	}

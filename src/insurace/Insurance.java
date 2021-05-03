@@ -7,9 +7,9 @@ public class Insurance {
 	private boolean confirmedStatus;
 	private String insuranceId;
 	private String name;
-	private float[] rateOfAge; // index[0 : ¿µÀ¯¾Æ/ 1 : 10´ë/ 2 : 20´ë/ 3 : 30´ë/ 4 : 40´ë/ 5 : 50´ë/ 6 : ³ë³âÃş]
-	private float[] rateOfGender; // index[0 : ³²¼º/ 1 : ¿©¼º]
-	private float[] rateOfJob; // index[0 : Á÷ÀåÀÎ/ 1 : ¿îÀü±â»ç/ 2 : °øÀå ³ëµ¿Á÷/ 3 : ÇĞ»ı/ 4 : ±³»ç(¼ö)Á÷/ 5 : ±ºÀÎ/ 6 : ±âÅ¸]
+	private float[] rateOfAge; // index[0 : ì˜ìœ ì•„/ 1 : 10ëŒ€/ 2 : 20ëŒ€/ 3 : 30ëŒ€/ 4 : 40ëŒ€/ 5 : 50ëŒ€/ 6 : ë…¸ë…„ì¸µ]
+	private float[] rateOfGender; // index[0 : ë‚¨ì„±/ 1 : ì—¬ì„±]
+	private float[] rateOfJob; // index[0 : ì§ì¥ì¸/ 1 : ìš´ì „ê¸°ì‚¬/ 2 : ê³µì¥ ë…¸ë™ì§/ 3 : í•™ìƒ/ 4 : êµì‚¬(ìˆ˜)ì§/ 5 : êµ°ì¸/ 6 : ê¸°íƒ€]
 	private int specialContractFee;
 	private enum type{};
 	private int warrantyPeriod;
