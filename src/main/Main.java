@@ -11,6 +11,5 @@ public class Main {
 		customerList.updateNameById("5kso3", "김민태");
 		System.out.println(customerList.delete("majormin"));
 		System.out.println(customerList.delete("5kso3"));
-		System.out.println("홍영석 바보 멍청이");
 	}
 }
