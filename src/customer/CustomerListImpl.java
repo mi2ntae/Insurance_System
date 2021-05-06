@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class CustomerListImpl implements CustomerList {
 
-	// Components
+	// Components -> 교수님에게 질문
 	private ArrayList<Customer> CustomerList;
 	
 	// Composition Class
@@ -14,30 +14,31 @@ public class CustomerListImpl implements CustomerList {
 	public CustomerListImpl() {
 		this.CustomerList = new ArrayList<Customer>();
 	}
-
-	public void finalize() throws Throwable {
-
-	}
-
-	public boolean insert(Customer Customer) {
-		if (this.CustomerList.add(Customer)) {
+	
+	// getters & setters
+	public ArrayList<Customer> getCustomerList() {return CustomerList;}
+	public void setCustomerList(ArrayList<Customer> customerList) {CustomerList = customerList;}
+	
+	// Methods
+	public boolean add(Customer customer) {
+		if (this.CustomerList.add(customer)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public Customer select(String CustomerId) {
+	public Customer select(String customerId) {
 		for (Customer customer : this.CustomerList) {
-			if (customer.getCustomerId().equals(CustomerId)) {
+			if (customer.getCustomerId().equals(customerId)) {
 				return customer;
 			}
 		}
 		return null;
 	}
 
-	public boolean delete(String CustomerId) {
-		int index = this.getCustomerIndex(CustomerId);
+	public boolean delete(String customerId) {
+		int index = this.getCustomerIndex(customerId);
 		if(index > -1) {
 			this.CustomerList.remove(index);
 			return true;
@@ -47,20 +48,13 @@ public class CustomerListImpl implements CustomerList {
 		
 	}
 
-	public void updateNameById(String CustomerId, String data) {
-		int index = this.getCustomerIndex(CustomerId);
+	public void updateNameById(String customerId, String data) {
+		int index = this.getCustomerIndex(customerId);
 		if(index > -1) {
 			this.CustomerList.get(index).setName(data);
 		}
 	}
 
-	public ArrayList<Customer> getCustomerList() {
-		return CustomerList;
-	}
-
-	public void setCustomerList(ArrayList<Customer> customerList) {
-		CustomerList = customerList;
-	}
 
 	private int getCustomerIndex(String CustomerId) {
 		for (int i = 0; i < this.CustomerList.size(); i++) {
