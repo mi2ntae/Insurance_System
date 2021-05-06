@@ -16,7 +16,7 @@ public class InterviewListImpl implements InterviewList {
 	public void setinterviewList(ArrayList<Interview> interviewList) {this.interviewList = interviewList;}
 
 	// public Method
-	public boolean add(Interview interview) {
+	public boolean insert(Interview interview) {
 		if (this.interviewList.add(interview)) {
 			return true;
 		} else {
@@ -33,7 +33,7 @@ public class InterviewListImpl implements InterviewList {
 		return null;
 	}
 
-	public boolean remove(String interviewId) {
+	public boolean delete(String interviewId) {
 		int deleteIndex = getInterviewIndex(interviewId);
 		if(deleteIndex != -1) {
 			this.interviewList.remove(deleteIndex);

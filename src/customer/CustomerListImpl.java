@@ -20,7 +20,7 @@ public class CustomerListImpl implements CustomerList {
 	public void setCustomerList(ArrayList<Customer> customerList) {CustomerList = customerList;}
 	
 	// Methods
-	public boolean add(Customer customer) {
+	public boolean insert(Customer customer) {
 		if (this.CustomerList.add(customer)) {
 			return true;
 		} else {

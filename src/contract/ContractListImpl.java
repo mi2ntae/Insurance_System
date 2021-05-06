@@ -16,7 +16,7 @@ public class ContractListImpl implements ContractList {
 	public void setContractList(ArrayList<Contract> contractList) {this.contractList = contractList;}
 
 	// public Method
-	public boolean add(Contract contract) {
+	public boolean insert(Contract contract) {
 		if (this.contractList.add(contract)) {
 			return true;
 		} else {
@@ -33,7 +33,7 @@ public class ContractListImpl implements ContractList {
 		return null;
 	}
 
-	public boolean remove(String contractId) {
+	public boolean delete(String contractId) {
 		int deleteIndex = getContractIndex(contractId);
 		if(deleteIndex != -1) {
 			this.contractList.remove(deleteIndex);

@@ -16,14 +16,14 @@ public class AccidentListImpl implements AccidentList {
 	public void setAccidentList(ArrayList<Accident> accidentList) {this.accidentList = accidentList;}
 
 	// public Method
-	public boolean add(Accident accident) {
+	public boolean insert(Accident accident) {
 		if (this.accidentList.add(accident)) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-
+	
 	public Accident search(String accidentId) {
 		for (Accident accident : this.accidentList) {
 			if (accident.getAccidentId().equals(accidentId)) {
@@ -33,7 +33,7 @@ public class AccidentListImpl implements AccidentList {
 		return null;
 	}
 
-	public boolean remove(String accidentId) {
+	public boolean delete(String accidentId) {
 		int deleteIndex = getAccidentIndex(accidentId);
 		if(deleteIndex != -1) {
 			this.accidentList.remove(deleteIndex);

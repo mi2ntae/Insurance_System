@@ -58,7 +58,7 @@ public class Contract {
 		this.customerId = customerId;
 		this.insuranceId = insuranceId;
 	}
-
+//
 //	public boolean payFee(enum monthOfPayment){
 //		return false;
 //	}
