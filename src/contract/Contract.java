@@ -3,38 +3,37 @@ package contract;
 import insurace.Insurance;
 
 public class Contract {
-
 	// Attributes
-	private int contractId;
-	private int customerId;
+	private String contractId;
+	private String customerId;
+	private String insuranceId;
 	private boolean effectiveness;
-	private int insuranceId;
 	private int lifespanOfContract;
 	private int paidFee;
 	private int salespersonId;
 	private int unpaidPeriod;
 	
 	// Composition Class
-	public Insurance m_Insurance;
-	public Accident m_Accident;
+	public Insurance insurance;
+	public Accident accident;
 
 	// Constructor
 	public Contract(){
-
+		
 	}
 	
-	// getters & setters
-	public int getContractId() {return contractId;}
-	public void setContractId(int contractId) {this.contractId = contractId;}
+	// Getters&Setters
+	public String getContractId() {return contractId;}
+	public void setContractId(String contractId) {this.contractId = contractId;}
 
-	public int getCustomerId() {return customerId;}
-	public void setCustomerId(int customerId) {this.customerId = customerId;}
+	public String getCustomerId() {return customerId;}
+	public void setCustomerId(String customerId) {this.customerId = customerId;}
 
 	public boolean isEffectiveness() {return effectiveness;}
 	public void setEffectiveness(boolean effectiveness) {this.effectiveness = effectiveness;}
 
-	public int getInsuranceId() {return insuranceId;}
-	public void setInsuranceId(int insuranceId) {this.insuranceId = insuranceId;}
+	public String getInsuranceId() {return insuranceId;}
+	public void setInsuranceId(String insuranceId) {this.insuranceId = insuranceId;}
 
 	public int getLifespanOfContract() {return lifespanOfContract;}
 	public void setLifespanOfContract(int lifespanOfContract) {this.lifespanOfContract = lifespanOfContract;}
@@ -48,43 +47,36 @@ public class Contract {
 	public int getUnpaidPeriod() {return unpaidPeriod;}
 	public void setUnpaidPeriod(int unpaidPeriod) {this.unpaidPeriod = unpaidPeriod;}
 
-	public Insurance getM_Insurance() {return m_Insurance;}
-	public void setM_Insurance(Insurance m_Insurance) {this.m_Insurance = m_Insurance;}
+	public Insurance getInsurance() {return insurance;}
+	public void setInsurance(Insurance insurance) {this.insurance = insurance;}
 
-	public Accident getM_Accident() {return m_Accident;}
-	public void setM_Accident(Accident m_Accident) {this.m_Accident = m_Accident;}
+	public Accident getAccident() {return accident;}
+	public void setAccident(Accident accident) {this.accident = accident;}
 
-
-
-	public void finalize() throws Throwable {
-
+	// public Method
+	public void joinInsurance(String customerId, String insuranceId){
+		this.customerId = customerId;
+		this.insuranceId = insuranceId;
 	}
 
-	
-	public void joinInsurance(int customerId, int insuranceId){
-
-	}
-
-	
 //	public boolean payFee(enum monthOfPayment){
 //		return false;
 //	}
-
-	
+//
 //	public void reportAccident(String content, enum type){
 //
 //	}
-
-	public void requestEmergencyRescueService(String location){
-
-	}
-
-	public void requestInsuranceRecharter(){
-
-	}
-
-	public void requestInsuranceRevival(){
-
-	}
+//
+//	public void requestEmergencyRescueService(String location){
+//
+//	}
+//
+//	public void requestInsuranceRecharter(){
+//
+//	}
+//
+//	public void requestInsuranceRevival(){
+//
+//	}
 
 }

@@ -1,27 +1,22 @@
 package contract;
 
 public class Accident {
-
 	// Attributes
-	private int accidentId;
+	private String accidentId;
 	private int compensation;
 	private String content;
 	private int contractId;
 	private boolean handlingStatus;
-	private enum type{};
+//	private enum type{};
 
 	// Constructor
 	public Accident(){
 
 	}
-	
-	public void finalize() throws Throwable {
 
-	}
-
-	// getters & setters
-	public int getAccidentId() {return accidentId;}
-	public void setAccidentId(int accidentId) {this.accidentId = accidentId;}
+	// Getters&Setters
+	public String getAccidentId() {return accidentId;}
+	public void setAccidentId(String accidentId) {this.accidentId = accidentId;}
 
 	public int getCompensation() {return compensation;}
 	public void setCompensation(int compensation) {this.compensation = compensation;}
