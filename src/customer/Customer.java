@@ -1,7 +1,7 @@
 package customer;
 
-public class Customer {
 
+public class Customer {
 	// Attributes
 	private String address;
 	private String customerId;
@@ -9,9 +9,9 @@ public class Customer {
 	private String phoneNumber;
 	
 	// Composition Class
-	private Insurant m_Insurant;
+	private Insurant insurant;
+//	private Contract contract;
 	//private Salesperson m_Salesperson;
-	//private Contract m_Contract;
 
 	// Constructor
 	public Customer(String address, String customerId, String name, String phoneNumber){
@@ -52,11 +52,6 @@ public class Customer {
 	}
 
 	public void writeSurvey(){
-
-	}
-	
-
-	public void finalize() throws Throwable {
 
 	}
 }
