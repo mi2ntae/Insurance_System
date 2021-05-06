@@ -11,7 +11,7 @@ public class AccidentListImpl implements AccidentList {
 		this.accidentList = new ArrayList<Accident>();
 	}
 
-	// Gettes&Setters
+	// Getters&Setters
 	public ArrayList<Accident> getAccidentList() {return accidentList;}
 	public void setAccidentList(ArrayList<Accident> accidentList) {this.accidentList = accidentList;}
 
@@ -44,10 +44,10 @@ public class AccidentListImpl implements AccidentList {
 		
 	}
 
-	public void updateContentById(String accidentId, String name) {
+	public void updateContentById(String accidentId, String content) {
 		int updateIndex = getAccidentIndex(accidentId);
 		if(updateIndex != -1) {
-			this.accidentList.get(updateIndex).setContent(name);
+			this.accidentList.get(updateIndex).setContent(content);
 		}
 	}
 	
