@@ -9,7 +9,7 @@ public class Insurant {
 	private int accidentHistory;
 	private String address;
 	private int age;
-	private int insurantId;
+	private String insurantId;
 	private String name;
 	private String phoneNumber;
 	private int postedPriceOfStructure;
@@ -33,8 +33,8 @@ public class Insurant {
 	public int getAge() {return age;}
 	public void setAge(int age) {this.age = age;}
 
-	public int getInsurantId() {return insurantId;}
-	public void setInsurantId(int insurantId) {this.insurantId = insurantId;}
+	public String getInsurantId() {return insurantId;}
+	public void setInsurantId(String insurantId) {this.insurantId = insurantId;}
 
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
