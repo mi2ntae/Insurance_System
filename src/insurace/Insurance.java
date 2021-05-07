@@ -1,6 +1,6 @@
 package insurace;
 
-public class Insurance {
+public abstract class Insurance {
 
 	// Attributes
 	private int basicFee;
@@ -11,16 +11,16 @@ public class Insurance {
 	private float[] rateOfGender; // index[0 : 남성/ 1 : 여성]
 	private float[] rateOfJob; // index[0 : 직장인/ 1 : 운전기사/ 2 : 공장 노동직/ 3 : 학생/ 4 : 교사(수)직/ 5 : 군인/ 6 : 기타]
 	private int specialContractFee;
-	private enum type{};
 	private int warrantyPeriod;
 	
 	// Composition Class
-	public membershipCondition m_membershipCondition;
-	public GuaranteePlan m_GuaranteePlan;
+	private MembershipCondition membershipCondition;
+	private GuaranteePlan guaranteePlan;
 
 	// Constructor
 	public Insurance(){
-
+		this.membershipCondition = new MembershipCondition();
+		this.guaranteePlan = new GuaranteePlan();
 	}
 	
 	// getters & setters
@@ -51,18 +51,16 @@ public class Insurance {
 	public int getWarrantyPeriod() {return warrantyPeriod;}
 	public void setWarrantyPeriod(int warrantyPeriod) {this.warrantyPeriod = warrantyPeriod;}
 
-	public membershipCondition getM_membershipCondition() {return m_membershipCondition;}
-	public void setM_membershipCondition(membershipCondition m_membershipCondition) {this.m_membershipCondition = m_membershipCondition;}
+	public MembershipCondition getM_membershipCondition() {return membershipCondition;}
+	public void setM_membershipCondition(MembershipCondition m_membershipCondition) {this.membershipCondition = m_membershipCondition;}
 
-	public GuaranteePlan getM_GuaranteePlan() {return m_GuaranteePlan;}
-	public void setM_GuaranteePlan(GuaranteePlan m_GuaranteePlan) {this.m_GuaranteePlan = m_GuaranteePlan;}
+	public GuaranteePlan getM_GuaranteePlan() {return guaranteePlan;}
+	public void setM_GuaranteePlan(GuaranteePlan m_GuaranteePlan) {this.guaranteePlan = m_GuaranteePlan;}
 	
 	public void finalize() throws Throwable {
 	}
 	
 	// Methods
-	public int calculateFee(int insurantId){
-		return 0;
-	}
+	abstract public int calculateFee(int insurantId);
 
 }

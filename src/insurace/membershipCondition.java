@@ -1,14 +1,10 @@
 package insurace;
 
-public class membershipCondition {
+public class MembershipCondition {
 
-	// Attributes
-	private enum age{};
-	private enum gender{};
-	private enum job{};
 
 	// Constructor
-	public membershipCondition(){
+	public MembershipCondition(){
 
 	}
 	

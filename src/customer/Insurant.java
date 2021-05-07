@@ -1,7 +1,6 @@
 package customer;
-enum gender {}
-enum job {}
-enum rankOfCar {}
+
+import Global.Constants;
 
 public class Insurant {
 
@@ -20,7 +19,7 @@ public class Insurant {
 
 	// Constructor
 	public Insurant(){
-
+		
 	}
 
 	// getters & setters	
