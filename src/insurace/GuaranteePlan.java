@@ -4,7 +4,6 @@ public class GuaranteePlan {
 
 	// Attributes
 	private int compensation;
-	private enum guaranteeItem{};
 
 	// Constructor
 	public GuaranteePlan(){

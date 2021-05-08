@@ -7,8 +7,7 @@ public class Accident {
 	private String content;
 	private int contractId;
 	private boolean handlingStatus;
-//	private enum type{};
-
+	
 	// Constructor
 	public Accident(){
 
