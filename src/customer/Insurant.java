@@ -20,7 +20,7 @@ public class Insurant {
 	private eInsurantRankOfCar rankOfCar;
 	
 	// Composition Class
-	public FamilyMedicalHistory m_FamilyMedicalHistory;
+	public FamilyMedicalHistory familyMedicalHistory;
 
 	// Constructor
 	public Insurant(){
@@ -52,9 +52,6 @@ public class Insurant {
 	public int getUsageOfStructure() {return usageOfStructure;}
 	public void setUsageOfStructure(int usageOfStructure) {this.usageOfStructure = usageOfStructure;}
 
-	public FamilyMedicalHistory getM_FamilyMedicalHistory() {return m_FamilyMedicalHistory;}
-	public void setM_FamilyMedicalHistory(FamilyMedicalHistory m_FamilyMedicalHistory) {this.m_FamilyMedicalHistory = m_FamilyMedicalHistory;}
-
 	public eInsurantGender getGender() {return gender;}
 	public void setGender(eInsurantGender gender) {this.gender = gender;}
 
@@ -64,9 +61,7 @@ public class Insurant {
 	public eInsurantRankOfCar getRankOfCar() {return rankOfCar;}
 	public void setRankOfCar(eInsurantRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
 
-	public void finalize() throws Throwable {
-
-	}
-
+	public FamilyMedicalHistory getFamilyMedicalHistory() {return familyMedicalHistory;}
+	public void setFamilyMedicalHistory(FamilyMedicalHistory familyMedicalHistory) {this.familyMedicalHistory = familyMedicalHistory;}
 	
 }

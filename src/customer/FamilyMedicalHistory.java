@@ -1,11 +1,11 @@
 package customer;
 
+import global.Constants.eFamilyMedicalDisease;
+
 public class FamilyMedicalHistory {
 
 	// Attributes
-	private int age;
-	private int disease;
-	private int gender;
+	private eFamilyMedicalDisease disease;
 	private int relationship;
 
 	// Constructor
@@ -13,8 +13,11 @@ public class FamilyMedicalHistory {
 
 	}
 
-	public void finalize() throws Throwable {
+	// getters % setters
+	public eFamilyMedicalDisease getDisease() {return disease;}
+	public void setDisease(eFamilyMedicalDisease disease) {this.disease = disease;}
 
-	}
-
+	public int getRelationship() {return relationship;}
+	public void setRelationship(int relationship) {this.relationship = relationship;}
+	
 }
