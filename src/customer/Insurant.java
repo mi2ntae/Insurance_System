@@ -3,6 +3,7 @@ package customer;
 import global.Constants.eInsurantGender;
 import global.Constants.eInsurantJob;
 import global.Constants.eInsurantRankOfCar;
+import global.Constants.eInsurantUsageOfStructure;
 
 public class Insurant {
 
@@ -13,8 +14,8 @@ public class Insurant {
 	private String insurantId;
 	private String name;
 	private String phoneNumber;
-	private int postedPriceOfStructure;
-	private int usageOfStructure;
+	private long postedPriceOfStructure;
+	private eInsurantUsageOfStructure usageOfStructure;
 	private eInsurantGender gender;
 	private eInsurantJob job;
 	private eInsurantRankOfCar rankOfCar;
@@ -46,14 +47,14 @@ public class Insurant {
 	public String getPhoneNumber() {return phoneNumber;}
 	public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
 
-	public int getPostedPriceOfStructure() {return postedPriceOfStructure;}
-	public void setPostedPriceOfStructure(int postedPriceOfStructure) {	this.postedPriceOfStructure = postedPriceOfStructure;}
-
-	public int getUsageOfStructure() {return usageOfStructure;}
-	public void setUsageOfStructure(int usageOfStructure) {this.usageOfStructure = usageOfStructure;}
+	public long getPostedPriceOfStructure() {return postedPriceOfStructure;}
+	public void setPostedPriceOfStructure(long postedPriceOfStructure) {this.postedPriceOfStructure = postedPriceOfStructure;}
 
 	public eInsurantGender getGender() {return gender;}
 	public void setGender(eInsurantGender gender) {this.gender = gender;}
+
+	public eInsurantUsageOfStructure getUsageOfStructure() {return usageOfStructure;}
+	public void setUsageOfStructure(eInsurantUsageOfStructure usageOfStructure) {this.usageOfStructure = usageOfStructure;}
 
 	public eInsurantJob getJob() {return job;}
 	public void setJob(eInsurantJob job) {this.job = job;}
