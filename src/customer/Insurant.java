@@ -1,6 +1,8 @@
 package customer;
 
-import global.Constants;
+import global.Constants.eInsurantGender;
+import global.Constants.eInsurantJob;
+import global.Constants.eInsurantRankOfCar;
 
 public class Insurant {
 
@@ -13,6 +15,9 @@ public class Insurant {
 	private String phoneNumber;
 	private int postedPriceOfStructure;
 	private int usageOfStructure;
+	private eInsurantGender gender;
+	private eInsurantJob job;
+	private eInsurantRankOfCar rankOfCar;
 	
 	// Composition Class
 	public FamilyMedicalHistory m_FamilyMedicalHistory;
@@ -50,7 +55,14 @@ public class Insurant {
 	public FamilyMedicalHistory getM_FamilyMedicalHistory() {return m_FamilyMedicalHistory;}
 	public void setM_FamilyMedicalHistory(FamilyMedicalHistory m_FamilyMedicalHistory) {this.m_FamilyMedicalHistory = m_FamilyMedicalHistory;}
 
+	public eInsurantGender getGender() {return gender;}
+	public void setGender(eInsurantGender gender) {this.gender = gender;}
 
+	public eInsurantJob getJob() {return job;}
+	public void setJob(eInsurantJob job) {this.job = job;}
+
+	public eInsurantRankOfCar getRankOfCar() {return rankOfCar;}
+	public void setRankOfCar(eInsurantRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
 
 	public void finalize() throws Throwable {
 
