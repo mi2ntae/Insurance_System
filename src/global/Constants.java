@@ -21,6 +21,10 @@ public class Constants {
 		house, study, factory, warehouse, office, publicFacility
 	}
 	
+	public static enum eInsurantRiskOfTripCountry{
+		safe, first, second, third
+	}
+	
 	public static enum eGuaranteePlanGuaranteeItem {
 
 	}
