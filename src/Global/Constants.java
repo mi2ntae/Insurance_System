@@ -1,35 +1,35 @@
 package global;
 
 public class Constants {
-	public enum eAccidentType {
+	public static enum eAccidentType {
 		actual, cancer, dental, driver, fire, trip;
 	}
 
-	public enum eInsurantGender {
+	public static enum eInsurantGender {
 		male, female;
 	}
-	public enum eInsurantJob {
-		officeWorker, driver, factoryWorder, student, teacher, soldier, etc
+	public static enum eInsurantJob {
+		officeWorker, driver, factoryWorker, student, teacher, soldier, etc
 	}
-	public enum eInsurantRankOfCar {
+	public static enum eInsurantRankOfCar {
 		high, middle, low;
 	}
 
-	public enum eGuaranteePlanGuaranteeItem {
+	public static enum eGuaranteePlanGuaranteeItem {
 
 	}
 	
-	public enum eInsuranceType {
+	public static enum eInsuranceType {
 		actualCostInsurance, cancerInsurance, dentalInsurance, driverInsurance, fireInsurance, tripInsurance;
 	}
 
-	public enum eMembershipConditionAge {
+	public static enum eMembershipConditionAge {
 		infant, teenager, twenty, thirty, forty, fifty, old;
 	}
-	public enum eMembershipConditionGender {
+	public static enum eMembershipConditionGender {
 		male, female;
 	}
-	public enum eMembershipConditionJob {
+	public static enum eMembershipConditionJob {
 		officeWorker, driver, FactoryWorder, student, teacher, soldier, etc
 	}
 }
