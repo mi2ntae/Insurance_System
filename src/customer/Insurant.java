@@ -1,6 +1,6 @@
 package customer;
 
-import Global.Constants;
+import global.Constants;
 
 public class Insurant {
 
