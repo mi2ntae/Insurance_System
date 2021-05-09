@@ -17,6 +17,10 @@ public class Constants {
 	public static enum eInsurantRankOfCar {
 		high, middle, low;
 	}
+	public static enum eInsurantUsageOfStructure{
+		house, study, factory, warehouse, office, publicFacility
+	}
+	
 	public static enum eGuaranteePlanGuaranteeItem {
 
 	}
