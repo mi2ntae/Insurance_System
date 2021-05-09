@@ -7,9 +7,9 @@ public abstract class Insurance {
 	private boolean confirmedStatus;
 	private String insuranceId;
 	private String name;
-	private float[] rateOfAge; // index[0 : 영유아/ 1 : 10대/ 2 : 20대/ 3 : 30대/ 4 : 40대/ 5 : 50대/ 6 : 노년층]
-	private float[] rateOfGender; // index[0 : 남성/ 1 : 여성]
-	private float[] rateOfJob; // index[0 : 직장인/ 1 : 운전기사/ 2 : 공장 노동직/ 3 : 학생/ 4 : 교사(수)직/ 5 : 군인/ 6 : 기타]
+	private double[] rateOfAge = {1.1, 1.0, 1.0, 1.1, 1.2, 1.3, 1.4}; // index[0 : 영유아/ 1 : 10대/ 2 : 20대/ 3 : 30대/ 4 : 40대/ 5 : 50대/ 6 : 노년층]
+	private double[] rateOfGender = {1.0, 1.1}; // index[0 : 남성/ 1 : 여성]
+	private double[] rateOfJob; // index[0 : 직장인/ 1 : 운전기사/ 2 : 공장 노동직/ 3 : 학생/ 4 : 교사(수)직/ 5 : 군인/ 6 : 기타]
 	private int specialContractFee;
 	private int warrantyPeriod;
 	
@@ -36,14 +36,14 @@ public abstract class Insurance {
 	public String getName() {return name;}
 	public void setName(String name) {this.name = name;}
 
-	public float[] getRateOfAge() {return rateOfAge;}
-	public void setRateOfAge(float[] rateOfAge) {this.rateOfAge = rateOfAge;}
+	public double[] getRateOfAge() {return rateOfAge;}
+	public void setRateOfAge(double[] rateOfAge) {this.rateOfAge = rateOfAge;}
 
-	public float[] getRateOfGender() {return rateOfGender;}
-	public void setRateOfGender(float[] rateOfGender) {this.rateOfGender = rateOfGender;}
+	public double[] getRateOfGender() {return rateOfGender;}
+	public void setRateOfGender(double[] rateOfGender) {this.rateOfGender = rateOfGender;}
 
-	public float[] getRateOfJob() {return rateOfJob;}
-	public void setRateOfJob(float[] rateOfJob) {this.rateOfJob = rateOfJob;}
+	public double[] getRateOfJob() {return rateOfJob;}
+	public void setRateOfJob(double[] rateOfJob) {this.rateOfJob = rateOfJob;}
 	
 	public int getSpecialContractFee() {return specialContractFee;}
 	public void setSpecialContractFee(int specialContractFee) {this.specialContractFee = specialContractFee;}
