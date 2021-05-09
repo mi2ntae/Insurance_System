@@ -6,7 +6,7 @@ import global.Constants.eInsurantGender;
 public class TripInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfCountryRisk = {1.0, 1.5, 2.5}; // index[0: 1단계 / 1: 2단계 / 2: 3단계] 
+	private double[] rateOfCountryRisk = {1.0, 1.3, 1.5, 2.5}; // index[0: 안전 / 1: 1단계 / 1: 2단계 / 2: 3단계] 
 
 	// Constructor
 	public TripInsurance(){
@@ -47,17 +47,22 @@ public class TripInsurance extends Insurance {
 		}
 
 		// 국가 위험도에 따른 요율 계산
-//		switch(insurant.getRiskOfTripCounty()) {
-//		case first:
-//			fee *= this.getRateOfCountryRank()[0];
-//			break;
-//		case second:
-//			fee *= this.getRateOfCountryRank()[1];
-//			break;
-//		case third:
-//			fee *= this.getRateOfCountryRank()[2];
-//			break;
-//		}
+		switch(insurant.getRiskOfTripCountry()) {
+		case safe:
+			fee *= this.getRateOfCountryRank()[0];
+			break;
+		case first:
+			fee *= this.getRateOfCountryRank()[1];
+			break;
+		case second:
+			fee *= this.getRateOfCountryRank()[2];
+			break;
+		case third:
+			fee *= this.getRateOfCountryRank()[3];
+			break;
+		default:
+			break;
+		}
 		
 		return (int) fee;
 	}

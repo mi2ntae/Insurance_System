@@ -3,6 +3,7 @@ package customer;
 import global.Constants.eInsurantGender;
 import global.Constants.eInsurantJob;
 import global.Constants.eInsurantRankOfCar;
+import global.Constants.eInsurantRiskOfTripCountry;
 import global.Constants.eInsurantUsageOfStructure;
 
 public class Insurant {
@@ -19,6 +20,7 @@ public class Insurant {
 	private eInsurantGender gender;
 	private eInsurantJob job;
 	private eInsurantRankOfCar rankOfCar;
+	private eInsurantRiskOfTripCountry riskOfTripCountry;
 	
 	// Composition Class
 	public FamilyMedicalHistory familyMedicalHistory;
@@ -64,5 +66,8 @@ public class Insurant {
 
 	public FamilyMedicalHistory getFamilyMedicalHistory() {return familyMedicalHistory;}
 	public void setFamilyMedicalHistory(FamilyMedicalHistory familyMedicalHistory) {this.familyMedicalHistory = familyMedicalHistory;}
+
+	public eInsurantRiskOfTripCountry getRiskOfTripCountry() {return riskOfTripCountry;}
+	public void setRiskOfTripCountry(eInsurantRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}	
 	
 }
