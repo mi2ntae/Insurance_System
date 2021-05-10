@@ -2,7 +2,7 @@ package customer;
 
 import java.util.ArrayList;
 
-import insurace.InsuranceListImpl;
+import insurance.InsuranceListImpl;
 
 public class Customer {
 	// Attributes

@@ -1,4 +1,4 @@
-package insurace;
+package insurance;
 
 import customer.Insurant;
 import global.Constants.eInsurantGender;
