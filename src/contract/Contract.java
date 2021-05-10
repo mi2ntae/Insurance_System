@@ -1,6 +1,6 @@
 package contract;
 
-import insurace.Insurance;
+import insurance.Insurance;
 
 public class Contract {
 	// Attributes

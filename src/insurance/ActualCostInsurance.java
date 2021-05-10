@@ -1,23 +1,22 @@
-package insurace;
+package insurance;
 
 import customer.Insurant;
 import global.Constants.eInsurantGender;
 
-public class DriverInsurance extends Insurance {
+public class ActualCostInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfAccident;
-	private double[] rateOfCarRank = {2, 1.5, 1.0};
+	private float selfBurdenRate;
 
 	// Constructor
-	public DriverInsurance(){
+	public ActualCostInsurance(){
 
 	}
 
-	public void finalize() throws Throwable {
-		super.finalize();
-	}
-	
+	// getters & setters
+	public float getSelfBurdenRate() {return selfBurdenRate;}
+	public void setSelfBurdenRate(float selfBurdenRate) {this.selfBurdenRate = selfBurdenRate;}
+
 	// Methods
 	public int calculateFee(int insurantId){
 		double fee = this.getBasicFee();
@@ -47,20 +46,11 @@ public class DriverInsurance extends Insurance {
 			fee *= this.getRateOfGender()[1];
 		}
 		
-		//자동차 등급에 따른 요율 계산
-		switch(insurant.getRankOfCar()) {
-		case high :
-			fee *= this.rateOfCarRank[0];
-			break;
-		case middle :
-			fee *= this.rateOfCarRank[1];
-			break;
-		case low :
-			fee *= this.rateOfCarRank[2];
-			break;
-		}
+		// 자기부담비율에 따른 요율 계산
+		fee *= selfBurdenRate;
 		
 		return (int)fee;
 	}
+
 
 }

@@ -1,6 +1,6 @@
 package employee;
 
-import insurace.Insurance;
+import insurance.Insurance;
 
 public class InsuranceConfirmer {
 

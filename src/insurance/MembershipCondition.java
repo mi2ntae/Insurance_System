@@ -1,4 +1,4 @@
-package insurace;
+package insurance;
 
 public class MembershipCondition {
 
