@@ -10,6 +10,7 @@ public class Customer {
 	private String customerId;
 	private String name;
 	private String phoneNumber;
+	private String password;
 	
 	// Composition Class
 	private InsurantList insurantList;
@@ -17,12 +18,8 @@ public class Customer {
 	// private Salesperson m_Salesperson;
 
 	// Constructor
-	public Customer(String address, String customerId, String name, String phoneNumber){
-		this.address = address;
-		this.customerId = customerId;
-		this.name = name;
-		this.phoneNumber = phoneNumber;
-		this.insurantList = (InsurantList) new InsuranceListImpl();
+	public Customer(){
+		this.insurantList = (InsurantList) new InsurantListImpl();
 	}
 	
 	// getters & setters
@@ -40,6 +37,9 @@ public class Customer {
 	
 	public InsurantList getInsurantList() {return insurantList;}
 	public void setInsurantList(InsurantList insurantList) {this.insurantList = insurantList;}
+	
+	public String getPassword() {return password;}
+	public void setPassword(String password) {this.password = password;}
 
 	// Methods
 	public void checkJoinedInsuranceList(){

@@ -6,6 +6,7 @@ import contract.AccidentList;
 import contract.AccidentListImpl;
 import contract.ContractList;
 import contract.ContractListImpl;
+import customer.Customer;
 import customer.CustomerList;
 import customer.CustomerListImpl;
 import global.Constants.eGender;
@@ -39,11 +40,12 @@ public class Home {
 	public void start() {
 		while (true) {
 			System.out.println("*******보험사 메뉴*******");
-			System.out.println("1.고객 가입하기");
+			System.out.println("1.고객 회원가입하기");
 			System.out.println("2.보험 상품 기획하기");
 			
 			switch (scn.nextInt()) {
 			case 1:
+				createCustomer();
 				break;
 			case 2:
 				createInsurance();
@@ -59,6 +61,32 @@ public class Home {
 				System.exit(0);
 				break;
 			}
+		}
+	}
+	// 고객 가입하기
+	private void createCustomer() {
+		Customer customer = new Customer();
+		System.out.println("이름을 입력해주세요.");
+		customer.setName(scn.next());
+		
+		System.out.println("주소를 입력해주세요.");
+		customer.setAddress(scn.next());
+		
+		System.out.println("전화번호를 입력해주세요.(ooo-oooo-oooo)");
+		customer.setPhoneNumber(scn.next());
+		
+		String input = null;
+		do {
+			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
+			input = scn.next();
+		} while (!customerList.checkDuplication(input));
+		customer.setCustomerId(input);
+
+		System.out.println("비밀번호를 입력해주세요.");
+		customer.setPassword(scn.next());
+		
+		if(customerList.insert(customer)) {
+			System.out.println("!!!회원가입이 완료되었습니다!!!!");
 		}
 	}
 	
