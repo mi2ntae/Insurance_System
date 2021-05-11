@@ -1,8 +1,8 @@
 package employee;
 
-public class Salesperson {
+public class Salesperson extends Employee{
 
-	private int salespersonId;
+	private int saleHistory;
 //	public Interview m_Interview;
 
 	public Salesperson(){

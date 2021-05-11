@@ -34,4 +34,8 @@ public class Constants {
 	public static enum eFamilyMedicalDisease {
 		thyroid, testicular, ovarian, esophageal, lung;
 	}
+	
+	public static enum eEplyeeRole{
+		salesperson, InsuranceDeveloper, InsuranceConfirmer, CompensationHndler, ContractManager
+	}
 }
