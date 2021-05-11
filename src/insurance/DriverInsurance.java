@@ -1,7 +1,7 @@
 package insurance;
 
 import customer.Insurant;
-import global.Constants.eInsurantGender;
+import global.Constants.eGender;
 
 public class DriverInsurance extends Insurance {
 
@@ -12,10 +12,6 @@ public class DriverInsurance extends Insurance {
 	// Constructor
 	public DriverInsurance(){
 
-	}
-
-	public void finalize() throws Throwable {
-		super.finalize();
 	}
 	
 	// Methods
@@ -41,9 +37,9 @@ public class DriverInsurance extends Insurance {
 		}
 				
 		// 성별에 따른 요율 계산
-		if (insurant.getGender() == eInsurantGender.male) {
+		if (insurant.getGender() == eGender.male) {
 			fee *= this.getRateOfGender()[0];
-		} else if (insurant.getGender() == eInsurantGender.female){
+		} else if (insurant.getGender() == eGender.female){
 			fee *= this.getRateOfGender()[1];
 		}
 		

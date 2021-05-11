@@ -10,8 +10,4 @@ public class GuaranteePlan {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
-
 }

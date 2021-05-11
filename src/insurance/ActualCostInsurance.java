@@ -1,12 +1,12 @@
 package insurance;
 
 import customer.Insurant;
-import global.Constants.eInsurantGender;
+import global.Constants.eGender;
 
 public class ActualCostInsurance extends Insurance {
 
 	// Attributes
-	private float selfBurdenRate;
+	private double selfBurdenRate;
 
 	// Constructor
 	public ActualCostInsurance(){
@@ -14,8 +14,8 @@ public class ActualCostInsurance extends Insurance {
 	}
 
 	// getters & setters
-	public float getSelfBurdenRate() {return selfBurdenRate;}
-	public void setSelfBurdenRate(float selfBurdenRate) {this.selfBurdenRate = selfBurdenRate;}
+	public double getSelfBurdenRate() {return selfBurdenRate;}
+	public void setSelfBurdenRate(double selfBurdenRate) {this.selfBurdenRate = selfBurdenRate;}
 
 	// Methods
 	public int calculateFee(int insurantId){
@@ -40,9 +40,9 @@ public class ActualCostInsurance extends Insurance {
 		}
 				
 		// 성별에 따른 요율 계산
-		if (insurant.getGender() == eInsurantGender.male) {
+		if (insurant.getGender() == eGender.male) {
 			fee *= this.getRateOfGender()[0];
-		} else if (insurant.getGender() == eInsurantGender.female){
+		} else if (insurant.getGender() == eGender.female){
 			fee *= this.getRateOfGender()[1];
 		}
 		

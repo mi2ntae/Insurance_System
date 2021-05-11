@@ -8,7 +8,6 @@ public class InsuranceListImpl implements InsuranceList {
 	private ArrayList<Insurance> insuranceList;
 	
 	// Composition Class
-	 private Insurance m_Insurance;
 
 	// Constructor
 	public InsuranceListImpl() {
