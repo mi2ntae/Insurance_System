@@ -1,7 +1,6 @@
 package insurance;
 
 import customer.Insurant;
-import global.Constants.eInsurantGender;
 
 public class FireInsurance extends Insurance {
 

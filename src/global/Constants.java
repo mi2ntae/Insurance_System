@@ -7,21 +7,20 @@ public class Constants {
 	public static enum eAccidentType {
 		actual, cancer, dental, driver, fire, trip;
 	}
-
-	public static enum eInsurantGender {
+	public static enum eGender {
 		male, female;
 	}
-	public static enum eInsurantJob {
+	public static enum eJob {
 		officeWorker, driver, factoryWorker, student, teacher, soldier, etc
 	}
-	public static enum eInsurantRankOfCar {
+	public static enum eRankOfCar {
 		high, middle, low;
 	}
-	public static enum eInsurantUsageOfStructure{
+	public static enum eUsageOfStructure{
 		house, study, factory, warehouse, office, publicFacility
 	}
 	
-	public static enum eInsurantRiskOfTripCountry{
+	public static enum eRiskOfTripCountry{
 		safe, first, second, third
 	}
 	

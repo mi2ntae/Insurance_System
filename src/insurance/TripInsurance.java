@@ -1,10 +1,9 @@
 package insurance;
 
 import customer.Insurant;
-import global.Constants.eInsurantGender;
+import global.Constants.eGender;
 
 public class TripInsurance extends Insurance {
-
 	// Attributes
 	private double[] rateOfCountryRisk = {1.0, 1.3, 1.5, 2.5}; // index[0: 안전 / 1: 1단계 / 1: 2단계 / 2: 3단계] 
 
@@ -40,9 +39,9 @@ public class TripInsurance extends Insurance {
 		}
 
 		// 성별에 따른 요율 계산
-		if (insurant.getGender() == eInsurantGender.male) {
+		if (insurant.getGender() == eGender.male) {
 			fee *= this.getRateOfGender()[0];
-		} else if (insurant.getGender() == eInsurantGender.female) {
+		} else if (insurant.getGender() == eGender.female) {
 			fee *= this.getRateOfGender()[1];
 		}
 

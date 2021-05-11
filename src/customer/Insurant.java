@@ -1,10 +1,10 @@
 package customer;
 
-import global.Constants.eInsurantGender;
-import global.Constants.eInsurantJob;
-import global.Constants.eInsurantRankOfCar;
-import global.Constants.eInsurantRiskOfTripCountry;
-import global.Constants.eInsurantUsageOfStructure;
+import global.Constants.eGender;
+import global.Constants.eJob;
+import global.Constants.eRankOfCar;
+import global.Constants.eRiskOfTripCountry;
+import global.Constants.eUsageOfStructure;
 
 public class Insurant {
 
@@ -16,11 +16,11 @@ public class Insurant {
 	private String name;
 	private String phoneNumber;
 	private long postedPriceOfStructure;
-	private eInsurantUsageOfStructure usageOfStructure;
-	private eInsurantGender gender;
-	private eInsurantJob job;
-	private eInsurantRankOfCar rankOfCar;
-	private eInsurantRiskOfTripCountry riskOfTripCountry;
+	private eUsageOfStructure usageOfStructure;
+	private eGender gender;
+	private eJob job;
+	private eRankOfCar rankOfCar;
+	private eRiskOfTripCountry riskOfTripCountry;
 	
 	// Composition Class
 	public FamilyMedicalHistory familyMedicalHistory;
@@ -52,22 +52,22 @@ public class Insurant {
 	public long getPostedPriceOfStructure() {return postedPriceOfStructure;}
 	public void setPostedPriceOfStructure(long postedPriceOfStructure) {this.postedPriceOfStructure = postedPriceOfStructure;}
 
-	public eInsurantGender getGender() {return gender;}
-	public void setGender(eInsurantGender gender) {this.gender = gender;}
+	public eGender getGender() {return gender;}
+	public void setGender(eGender gender) {this.gender = gender;}
 
-	public eInsurantUsageOfStructure getUsageOfStructure() {return usageOfStructure;}
-	public void setUsageOfStructure(eInsurantUsageOfStructure usageOfStructure) {this.usageOfStructure = usageOfStructure;}
+	public eUsageOfStructure getUsageOfStructure() {return usageOfStructure;}
+	public void setUsageOfStructure(eUsageOfStructure usageOfStructure) {this.usageOfStructure = usageOfStructure;}
 
-	public eInsurantJob getJob() {return job;}
-	public void setJob(eInsurantJob job) {this.job = job;}
+	public eJob getJob() {return job;}
+	public void setJob(eJob job) {this.job = job;}
 
-	public eInsurantRankOfCar getRankOfCar() {return rankOfCar;}
-	public void setRankOfCar(eInsurantRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
+	public eRankOfCar getRankOfCar() {return rankOfCar;}
+	public void setRankOfCar(eRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
 
 	public FamilyMedicalHistory getFamilyMedicalHistory() {return familyMedicalHistory;}
 	public void setFamilyMedicalHistory(FamilyMedicalHistory familyMedicalHistory) {this.familyMedicalHistory = familyMedicalHistory;}
 
-	public eInsurantRiskOfTripCountry getRiskOfTripCountry() {return riskOfTripCountry;}
-	public void setRiskOfTripCountry(eInsurantRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}	
+	public eRiskOfTripCountry getRiskOfTripCountry() {return riskOfTripCountry;}
+	public void setRiskOfTripCountry(eRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}	
 	
 }
