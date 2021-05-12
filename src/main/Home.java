@@ -11,6 +11,10 @@ import customer.CustomerList;
 import customer.CustomerListImpl;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
+import global.Constants.eJob;
+import global.Constants.eRankOfCar;
+import global.Constants.eRiskOfTripCountry;
+import global.Constants.eUsageOfStructure;
 import insurance.ActualCostInsurance;
 import insurance.CancerInsurance;
 import insurance.DentalInsurance;
@@ -42,7 +46,7 @@ public class Home {
 			System.out.println("*******보험사 메뉴*******");
 			System.out.println("1.고객 회원가입하기");
 			System.out.println("2.보험 상품 기획하기");
-			
+			System.out.println("3.보험 가입하기");
 			switch (scn.nextInt()) {
 			case 1:
 				createCustomer();
@@ -51,6 +55,7 @@ public class Home {
 				createInsurance();
 				break;
 			case 3:
+				selectInsurant();
 				break;
 			case 4:
 				break;
@@ -63,6 +68,181 @@ public class Home {
 			}
 		}
 	}
+	
+	// 보험 가입하기
+	private void selectInsurant() {
+		Customer customer = null;
+		while (customer == null) {
+			System.out.print("이전으로 돌아가려면 0을 입력하세요\n가입할 고객 아이디를 입력해주세요 : ");
+			String customerId = scn.next();
+			customer = this.customerList.select(customerId);
+			if(customerId.equals("0")) {
+				return;
+			} else if (customer == null) {
+				System.out.println("해당 고객이 존재하지 않습니다");
+			}
+		}
+		System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
+		int input = scn.nextInt();
+		while(input != 1 && input != 2) {
+			System.out.println("잘못된 입력입니다");
+			System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
+			input = scn.nextInt();
+		}
+		if(input == 1 && !customer.getInsurantList().isEmpty()) {
+			boolean flag = false;
+			while(!flag) {
+				System.out.print("메뉴으로 돌아가려면 0을 입력하세요\n보험가입자 ID를 입력하세요 : ");
+				String InsurantId = scn.next();
+				if(InsurantId.equals("0")) {
+					return;
+				} else if(customer.getInsurantList().select(InsurantId) != null) {
+					flag = true;
+					createContract();
+				} else {
+					System.out.println("해당 보험가입자가 존재하지 않습니다");
+				}
+			}
+		} else {
+			this.createInsurant(customer);
+		}
+	}
+
+	private void createInsurant(Customer customer) {
+		System.out.print("사고횟수 : ");
+		int accidentHistory = scn.nextInt();
+		System.out.print("주소 : ");
+		String address = scn.next();
+		System.out.print("나이 : ");
+		int age = scn.nextInt();
+		System.out.print("아이디 : ");
+		String id = scn.next();
+		System.out.print("이름 : ");
+		String name = scn.next();
+		System.out.print("전화번호 : ");
+		String phoneNum = scn.next();
+		System.out.print("건물가격 : ");
+		long postedPriceOfStructure = scn.nextLong();
+		System.out.print("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
+		eUsageOfStructure usageOfStructure = null;
+		while (usageOfStructure == null) {
+			switch (scn.nextInt()) {
+			default:
+				System.out.print("입력값이 잘못되었습니다");
+				break;
+			case 1:
+				usageOfStructure = eUsageOfStructure.house;
+				break;
+			case 2:
+				usageOfStructure = eUsageOfStructure.study;
+				break;
+			case 3:
+				usageOfStructure = eUsageOfStructure.factory;
+				break;
+			case 4:
+				usageOfStructure = eUsageOfStructure.warehouse;
+				break;
+			case 5:
+				usageOfStructure = eUsageOfStructure.office;
+				break;
+			case 6:
+				usageOfStructure = eUsageOfStructure.publicFacility;
+				break;
+			}
+		}
+		System.out.println("성별\n1.남자\n2.여");
+		eGender gender = null;
+		while(gender == null) {
+			switch(scn.nextInt()) {
+				default :
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1 :
+					gender = eGender.male;
+					break;
+				case 2 :
+					gender = eGender.female;
+					break;
+			}
+		}
+		System.out.println("직업\n1.사무직\n2.운전자\n3.현장직\n4.학생\n5.교사\n6.군인\n7.기타");
+		eJob job = null;
+		while(job == null) {
+			switch(scn.nextInt()) {
+			default :
+				System.out.print("입력값이 잘못되었습니다");
+				break;
+			case 1 :
+				job = eJob.officeWorker;
+				break;
+			case 2 :
+				job = eJob.driver;
+				break;
+			case 3 :
+				job = eJob.factoryWorker;
+				break;
+			case 4 :
+				job = eJob.student;
+				break;
+			case 5 :
+				job = eJob.teacher;
+				break;
+			case 6 :
+				job = eJob.soldier;
+				break;
+			case 7 :
+				job = eJob.etc;
+				break;
+			}
+		}
+		System.out.println("자동차등급\n1.상\n2.중\n3.하");
+		eRankOfCar rankOfCar = null;
+		while(rankOfCar == null) {
+			switch(scn.nextInt()) {
+			default :
+				System.out.print("입력값이 잘못되었습니다");
+				break;
+			case 1 :
+				rankOfCar = eRankOfCar.high;
+				break;
+			case 2 :
+				rankOfCar = eRankOfCar.middle;
+				break;
+			case 3 :
+				rankOfCar = eRankOfCar.low;
+				break;
+			}
+		}
+		System.out.println("여행국가 위험등급\n1.안전\n2.1등급\n3.2등급\n4.3등급");
+		eRiskOfTripCountry riskOfTripCountry = null;
+		while(riskOfTripCountry == null) {
+			switch(scn.nextInt()) {
+			default :
+				System.out.print("입력값이 잘못되었습니다");
+				break;
+			case 1 :
+				riskOfTripCountry = eRiskOfTripCountry.safe;
+				break;
+			case 2 :
+				riskOfTripCountry = eRiskOfTripCountry.first;
+				break;
+			case 3 :
+				riskOfTripCountry = eRiskOfTripCountry.second;
+				break;
+			case 4 :
+				riskOfTripCountry = eRiskOfTripCountry.third;
+				break;
+			}
+		}
+		customer.createInsurant(accidentHistory, address, age, id, name, phoneNum, postedPriceOfStructure, usageOfStructure, gender, job, rankOfCar, riskOfTripCountry);
+		customer.getInsurantList().select(id);
+	}
+	
+	
+	private void createContract() {
+		
+	}
+
 	// 고객 가입하기
 	private void createCustomer() {
 		Customer customer = new Customer();
