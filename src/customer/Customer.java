@@ -2,6 +2,11 @@ package customer;
 
 import java.util.ArrayList;
 
+import global.Constants.eGender;
+import global.Constants.eJob;
+import global.Constants.eRankOfCar;
+import global.Constants.eRiskOfTripCountry;
+import global.Constants.eUsageOfStructure;
 import insurance.InsuranceListImpl;
 
 public class Customer {
@@ -19,7 +24,7 @@ public class Customer {
 
 	// Constructor
 	public Customer(){
-		this.insurantList = (InsurantList) new InsurantListImpl();
+		this.insurantList = new InsurantListImpl();
 	}
 	
 	// getters & setters
@@ -60,5 +65,9 @@ public class Customer {
 
 	public void writeSurvey(){
 
+	}
+
+	public void createInsurant(int accidentHistory, String address, int age, String id, String name, String phoneNum, long postedPriceOfStructure, eUsageOfStructure usageOfStructure, eGender gender, eJob job, eRankOfCar rankOfCar, eRiskOfTripCountry riskOfTripCountry) {
+		this.insurantList.insert(accidentHistory,address,age,id,name,phoneNum,postedPriceOfStructure,usageOfStructure,gender,job,rankOfCar,riskOfTripCountry);
 	}
 }
