@@ -8,7 +8,7 @@ public class CustomerListImpl implements CustomerList {
 	private ArrayList<Customer> customerList;
 	
 	// Composition Class
-	 private Customer m_Customer;
+	 private Customer customer;
 
 	// Constructor
 	public CustomerListImpl() {
@@ -58,8 +58,6 @@ public class CustomerListImpl implements CustomerList {
 	public boolean checkDuplication(String input) {
 		for(Customer customer: customerList) {
 			if(customer.getCustomerId().equals(input)) {
-				System.out.println("이미 존재하는 ID입니다!(사용불가)");
-				System.out.println("--------------------------");
 				return false;
 			}
 		}
@@ -67,9 +65,9 @@ public class CustomerListImpl implements CustomerList {
 	}
 
 	// Private Methods
-	private int getCustomerIndex(String CustomerId) {
+	private int getCustomerIndex(String customerId) {
 		for (int i = 0; i < this.customerList.size(); i++) {
-			if (this.customerList.get(i).getCustomerId() == CustomerId) {
+			if (this.customerList.get(i).getCustomerId() == customerId) {
 				return i;
 			}
 		}
