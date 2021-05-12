@@ -373,11 +373,11 @@ public class Home {
 				continue;
 			}
 			
-			insurance = createPlanInsurance(insurance);	// 보험 설계하기
+			insurance = this.createPlanInsurance(insurance);	// 보험 설계하기
 			if (insurance == null) {
 				continue;
 			}
-			insurance = createDetailInsurance(insurance);	// 보험 세부설정하기
+			insurance = this.createDetailInsurance(insurance);	// 보험 세부설정하기
 			
 			if (this.insuranceList.insert(insurance)) {
 				System.out.println("!!!보험 설계가 완료되었습니다!!!!");
@@ -410,31 +410,8 @@ public class Home {
 					if ((insurance.getType() != newInsurance.getType()) && (insurance.getDeniedGender() == newInsurance.getDeniedGender())) {
 						continue;
 					}
-					System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
-					System.out.println("  기본보험료 : "+insurance.getBasicFee());
-					System.out.println("  <나이 요율표>");
-					System.out.println("영유아 : "+insurance.getRateOfAge()[0]);
-					System.out.println("10대 : "+insurance.getRateOfAge()[1]);
-					System.out.println("20대 : "+insurance.getRateOfAge()[2]);
-					System.out.println("30대 : "+insurance.getRateOfAge()[3]);
-					System.out.println("40대 : "+insurance.getRateOfAge()[4]);
-					System.out.println("50대 : "+insurance.getRateOfAge()[5]);
-					System.out.println("노년층 : "+insurance.getRateOfAge()[6]);
-					System.out.println("\n  <성별 요율표>");
-					System.out.println("남자 : "+insurance.getRateOfGender()[0]);
-					System.out.println("여자 : "+insurance.getRateOfGender()[1]);
-					System.out.println("\n  <직업 요율표>");
-					System.out.println("직장인 : "+insurance.getRateOfJob()[0]);
-					System.out.println("운전기사 : "+insurance.getRateOfJob()[1]);
-					System.out.println("공장노동직 : "+insurance.getRateOfJob()[2]);
-					System.out.println("교사(수) : "+insurance.getRateOfJob()[3]);
-					System.out.println("군인 : "+insurance.getRateOfJob()[4]);
-					System.out.println("기타직업 : "+insurance.getRateOfJob()[5]);
-					System.out.println("----------------------------\n");
+					this.showInsuranceData(insurance);
 				}
-				
-				// 보장 내역 가져와서 보여주는 거 코딩해야함
-				//
 				
 				System.out.printf("적용을 원하는 보험의 ID를 입력하세요 : ");
 				String inputIndex = scn.next();
@@ -480,29 +457,8 @@ public class Home {
 					if (insurance.isConfirmedStatus()) {
 						continue;
 					}
-					System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
-					System.out.println("  기본보험료 : "+insurance.getBasicFee());
-					System.out.println("  <나이 요율표>");
-					System.out.println("영유아 : "+insurance.getRateOfAge()[0]);
-					System.out.println("10대 : "+insurance.getRateOfAge()[1]);
-					System.out.println("20대 : "+insurance.getRateOfAge()[2]);
-					System.out.println("30대 : "+insurance.getRateOfAge()[3]);
-					System.out.println("40대 : "+insurance.getRateOfAge()[4]);
-					System.out.println("50대 : "+insurance.getRateOfAge()[5]);
-					System.out.println("노년층 : "+insurance.getRateOfAge()[6]);
-					System.out.println("\n  <성별 요율표>");
-					System.out.println("남자 : "+insurance.getRateOfGender()[0]);
-					System.out.println("여자 : "+insurance.getRateOfGender()[1]);
-					System.out.println("\n  <직업 요율표>");
-					System.out.println("직장인 : "+insurance.getRateOfJob()[0]);
-					System.out.println("운전기사 : "+insurance.getRateOfJob()[1]);
-					System.out.println("공장노동직 : "+insurance.getRateOfJob()[2]);
-					System.out.println("교사(수) : "+insurance.getRateOfJob()[3]);
-					System.out.println("군인 : "+insurance.getRateOfJob()[4]);
-					System.out.println("기타직업 : "+insurance.getRateOfJob()[5]);
-					System.out.println("----------------------------\n");
+					this.showInsuranceData(insurance);
 					
-					// 보장내역 가져오는 거 코딩해야함
 				}
 				System.out.printf("확정을 원하는 보험의 ID를 입력하세요 : ");
 				String inputIndex = scn.next();
@@ -532,6 +488,41 @@ public class Home {
 				continue;
 			}
 		}
+	}
+	
+	// 전체 보험리스트 조회하기
+	private void showAllInsurance() {
+		System.out.println("-----전체보험리스트-----");
+		for (Insurance insurance: this.insuranceList.getInsuranceList()) {
+			this.showInsuranceData(insurance);
+		}
+		System.out.println("-----------------\\n");
+	}
+	
+	// 보험 정보 출력하기
+	private void showInsuranceData(Insurance insurance) {
+		System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
+		System.out.println("  기본보험료 : "+insurance.getBasicFee());
+		System.out.println("  <나이 요율표>");
+		System.out.println("영유아 : "+insurance.getRateOfAge()[0]);
+		System.out.println("10대 : "+insurance.getRateOfAge()[1]);
+		System.out.println("20대 : "+insurance.getRateOfAge()[2]);
+		System.out.println("30대 : "+insurance.getRateOfAge()[3]);
+		System.out.println("40대 : "+insurance.getRateOfAge()[4]);
+		System.out.println("50대 : "+insurance.getRateOfAge()[5]);
+		System.out.println("노년층 : "+insurance.getRateOfAge()[6]);
+		System.out.println("\n  <성별 요율표>");
+		System.out.println("남자 : "+insurance.getRateOfGender()[0]);
+		System.out.println("여자 : "+insurance.getRateOfGender()[1]);
+		System.out.println("\n  <직업 요율표>");
+		System.out.println("직장인 : "+insurance.getRateOfJob()[0]);
+		System.out.println("운전기사 : "+insurance.getRateOfJob()[1]);
+		System.out.println("공장노동직 : "+insurance.getRateOfJob()[2]);
+		System.out.println("교사(수) : "+insurance.getRateOfJob()[3]);
+		System.out.println("군인 : "+insurance.getRateOfJob()[4]);
+		System.out.println("기타직업 : "+insurance.getRateOfJob()[5]);
+		System.out.println("-----------------\n");
 		
+		// 보장내역 조회하는 것 코딩해야
 	}
 }
