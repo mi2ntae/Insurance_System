@@ -7,7 +7,7 @@ public abstract class Insurance {
 
 	// Attributes
 	private int basicFee;
-	private boolean confirmedStatus;
+	private boolean confirmedStatus = false;
 	private eGender deniedGender;
 	private String insuranceId;
 	private eInsuranceType type;
