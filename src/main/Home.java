@@ -296,12 +296,17 @@ public class Home {
 		System.out.println("전화번호를 입력해주세요.(ooo-oooo-oooo)");
 		customer.setPhoneNumber(scn.next());
 		
-		String input = null;
-		do {
+		while(true) {
 			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
-			input = scn.next();
-		} while (!customerList.checkDuplication(input));
-		customer.setCustomerId(input);
+			String input = scn.next();
+			if(customerList.checkDuplication(input)) {
+				customer.setCustomerId(input);
+				break;
+			} else {
+				System.out.println("이미 존재하는 ID입니다!(사용불가)");
+				System.out.println("--------------------------");
+			}
+		}
 
 		System.out.println("비밀번호를 입력해주세요.");
 		customer.setPassword(scn.next());
@@ -310,6 +315,23 @@ public class Home {
 			System.out.println("!!!회원가입이 완료되었습니다!!!!");
 		}
 	}
+	// 직원 가입하기
+//	private void createEmployee() {
+//		Employee employee = new Employee();
+//		System.out.println("이름을 입력해주세요.");
+//		employee.setName(scn.next());
+//
+//		System.out.println("전화번호를 입력해주세요.(ooo-oooo-oooo)");
+//		employee.setPhoneNumber(scn.next());
+//		
+//		String input = null;
+//		do {
+//			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
+//			input = scn.next();
+//		} while (!customerList.checkDuplication(input));
+//		employee.setCustomerId(input);
+//
+//	}
 	
 	// 보험 만들기
 	private void createInsurance() {
