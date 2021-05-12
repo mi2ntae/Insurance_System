@@ -1,11 +1,14 @@
 package employee;
 
+import global.Constants.eEmployeeRole;
+
 public class Employee {
 	// Attributes
 	private String employeeId;
 	private String name;
 	private String phoneNumber;
 	private String password;
+	private eEmployeeRole employeeRole;
 	
 	// Constructor
 	public Employee() {
@@ -24,5 +27,6 @@ public class Employee {
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
 
-	
+	public eEmployeeRole getEmployeeRole() {return employeeRole;}
+	public void setEmployeeRole(eEmployeeRole employeeRole) {this.employeeRole = employeeRole;}
 }

@@ -35,7 +35,8 @@ public class Constants {
 		thyroid, testicular, ovarian, esophageal, lung;
 	}
 	
-	public static enum eEplyeeRole{
+	public static enum eEmployeeRole{
 		salesperson, InsuranceDeveloper, InsuranceConfirmer, CompensationHndler, ContractManager
 	}
 }
+
