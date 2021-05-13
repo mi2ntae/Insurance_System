@@ -34,6 +34,7 @@ public class Home {
 	private InsuranceList insuranceList;
 	private ContractList contractList;
 	private CustomerList customerList;
+	private EmployeeList employeeList;
 	
 	public Home() {
 		this.scn = new Scanner(System.in);
@@ -397,24 +398,107 @@ public class Home {
 			System.out.println("!!!회원가입이 완료되었습니다!!!!");
 		}
 	}
-	// 직원 가입하기
-//	private void createEmployee() {
-//		Employee employee = new Employee();
-//		System.out.println("이름을 입력해주세요.");
-//		employee.setName(scn.next());
-//
-//		System.out.println("전화번호를 입력해주세요.(ooo-oooo-oooo)");
-//		employee.setPhoneNumber(scn.next());
-//		
-//		String input = null;
-//		do {
-//			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
-//			input = scn.next();
-//		} while (!customerList.checkDuplication(input));
-//		employee.setCustomerId(input);
-//
+	// 고객 로그인하기
+//	private boolean loginCustomer(String id, String pw) {
+//		for(Customer customer : this.customerList.getCustomerList()) {
+//			if(customer.getCustomerId().equals(id)) {
+//				if(customer.getPassword().equals(pw)) {
+//					return true;
+//				}else {
+//					System.out.println("error : 비밀번호가 틀립니다!");
+//					return false;
+//				}
+//			}
+//		}
+//		System.out.println("error : 존재하지 않는 ID입니다!");
+//		return false;
 //	}
 	
+	// 직원 가입하기
+	private void createEmployee() {
+		Employee employee = new Employee();
+		System.out.println("이름을 입력해주세요.");
+		employee.setName(scn.next());
+		
+		System.out.println("전화번호를 입력해주세요.(ooo-oooo-oooo)");
+		employee.setPhoneNumber(scn.next());
+
+		role : while (true) {
+			System.out.println("직종을 선택해주세요.");
+			System.out.println("1.보험개발자");
+			System.out.println("2.보험상품 확정자");
+			System.out.println("3.영업사원");
+			System.out.println("4.계약관리인");
+			System.out.println("5.보상처리사");
+			System.out.println("6.U/W");
+			try {
+				switch (scn.nextInt()) {
+				case 1:
+					employee.setEmployeeRole(eEmployeeRole.insuranceDeveloper);
+					break role;
+				case 2:
+					employee.setEmployeeRole(eEmployeeRole.insuranceConfirmer);
+					break role;
+				case 3:
+					employee.setEmployeeRole(eEmployeeRole.salesperson);
+					break role;
+				case 4:
+					employee.setEmployeeRole(eEmployeeRole.contractManager);
+					break role;
+				case 5:
+					employee.setEmployeeRole(eEmployeeRole.compensationHandler);
+					break role;
+				case 6:
+					employee.setEmployeeRole(eEmployeeRole.underWriter);
+					break role;
+				default:
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					System.out.println("------------------------------");
+					break;
+				}
+			} catch (Exception e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+			}
+		}
+		
+		while(true) {
+			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
+			String input = scn.next();
+			if(employeeList.checkDuplication(input)) {
+				employee.setEmployeeId(input);
+				break;
+			} else {
+				System.out.println("이미 존재하는 ID입니다!(사용불가)");
+				System.out.println("--------------------------");
+			}
+		}
+
+		System.out.println("비밀번호를 입력해주세요.");
+		employee.setPassword(scn.next());
+
+		if (employeeList.insert(employee)) {
+			System.out.println("!!!회원가입이 완료되었습니다!!!!");
+		}
+	}
+
+	// 고객 로그인하기
+//	private boolean loginEmployee(String id, String pw) {
+//		for (Customer customer : this.customerList.getCustomerList()) {
+//			if (customer.getCustomerId().equals(id)) {
+//				if (customer.getPassword().equals(pw)) {
+//					return true;
+//				} else {
+//					System.out.println("error : 비밀번호가 틀립니다!");
+//					return false;
+//				}
+//			}
+//		}
+//		System.out.println("error : 존재하지 않는 ID입니다!");
+//		return false;
+//	}
+
 	// 보험 만들기
 	private void createInsurance() {
 		Insurance insurance;
