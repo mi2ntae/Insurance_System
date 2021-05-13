@@ -1,25 +1,31 @@
 package employee;
 
 import contract.Contract;
+import contract.ContractList;
 
 public class UnderWriter {
 
-	public Contract m_Contract;
+	public ContractList contractList;
 
 	public UnderWriter(){
 
 	}
-
-	public void finalize() throws Throwable {
-
-	}
-
-	public void judgeContract(){
-
+	
+	public void assoicate(ContractList contractList) {
+		this.contractList = contractList;
 	}
 
 	public void requestJointAcquisition(){
 
 	}
 
+	// 계약 승인
+	public void approveContract(Contract contract) {
+		contract.setEffectiveness(true);
+	}
+	
+	// 계약 거부
+	public void refuseContract(Contract contract) {
+		this.contractList.delete(contract.getContractId());
+	}
 }
