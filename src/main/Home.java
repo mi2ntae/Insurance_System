@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import contract.AccidentList;
 import contract.AccidentListImpl;
+import contract.Contract;
 import contract.ContractList;
 import contract.ContractListImpl;
 import customer.Customer;
@@ -153,20 +154,31 @@ public class Home {
 	}
 	
 	// 보험 가입하기
-	private void ContractInsurnace() {
-		
+	private void contractInsurnace() {
+		Insurance insurance = null;
+		System.out.print("가입할 보험 ID를 입력해주세요 : ");
+		insurance = this.insuranceList.select(scn.next());
+		if (insurance != null) {
+			Customer customer = selectCustomerInsurant();
+			if(customer != null) {
+				Contract contract = new Contract();
+				contract.joinInsurance(customer, insurance, customer.getInsurantList().getSelectedInsurant());
+				this.contractList.insert(contract);
+				System.out.print("!!!!보험가입이 완료되었습니다!!!!");
+			}
+		} else {
+			System.out.print("해당 보험이 존재하지 않습니다");
+		}
 	}
 
 	// 보험 가입자 선택하기
-	private void selectInsurant() {
+	private Customer selectCustomerInsurant() {
 		Customer customer = null;
 		while (customer == null) {
-			System.out.print("이전으로 돌아가려면 0을 입력하세요\n가입할 고객 아이디를 입력해주세요 : ");
+			System.out.print("가입할 고객 아이디를 입력해주세요 : ");
 			String customerId = scn.next();
 			customer = this.customerList.select(customerId);
-			if(customerId.equals("0")) {
-				return;
-			} else if (customer == null) {
+			if(customer == null) {
 				System.out.println("해당 고객이 존재하지 않습니다");
 			}
 		}
@@ -180,11 +192,9 @@ public class Home {
 		if(input == 1 && !customer.getInsurantList().isEmpty()) {
 			boolean flag = false;
 			while(!flag) {
-				System.out.print("메뉴으로 돌아가려면 0을 입력하세요\n보험가입자 ID를 입력하세요 : ");
+				System.out.print("보험가입자 ID를 입력하세요 : ");
 				String InsurantId = scn.next();
-				if(InsurantId.equals("0")) {
-					return;
-				} else if(customer.getInsurantList().select(InsurantId) != null) {
+				if(customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
 					createContract();
 				} else {
@@ -194,6 +204,7 @@ public class Home {
 		} else {
 			this.createInsurant(customer);
 		}
+		return customer;
 	}
 
 	private void createInsurant(Customer customer) {
