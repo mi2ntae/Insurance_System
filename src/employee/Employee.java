@@ -28,5 +28,11 @@ public class Employee {
 	public void setPassword(String password) {this.password = password;}
 
 	public eEmployeeRole getEmployeeRole() {return employeeRole;}
-	public void setEmployeeRole(eEmployeeRole employeeRole) {this.employeeRole = employeeRole;}
+	public void setEmployeeRole(int input) {
+		switch(input) {
+		case 1:
+			
+		}
+		this.employeeRole = employeeRole;
+	}
 }
