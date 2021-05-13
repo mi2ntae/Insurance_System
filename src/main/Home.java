@@ -13,6 +13,7 @@ import customer.CustomerListImpl;
 import customer.Insurant;
 import employee.Employee;
 import employee.EmployeeList;
+import employee.UnderWriter;
 import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -190,10 +191,84 @@ public class Home {
 				this.showInsuranceData(contract.getInsurance());
 			}
 		}
-
 	}
 	
+	// 보험 계약 심사하기
+	private void judgeContract() {
+		UnderWriter underwriter = new UnderWriter();
+		underwriter.assoicate(this.contractList);
+		for(Contract contract : this.contractList.getContractList()) {
+			if(contract.isEffectiveness() == false) {
+				this.showContractData(contract);
+			}
+		}
+		Contract contract = null;
+		System.out.println("'심사'할 계약 ID를 입력하세요");
+		contract = this.contractList.search(scn.next());
+		if (contract != null) {
+			System.out.println("1.승인\n2.거부");
+			switch (scn.nextInt()) {
+			default:
+				System.out.println("잘못된 입력입니다");
+				break;
+			case 1:
+				underwriter.approveContract(contract);
+				break;
+			case 2:
+				underwriter.refuseContract(contract);
+				break;
+			}
+		} else {
+			System.out.println("해당 계약이 존재하지 않습니다");
+		}
+	}
 	
+	// 선택된 계약 보기
+	private void showContractData(Contract contract) {
+		System.out.println("------계약 상세정보------");
+		System.out.println("계약 ID : " + contract.getContractId());
+		System.out.println("계약 기간 : " + contract.getLifespanOfContract());
+		System.out.println("지불된 요금 : " + contract.getPaidFee());
+		System.out.println("영업사원 ID" + contract.getSalespersonId());
+		System.out.println("미납 기간 : " + contract.getUnpaidPeriod());
+		this.showInsurantData(contract.getInsurant());
+		this.showInsuranceData(contract.getInsurance());
+	}
+	
+	private void showInsurantData(Insurant insurant) {
+		System.out.println("------보험 가입자 상세정보------");
+		System.out.println("사고 기록 : " + insurant.getAccidentHistory());
+		System.out.println("주소 : " + insurant.getAddress());
+		System.out.println("나이 : " + insurant.getAge());
+		System.out.println("보험 가입자 ID : " + insurant.getInsurantId());
+		System.out.println("이름 : " + insurant.getName());
+		System.out.println("전화번호 : " + insurant.getPhoneNumber());
+		System.out.println("공시지사 :" + insurant.getPostedPriceOfStructure());
+		System.out.println("구조물 용도 : " + insurant.getUsageOfStructure());
+		System.out.println("성별 : " + insurant.getGender());
+		System.out.println("직업 : " + insurant.getJob());
+		System.out.println("자동차 등급 : " + insurant.getRankOfCar());
+		System.out.println("여행 국가 위험 등급 : " + insurant.getRiskOfTripCountry());
+	}
+
+	private void showCustomerData(Customer customer) {
+		System.out.println("------고객 상세정보------");
+		System.out.println("주소 : " + customer.getAddress());
+		System.out.println("고객 ID : " + customer.getCustomerId());
+		System.out.println("이름 : " + customer.getName());
+		System.out.println("전화번호 : " + customer.getPhoneNumber());
+		System.out.println("고객 PW : " + customer.getPassword());
+		System.out.print("보험 가입자 ID :");
+		if(customer.getInsurantList().isEmpty()) {
+			System.out.print("보험 가입자 ID : null");
+		} else {
+			for(Insurant insurant : customer.getInsurantList().getInsurantList()) {
+				System.out.print(" " + insurant.getInsurantId());
+			}
+		}
+		System.out.println();
+	}
+
 	// 전체 보험 리스트 확인하기
 	private void showAllInsurance() {
 		eInsuranceType type = null;
@@ -780,6 +855,7 @@ public class Home {
 	
 	// 보험 정보 출력하기
 	private void showInsuranceData(Insurance insurance) {
+		System.out.println("------보험 상세정보------");
 		System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
 		System.out.println("  기본보험료 : "+insurance.getBasicFee());
 		System.out.println("  <나이 요율표>");
