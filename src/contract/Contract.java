@@ -7,9 +7,6 @@ import insurance.Insurance;
 public class Contract {
 	// Attributes
 	private String contractId;
-	private Customer customer;
-	private Insurance insurance;
-	private Insurant insurant;
 	private boolean effectiveness;
 	private int lifespanOfContract;
 	private int paidFee;
@@ -18,6 +15,11 @@ public class Contract {
 	
 	// Composition Class
 	public Accident accident;
+	
+	// Associate
+	private Customer customer;
+	private Insurance insurance;
+	private Insurant insurant;
 
 	// Constructor
 	public Contract(){

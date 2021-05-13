@@ -18,10 +18,6 @@ public class InsuranceListImpl implements InsuranceList {
 	public ArrayList<Insurance> getInsuranceList() {return insuranceList;}
 	public void setInsuranceList(ArrayList<Insurance> insuranceList) {this.insuranceList = insuranceList;}
 
-	public void finalize() throws Throwable {
-
-	}
-
 	// Methods
 	public boolean insert(Insurance insurance) {
 		if (this.insuranceList.add(insurance)) {
