@@ -1,12 +1,15 @@
 package contract;
 
+import customer.Customer;
+import customer.Insurant;
 import insurance.Insurance;
 
 public class Contract {
 	// Attributes
 	private String contractId;
-	private String customerId;
-	private String insuranceId;
+	private Customer customer;
+	private Insurance insurance;
+	private Insurant insurant;
 	private boolean effectiveness;
 	private int lifespanOfContract;
 	private int paidFee;
@@ -14,7 +17,6 @@ public class Contract {
 	private int unpaidPeriod;
 	
 	// Composition Class
-	public Insurance insurance;
 	public Accident accident;
 
 	// Constructor
@@ -26,14 +28,11 @@ public class Contract {
 	public String getContractId() {return contractId;}
 	public void setContractId(String contractId) {this.contractId = contractId;}
 
-	public String getCustomerId() {return customerId;}
-	public void setCustomerId(String customerId) {this.customerId = customerId;}
+	public Customer getCustomer() {return customer;}
+	public void setCustomer(Customer customerId) {this.customer = customerId;}
 
 	public boolean isEffectiveness() {return effectiveness;}
 	public void setEffectiveness(boolean effectiveness) {this.effectiveness = effectiveness;}
-
-	public String getInsuranceId() {return insuranceId;}
-	public void setInsuranceId(String insuranceId) {this.insuranceId = insuranceId;}
 
 	public int getLifespanOfContract() {return lifespanOfContract;}
 	public void setLifespanOfContract(int lifespanOfContract) {this.lifespanOfContract = lifespanOfContract;}
@@ -50,13 +49,17 @@ public class Contract {
 	public Insurance getInsurance() {return insurance;}
 	public void setInsurance(Insurance insurance) {this.insurance = insurance;}
 
+	public Insurant getInsurant() {return insurant;}
+	public void setInsurant(Insurant insurant) {this.insurant = insurant;}
+
 	public Accident getAccident() {return accident;}
 	public void setAccident(Accident accident) {this.accident = accident;}
 
 	// public Method
-	public void joinInsurance(String customerId, String insuranceId){
-		this.customerId = customerId;
-		this.insuranceId = insuranceId;
+	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
+		this.customer = customer;
+		this.insurance = insurance;
+		this.insurant = insurant;
 	}
 //
 //	public boolean payFee(enum monthOfPayment){
