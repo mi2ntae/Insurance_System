@@ -1,5 +1,7 @@
 package customer;
 
+import java.util.ArrayList;
+
 public interface CustomerList {
 	
 	// Methods
@@ -8,4 +10,8 @@ public interface CustomerList {
 	public boolean delete(String customerId);
 	public void updateNameById(String customerId, String data);
 	public boolean checkDuplication(String input);
+	
+	// Getters & Setters
+	public ArrayList<Customer> getCustomerList();
+	public void setCustomerList(ArrayList<Customer> customerList);
 }
