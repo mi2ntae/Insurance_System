@@ -1,6 +1,8 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+
 
 import contract.AccidentList;
 import contract.AccidentListImpl;
@@ -115,27 +117,33 @@ public class Home {
 	// 전체 보험 리스트 확인하기
 	private void showAllInsurance() {
 		eInsuranceType type = null;
-		System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기");
-		switch(scn.nextInt()) {
-		case 1 :
-			type = eInsuranceType.driverInsurance;
-			break;
-		case 2 :
-			type = eInsuranceType.dentalInsurance;
-			break;
-		case 3 :
-			type = eInsuranceType.actualCostInsurance;
-			break;
-		case 4 :
-			type = eInsuranceType.fireInsurance;
-			break;
-		case 5 :
-			type = eInsuranceType.cancerInsurance;
-			break;
-		case 6 :
-			type = eInsuranceType.tripInsurance;
-			break;
-		case 7 :
+		while (true) {
+			System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기");
+			switch(scn.nextInt()) {
+			case 1 :
+				type = eInsuranceType.driverInsurance;
+				break;
+			case 2 :
+				type = eInsuranceType.dentalInsurance;
+				break;
+			case 3 :
+				type = eInsuranceType.actualCostInsurance;
+				break;
+			case 4 :
+				type = eInsuranceType.fireInsurance;
+				break;
+			case 5 :
+				type = eInsuranceType.cancerInsurance;
+				break;
+			case 6 :
+				type = eInsuranceType.tripInsurance;
+				break;
+			case 7 :
+				break;
+			default:
+				System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
+				continue;
+			}
 			break;
 		}
 		System.out.println("-----보험리스트-----");
@@ -500,7 +508,61 @@ public class Home {
 	
 	// 보험 세부설정하기
 	private Insurance createDetailInsurance(Insurance newInsurance) {
-		
+		while (true) {
+			System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
+			double[] tmpRateOfAge = new double[7];
+			System.out.println("  <나이 요율표>");
+			System.out.printf("영유아 : ");
+			tmpRateOfAge[0] = scn.nextDouble();
+			System.out.printf("10대 : ");
+			tmpRateOfAge[1] = scn.nextDouble();
+			System.out.printf("20대 : ");
+			tmpRateOfAge[2] = scn.nextDouble();
+			System.out.printf("30대 : ");
+			tmpRateOfAge[3] = scn.nextDouble();
+			System.out.printf("40대 : ");
+			tmpRateOfAge[4] = scn.nextDouble();
+			System.out.printf("50대 : ");
+			tmpRateOfAge[5] = scn.nextDouble();
+			System.out.printf("노년층 : ");
+			tmpRateOfAge[6] = scn.nextDouble();
+			newInsurance.setRateOfAge(tmpRateOfAge);
+			System.out.println("나이에 대한 요율설정을 완료했습니다.");
+			break;
+		}
+		while (true) {
+			System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
+			double[] tmpRateOfGender = new double[2];
+			System.out.printf("\n  <성별 요율표>");
+			System.out.printf("남자 : ");
+			tmpRateOfGender[0] = scn.nextDouble();
+			System.out.printf("여자 : ");
+			tmpRateOfGender[1] = scn.nextDouble();
+			double[] tmpRateOfJob = new double[7];
+			System.out.printf("\n  <직업 요율표>");
+			System.out.printf("직장인 : ");
+			tmpRateOfJob[0] = scn.nextDouble();
+			System.out.printf("운전기사 : ");
+			tmpRateOfJob[1] = scn.nextDouble();
+			System.out.printf("공장노동직 : ");
+			tmpRateOfJob[2] = scn.nextDouble();
+			System.out.println("학생 : ");
+			tmpRateOfJob[3] = scn.nextDouble();
+			System.out.printf("교사(수) : ");
+			tmpRateOfJob[4] = scn.nextDouble();
+			System.out.printf("군인 : ");
+			tmpRateOfJob[5] = scn.nextDouble();
+			System.out.printf("기타직업 : ");
+			tmpRateOfJob[6] = scn.nextDouble();
+			newInsurance.setRateOfGender(tmpRateOfGender);
+			newInsurance.setRateOfJob(tmpRateOfJob);
+			System.out.println("성별과 직업에 대한 요율설정을 완료했습니다.");
+			break;
+		}
+		while (true) {
+			// 보장 내역 설정하기 코딩해야함
+			break;
+		}
 		return newInsurance;
 	}
 	
@@ -566,11 +628,12 @@ public class Home {
 		System.out.println("직장인 : "+insurance.getRateOfJob()[0]);
 		System.out.println("운전기사 : "+insurance.getRateOfJob()[1]);
 		System.out.println("공장노동직 : "+insurance.getRateOfJob()[2]);
-		System.out.println("교사(수) : "+insurance.getRateOfJob()[3]);
-		System.out.println("군인 : "+insurance.getRateOfJob()[4]);
-		System.out.println("기타직업 : "+insurance.getRateOfJob()[5]);
+		System.out.println("학생 : "+insurance.getRateOfJob()[3]);
+		System.out.println("교사(수) : "+insurance.getRateOfJob()[4]);
+		System.out.println("군인 : "+insurance.getRateOfJob()[5]);
+		System.out.println("기타직업 : "+insurance.getRateOfJob()[6]);
 		System.out.println("-----------------\n");
 		
-		// 보장내역 조회하는 것 코딩해야
+		// 보장내역 조회하는 것 코딩해야함
 	}
 }
