@@ -110,8 +110,54 @@ public class Home {
 			}
 		}
 	}
-
+	
+	// 전체 보험 리스트 확인하기
+	private void showAllInsurance() {
+		eInsuranceType type = null;
+		System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기");
+		switch(scn.nextInt()) {
+		case 1 :
+			type = eInsuranceType.driverInsurance;
+			break;
+		case 2 :
+			type = eInsuranceType.dentalInsurance;
+			break;
+		case 3 :
+			type = eInsuranceType.actualCostInsurance;
+			break;
+		case 4 :
+			type = eInsuranceType.fireInsurance;
+			break;
+		case 5 :
+			type = eInsuranceType.cancerInsurance;
+			break;
+		case 6 :
+			type = eInsuranceType.tripInsurance;
+			break;
+		case 7 :
+			break;
+		}
+		System.out.println("-----보험리스트-----");
+		if(type == null) { //null이면 전체보험
+			for (Insurance insurance: this.insuranceList.getInsuranceList()) {
+				this.showInsuranceData(insurance);
+			}
+		} else {
+			for (Insurance insurance: this.insuranceList.getInsuranceList()) {
+				if(insurance.getType() == type) {
+					this.showInsuranceData(insurance);
+				}
+			}
+		}
+		System.out.println("-----------------\\n");
+	}
+	
 	// 보험 가입하기
+	private void ContractInsurnace() {
+		
+	}
+
+	// 보험 가입자 선택하기
 	private void selectInsurant() {
 		Customer customer = null;
 		while (customer == null) {
@@ -488,15 +534,6 @@ public class Home {
 				continue;
 			}
 		}
-	}
-	
-	// 전체 보험리스트 조회하기
-	private void showAllInsurance() {
-		System.out.println("-----전체보험리스트-----");
-		for (Insurance insurance: this.insuranceList.getInsuranceList()) {
-			this.showInsuranceData(insurance);
-		}
-		System.out.println("-----------------\\n");
 	}
 	
 	// 보험 정보 출력하기
