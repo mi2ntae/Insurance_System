@@ -37,7 +37,7 @@ public class Home {
 
 	private InsuranceList insuranceList;
 	private ContractList contractList;
-	private CustomerListImpl customerList;
+	private CustomerList customerList;
 	private EmployeeList employeeList;
 	
 	public Home() {
@@ -452,20 +452,20 @@ public class Home {
 		}
 	}
 	// 고객 로그인하기
-	private boolean loginCustomer(String id, String pw) {
-		for(Customer customer : this.customerList.getCustomerList()) {
-			if(customer.getCustomerId().equals(id)) {
-				if(customer.getPassword().equals(pw)) {
-					return true;
-				}else {
-					System.out.println("error : 비밀번호가 틀립니다!");
-					return false;
-				}
-			}
-		}
-		System.out.println("error : 존재하지 않는 ID입니다!");
-		return false;
-	}
+//	private boolean loginCustomer(String id, String pw) {
+//		for(Customer customer : this.customerList.getCustomerList()) {
+//			if(customer.getCustomerId().equals(id)) {
+//				if(customer.getPassword().equals(pw)) {
+//					return true;
+//				}else {
+//					System.out.println("error : 비밀번호가 틀립니다!");
+//					return false;
+//				}
+//			}
+//		}
+//		System.out.println("error : 존재하지 않는 ID입니다!");
+//		return false;
+//	}
 	
 	// 직원 가입하기
 	private void createEmployee() {
@@ -537,20 +537,20 @@ public class Home {
 	}
 
 	// 고객 로그인하기
-	private boolean loginEmployee(String id, String pw) {
-		for (Customer customer : this.customerList.getCustomerList()) {
-			if (customer.getCustomerId().equals(id)) {
-				if (customer.getPassword().equals(pw)) {
-					return true;
-				} else {
-					System.out.println("error : 비밀번호가 틀립니다!");
-					return false;
-				}
-			}
-		}
-		System.out.println("error : 존재하지 않는 ID입니다!");
-		return false;
-	}
+//	private boolean loginEmployee(String id, String pw) {
+//		for (Customer customer : this.customerList.getCustomerList()) {
+//			if (customer.getCustomerId().equals(id)) {
+//				if (customer.getPassword().equals(pw)) {
+//					return true;
+//				} else {
+//					System.out.println("error : 비밀번호가 틀립니다!");
+//					return false;
+//				}
+//			}
+//		}
+//		System.out.println("error : 존재하지 않는 ID입니다!");
+//		return false;
+//	}
 
 	// 보험 만들기
 	private void createInsurance() {
