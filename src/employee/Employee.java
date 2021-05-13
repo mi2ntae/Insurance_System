@@ -29,11 +29,4 @@ public class Employee {
 
 	public eEmployeeRole getEmployeeRole() {return employeeRole;}
 	public void setEmployeeRole(eEmployeeRole employeeRole) {this.employeeRole = employeeRole;}
-	
-//	System.out.println("1.보험개발자");
-//	System.out.println("2.보험상품 확정자");
-//	System.out.println("3.영업사원");
-//	System.out.println("4.계약관리인");
-//	System.out.println("5.보상처리사");
-//	System.out.println("6.U/W");
 }

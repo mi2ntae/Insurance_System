@@ -15,7 +15,7 @@ public class CustomerListImpl implements CustomerList {
 		this.customerList = new ArrayList<Customer>();
 	}
 	
-	// getters & setters
+	// Getters & Setters
 	public ArrayList<Customer> getCustomerList() {return customerList;}
 	public void setCustomerList(ArrayList<Customer> customerList) {this.customerList = customerList;}
 	
