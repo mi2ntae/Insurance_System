@@ -36,7 +36,7 @@ public class Constants {
 	}
 	
 	public static enum eEmployeeRole{
-		salesperson, InsuranceDeveloper, InsuranceConfirmer, CompensationHndler, ContractManager
+		salesperson, insuranceDeveloper, insuranceConfirmer, compensationHandler, contractManager, underWriter;
 	}
 }
 
