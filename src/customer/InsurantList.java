@@ -11,9 +11,7 @@ import global.Constants.eUsageOfStructure;
 public interface InsurantList {
 	
 	// Methods
-	public void insert(int accidentHistory, String address, int age, String id, String name, String phoneNum,
-			long postedPriceOfStructure, eUsageOfStructure usageOfStructure, eGender gender, eJob job,
-			eRankOfCar rankOfCar, eRiskOfTripCountry riskOfTripCountry);
+	public void insert(Insurant insurant);
 	public Insurant select(String insurantId);
 	public boolean delete(String insurantId);
 	public void updateNameById(String insurantId, String data);

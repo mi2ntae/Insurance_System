@@ -30,23 +30,8 @@ public class InsurantListImpl implements InsurantList {
 
 	// Methods
 	@Override
-	public void insert(int accidentHistory, String address, int age, String id, String name, String phoneNum,
-			long postedPriceOfStructure, eUsageOfStructure usageOfStructure, eGender gender, eJob job,
-			eRankOfCar rankOfCar, eRiskOfTripCountry riskOfTripCountry) {
-		Insurant Insurant = new Insurant();
-		Insurant.setAccidentHistory(accidentHistory);
-		Insurant.setAddress(address);
-		Insurant.setAge(age);
-		Insurant.setInsurantId(id);
-		Insurant.setName(name);
-		Insurant.setPhoneNumber(phoneNum);
-		Insurant.setPostedPriceOfStructure(postedPriceOfStructure);
-		Insurant.setUsageOfStructure(usageOfStructure);
-		Insurant.setGender(gender);
-		Insurant.setJob(job);
-		Insurant.setRankOfCar(rankOfCar);
-		Insurant.setRiskOfTripCountry(riskOfTripCountry);
-		this.insurantList.add(Insurant);
+	public void insert(Insurant insurant) {
+		this.insurantList.add(insurant);
 	}
 	
 	public Insurant select(String insurantId) {

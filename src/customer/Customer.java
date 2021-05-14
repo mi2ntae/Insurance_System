@@ -67,7 +67,7 @@ public class Customer {
 
 	}
 
-	public void createInsurant(int accidentHistory, String address, int age, String id, String name, String phoneNum, long postedPriceOfStructure, eUsageOfStructure usageOfStructure, eGender gender, eJob job, eRankOfCar rankOfCar, eRiskOfTripCountry riskOfTripCountry) {
-		this.insurantList.insert(accidentHistory,address,age,id,name,phoneNum,postedPriceOfStructure,usageOfStructure,gender,job,rankOfCar,riskOfTripCountry);
+	public void createInsurant(Insurant insurant) {
+		this.insurantList.insert(insurant);
 	}
 }
