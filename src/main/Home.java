@@ -31,6 +31,20 @@ import insurance.InsuranceList;
 import insurance.InsuranceListImpl;
 import insurance.TripInsurance;
 
+/* 	
+ * 
+ * 공통 : 요율 refactoring enum으로
+ * 		 employee extend하기, home에서 employee함수를 통해서 작업(프린트문x, 데이터만 옮겨가기)
+		 Guarantee Plan 생각하기
+		 
+ * 소철 : 보험 일부 정보보기, insurant 가입할 때 case나눠서 입력받기, 예외처리 추가하고 에러메시지 통일
+ * 
+ * 민태 : insurance id, name 입력받는 것 추가, 예외처리 추가하고 에러메시지 통일
+ * 
+ * 영석 : 메뉴 추가하고 함수 연결하기, DBA(멋져) serialization으로 각 어레이리스트들 저장, 불러오기(가능하면)
+ * 
+ */
+
 public class Home {
 	private Scanner scn;
 
@@ -78,7 +92,8 @@ public class Home {
 									try {
 										switch (scn.nextInt()) {
 										case 1:
-											showAllInsurance();
+											this.showAllInsurance();
+											this.contractInsurnace();
 											break;
 										case 2:
 											break;
@@ -175,7 +190,7 @@ public class Home {
 										try {
 											switch (scn.nextInt()) {
 											case 1:
-												// 보험상품 확정하기
+												this.confirmInsurance();
 												break;
 											case 0:
 												break employee2;
@@ -464,7 +479,7 @@ public class Home {
 				}
 			}
 		}
-		System.out.println("-----------------\\n");
+		System.out.println("-----------------\n");
 	}
 	
 	// 보험 가입하기
@@ -516,7 +531,7 @@ public class Home {
 				String InsurantId = scn.next();
 				if(customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
-					createContract();
+					this.contractInsurnace();
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
 				}
@@ -657,10 +672,6 @@ public class Home {
 		customer.getInsurantList().select(id);
 	}
 	
-	
-	private void createContract() {
-		
-	}
 	// 고객 가입하기
 	private void createCustomer() {
 		Customer customer = new Customer();
@@ -908,6 +919,11 @@ public class Home {
 	// 보험 세부설정하기
 	private Insurance createDetailInsurance(Insurance newInsurance) {
 		while (true) {
+			// 이름, 아이디
+			break;
+		}
+
+		while (true) {
 			System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
 			double[] tmpRateOfAge = new double[7];
 			System.out.println("  <나이 요율표>");
@@ -932,7 +948,7 @@ public class Home {
 		while (true) {
 			System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
 			double[] tmpRateOfGender = new double[2];
-			System.out.printf("\n  <성별 요율표>");
+			System.out.println("\n  <성별 요율표>");
 			System.out.printf("남자 : ");
 			tmpRateOfGender[0] = scn.nextDouble();
 			System.out.printf("여자 : ");
@@ -945,7 +961,7 @@ public class Home {
 			tmpRateOfJob[1] = scn.nextDouble();
 			System.out.printf("공장노동직 : ");
 			tmpRateOfJob[2] = scn.nextDouble();
-			System.out.println("학생 : ");
+			System.out.printf("학생 : ");
 			tmpRateOfJob[3] = scn.nextDouble();
 			System.out.printf("교사(수) : ");
 			tmpRateOfJob[4] = scn.nextDouble();
