@@ -14,6 +14,7 @@ import employee.Employee;
 import employee.EmployeeList;
 import employee.EmployeeListImpl;
 import employee.UnderWriter;
+import global.Constants;
 import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -971,6 +972,7 @@ public class Home {
 						newInsurance.setRateOfAge(this.insuranceList.getInsuranceList().get(Integer.parseInt(inputIndex)).getRateOfAge());
 						newInsurance.setRateOfGender(this.insuranceList.getInsuranceList().get(Integer.parseInt(inputIndex)).getRateOfGender());
 						newInsurance.setRateOfJob(this.insuranceList.getInsuranceList().get(Integer.parseInt(inputIndex)).getRateOfJob());
+						newInsurance.setClone(true);
 						System.out.println("선택한 보험의 요율정보로 설정했습니다. 세부설정 단계로 넘어갑니다.");
 						return newInsurance;
 					} else {
@@ -990,6 +992,20 @@ public class Home {
 	
 	// 보험 세부설정하기
 	private Insurance createDetailInsurance(Insurance newInsurance) {
+		getid:while (true) {
+			System.out.printf("만드실 보험의 ID를 입력해주세요 : ");
+			String inputId = scn.next();
+			for (Insurance insurance: this.insuranceList.getInsuranceList()) {
+				if (inputId.equals(insurance.getInsuranceId())) {
+					System.out.println("이미 존재하는 ID입니다. 다시 입력해주세요");
+					continue getid;
+				}
+			}
+			newInsurance.setInsuranceId(inputId);
+			break;
+		}
+		
+		
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
 			newInsurance.setName(scn.next());
@@ -1009,8 +1025,16 @@ public class Home {
 					System.out.println("-----------------------");
 					continue;
 				}
-				while (true) {
-					System.out.printf("보장 기간을 입력해주세요(연단위) : ");
+			} catch (InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+				continue;
+			}
+	
+			while (true) {
+				System.out.printf("보장 기간을 입력해주세요(연단위) : ");
+				try {
 					int inputPeriod = scn.nextInt();
 					if (inputPeriod >= 80 || inputPeriod <= 0) {
 						System.out.println("보장기간은 1~79년 사이에서 설정해주세요");
@@ -1018,70 +1042,88 @@ public class Home {
 					}
 					newInsurance.setWarrantyPeriod(inputPeriod);
 					break;
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+					continue;
 				}
-				
-			} catch (InputMismatchException e) {
-				System.out.println("error : 숫자를 입력해주세요");
-				System.out.println("-----------------------");
-				scn.nextLine();
-				continue;
 			}
 			break;
 		}
-		String[] ageArray = {"영유아","10대","20대","30대","40대","50대","노년층"};
-		int ageIndex = 0;
-		double[] tmpRateOfAge = new double[ageArray.length];
-		System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
-		while (ageIndex < ageArray.length) {
-			try {
-				System.out.printf(ageArray[ageIndex]+" : ");
-				tmpRateOfAge[ageIndex] = scn.nextDouble();
-			} catch (InputMismatchException e) {
-				System.out.println("error : 숫자를 입력해주세요");
-				System.out.println("-----------------------");
-				scn.nextLine();
-				continue;
+		if (!newInsurance.isClone()) {
+			String[] ageArray = {"영유아","10대","20대","30대","40대","50대","노년층"};
+			int ageIndex = 0;
+			double[] tmpRateOfAge = new double[ageArray.length];
+			System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
+			while (ageIndex < ageArray.length) {
+				try {
+					System.out.printf(ageArray[ageIndex]+" : ");
+					tmpRateOfAge[ageIndex] = scn.nextDouble();
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+					continue;
+				}
+				ageIndex++;
 			}
-			ageIndex++;
-		}
-		newInsurance.setRateOfAge(tmpRateOfAge);
+			newInsurance.setRateOfAge(tmpRateOfAge);
+			
+			double[] tmpRateOfGender = new double[2];
+			while (true) {
+				try {
+					System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
+					System.out.printf("남자 : ");
+					tmpRateOfGender[0] = scn.nextDouble();
+					System.out.printf("여자 : ");
+					tmpRateOfGender[1] = scn.nextDouble();
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+					continue;
+				}
+				break;
+			}
+			newInsurance.setRateOfGender(tmpRateOfGender);
+			
+			String[] jobArray = {"직장인","운전기사","공장노동직","학생","교사(수)","군인","기타직업"};
+			int jobIndex = 0;
+			double[] tmpRateOfJob = new double[jobArray.length];
+			System.out.println("직업에 대한 요율을 설정합니다. ex) 직장 : 1.0)");
+			while (jobIndex < jobArray.length) {
+				try {
+					System.out.printf(jobArray[jobIndex]+" : ");
+					tmpRateOfJob[jobIndex] = scn.nextDouble();
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+					continue;
+				}
+				jobIndex++;
+			}
+			newInsurance.setRateOfJob(tmpRateOfJob);
+		} 
 		
-		double[] tmpRateOfGender = new double[2];
-		while (true) {
-			try {
-				System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
-				System.out.printf("남자 : ");
-				tmpRateOfGender[0] = scn.nextDouble();
-				System.out.printf("여자 : ");
-				tmpRateOfGender[1] = scn.nextDouble();
-			} catch (InputMismatchException e) {
-				System.out.println("error : 숫자를 입력해주세요");
-				System.out.println("-----------------------");
-				scn.nextLine();
-				continue;
-			}
+		// 특화 요율 설정하기 코딩해야함
+		switch (newInsurance.getType()) {
+		case actualCostInsurance:
+			break;
+		case cancerInsurance:
+			break;
+		case dentalInsurance:
+			break;
+		case driverInsurance:
+			break;
+		case fireInsurance:
+			break;
+		case tripInsurance:
+			break;
+		default:
 			break;
 		}
-		newInsurance.setRateOfGender(tmpRateOfGender);
-		
-		String[] jobArray = {"직장인","운전기사","공장노동직","학생","교사(수)","군인","기타직업"};
-		int jobIndex = 0;
-		double[] tmpRateOfJob = new double[jobArray.length];
-		System.out.println("직업에 대한 요율을 설정합니다. ex) 직장 : 1.0)");
-		while (jobIndex < jobArray.length) {
-			try {
-				System.out.printf(jobArray[jobIndex]+" : ");
-				tmpRateOfJob[jobIndex] = scn.nextDouble();
-			} catch (InputMismatchException e) {
-				System.out.println("error : 숫자를 입력해주세요");
-				System.out.println("-----------------------");
-				scn.nextLine();
-				continue;
-			}
-			jobIndex++;
-		}
-		newInsurance.setRateOfJob(tmpRateOfJob);
-		
 		while (true) {
 			// 보장 내역 설정하기 코딩해야함
 			break;
