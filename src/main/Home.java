@@ -62,6 +62,7 @@ public class Home {
 		this.employeeList = new EmployeeListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
+			e.printStackTrace();
 		}
 	}
 	
@@ -86,7 +87,9 @@ public class Home {
 							String id = scn.next();
 							System.out.println("비밀번호를 입력하세요 : ");
 							String pw = scn.next();
-							if (loginCustomer(id, pw)) {
+							Customer customer = loginCustomer(id, pw);
+							if (customer != null) {
+								System.out.println("안녕하세요 " + customer.getName() + "님!");
 								login: while (true) {
 									System.out.println("1.전체 보험리스트 확인하기");
 									System.out.println("2.고객 만족 설문조사 작성하기");
@@ -146,13 +149,13 @@ public class Home {
 					try {
 						switch (scn.nextInt()) {
 						case 1:
-							Employee employee = new Employee();
 							System.out.println("ID를 입력하세요 : ");
 							String id = scn.next();
 							System.out.println("비밀번호를 입력하세요 : ");
 							String pw = scn.next();
-							if (this.loginEmployee(id, pw) != null) {
-								employee.setEmployeeRole(this.loginEmployee(id, pw));
+							Employee employee = this.loginEmployee(id, pw);
+							if (employee != null) {
+								System.out.println("안녕하세요 " + employee.getName() + "님!");
 								switch (employee.getEmployeeRole()) {
 								case insuranceDeveloper:
 									employee2: while (true) {
@@ -323,6 +326,8 @@ public class Home {
 									}
 									break;
 								default:
+									System.out.println("asdasdasdasdasdasd");
+									System.out.println(employee.getEmployeeRole());
 									break;
 
 								}
@@ -752,19 +757,20 @@ public class Home {
 		}
 	}
 	// 고객 로그인하기
-	private boolean loginCustomer(String id, String pw) {
+	private Customer loginCustomer(String id, String pw) {
 		for(Customer customer : this.customerList.getCustomerList()) {
 			if(customer.getCustomerId().equals(id)) {
 				if(customer.getPassword().equals(pw)) {
-					return true;
+					System.out.println("!!!로그인에 성공하였습니다!!!!");
+					return customer;
 				}else {
 					System.out.println("error : 비밀번호가 틀립니다!");
-					return false;
+					return null;
 				}
 			}
 		}
 		System.out.println("error : 존재하지 않는 ID입니다!");
-		return false;
+		return null;
 	}
 	
 	// 직원 가입하기
@@ -839,11 +845,12 @@ public class Home {
 	}
 
 	// 직원 로그인하기
-	private Constants.eEmployeeRole loginEmployee(String id, String pw) {
+	private Employee loginEmployee(String id, String pw) {
 		for (Employee employee : this.employeeList.getEmployeeList()) {
 			if (employee.getEmployeeId().equals(id)) {
 				if (employee.getPassword().equals(pw)) {
-					return employee.getEmployeeRole();
+					System.out.println("!!!로그인에 성공하였습니다!!!!");
+					return employee;
 				} else {
 					System.out.println("error : 비밀번호가 틀립니다!");
 					return null;
