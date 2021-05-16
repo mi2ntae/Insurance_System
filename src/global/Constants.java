@@ -41,7 +41,20 @@ public class Constants {
 	}
 
 	public static enum eEmployeeRole {
-		salesperson, insuranceDeveloper, insuranceConfirmer, compensationHandler, contractManager, underWriter
+		insuranceDeveloper(1),
+		insuranceConfirmer(2),
+		salesperson(3),
+		contractManager(4),
+		compensationHandler(5),
+		underWriter(6);
+		
+		final private int num;
+		
+		private eEmployeeRole(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 }

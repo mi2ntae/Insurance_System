@@ -1,5 +1,7 @@
 package employee;
 
+import java.util.Scanner;
+
 import global.Constants.eEmployeeRole;
 
 public class Employee {
@@ -29,4 +31,25 @@ public class Employee {
 
 	public eEmployeeRole getEmployeeRole() {return employeeRole;}
 	public void setEmployeeRole(eEmployeeRole employeeRole) {this.employeeRole = employeeRole;}
+	
+	// Public Methods
+	public String writeToFile() {
+		String output = null;
+		output = this.name + ' ' + this.phoneNumber + ' ' + this.employeeRole.getNum() + ' ' + this.employeeId + ' ' + this.password + '\n';
+		return output;
+		
+	}
+	
+	public void readFromFile(Scanner sc) {
+		this.setName(sc.next());
+		this.setPhoneNumber(sc.next());
+		int input = sc.nextInt();
+		for(eEmployeeRole employeeRole : eEmployeeRole.values()) {
+			if(employeeRole.getNum() == input) this.setEmployeeRole(employeeRole);
+		}
+		this.setEmployeeId(sc.next());
+		this.setPassword(sc.next());
+	}
+	
+	// Private Methods
 }
