@@ -115,6 +115,7 @@ public class Home {
 													continue;
 												}
 											}
+											this.contractInsurnace(customer);
 											break;
 										case 2:
 											break;
@@ -521,10 +522,11 @@ public class Home {
 		System.out.println("-----------------\n");
 	}
 	
-	// 보험 가입하기 to do
+
+	// 보험 가입하기
 	private void contractInsurnace(Customer customer) {
 		Insurance insurance = null;
-		while (insurance == null) {
+		while(insurance == null) {
 			System.out.print("가입할 보험 ID를 입력해주세요 : ");
 			insurance = this.insuranceList.select(scn.next());
 			if (insurance != null) {
@@ -542,7 +544,7 @@ public class Home {
 	}
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer) {
-		System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
+		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		int input = scn.nextInt();
 		while(input != 1 && input != 2) {
 			System.out.println("잘못된 입력입니다");
