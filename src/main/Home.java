@@ -53,12 +53,16 @@ public class Home {
 	private CustomerList customerList;
 	private EmployeeList employeeList;
 	
-	public Home() {
+	public Home(){
+		try {
 		this.scn = new Scanner(System.in);
 		this.insuranceList = new InsuranceListImpl();
 		this.contractList = new ContractListImpl();
 		this.customerList = new CustomerListImpl();
 		this.employeeList = new EmployeeListImpl();
+		}catch(Exception e) {
+			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
+		}
 	}
 	
 	public void start() {

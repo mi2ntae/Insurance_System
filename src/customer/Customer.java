@@ -1,6 +1,7 @@
 package customer;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import global.Constants.eGender;
 import global.Constants.eJob;
@@ -11,10 +12,10 @@ import insurance.InsuranceListImpl;
 
 public class Customer {
 	// Attributes
-	private String address;
-	private String customerId;
 	private String name;
+	private String address;
 	private String phoneNumber;
+	private String customerId;
 	private String password;
 	
 	// Composition Class
@@ -64,7 +65,22 @@ public class Customer {
 	}
 
 	public void writeSurvey(){
-
+	}
+	
+	public String writeToFile() {
+		String output = null;
+		output = this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + this.customerId + ' ' + this.password + '\n';
+		return output;
+		
+	}
+	
+	public void readFromFile(Scanner sc) {
+		this.setName(sc.next());
+		this.setAddress(sc.next());
+		this.setPhoneNumber(sc.next());
+		this.setCustomerId(sc.next());
+		this.setPassword(sc.next());
+		
 	}
 
 	public void createInsurant(Insurant insurant) {
