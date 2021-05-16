@@ -7,6 +7,7 @@ public class Accident {
 	private String content;
 	private int contractId;
 	private boolean handlingStatus;
+	private int damageCost;
 	
 	// Constructor
 	public Accident(){
@@ -29,4 +30,6 @@ public class Accident {
 	public boolean isHandlingStatus() {return handlingStatus;}
 	public void setHandlingStatus(boolean handlingStatus) {this.handlingStatus = handlingStatus;}
 
+	public int getDamageCost() {return damageCost;}
+	public void setDamageCost(int damageCost) {this.damageCost = damageCost;}	
 }

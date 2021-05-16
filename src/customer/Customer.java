@@ -75,12 +75,11 @@ public class Customer {
 	}
 	
 	public void readFromFile(Scanner sc) {
-		this.setName(sc.next());
-		this.setAddress(sc.next());
-		this.setPhoneNumber(sc.next());
-		this.setCustomerId(sc.next());
-		this.setPassword(sc.next());
-		
+		this.name = sc.next();
+		this.address = sc.next();
+		this.phoneNumber = sc.next();
+		this.customerId = sc.next();
+		this.password = sc.next();
 	}
 
 	public void createInsurant(Insurant insurant) {

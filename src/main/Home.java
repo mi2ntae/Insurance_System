@@ -101,6 +101,20 @@ public class Home {
 										switch (scn.nextInt()) {
 										case 1:
 											this.showAllInsurance();
+											while (true) {
+												System.out.println("보험을 가입하시겠습니까?(y/n)");
+												String input = scn.next();
+												if (input.equals("y")) {
+													this.contractInsurnace(customer); // customer를 받아가서 아이디를 받거나, customer.getCustomerId()로 아이디를 받아갈 것
+													break;
+												} else if (input.equals("n")) {
+													break;
+												} else {
+													System.out.println("error : 정해진 문자를 사용해주세요");
+													System.out.println("-----------------------");
+													continue;
+												}
+											}
 											this.contractInsurnace(customer);
 											break;
 										case 2:
@@ -360,8 +374,7 @@ public class Home {
 	}
 	
 	// 가입한 보험 리스트 보기
-	private void showSubscribedInsurance() {
-		Customer customer = this.selectCustomer();
+	private void showSubscribedInsurance(Customer customer) {
 		for (Contract contract : this.contractList.getContractList()) {
 			if(contract.getCustomer().getCustomerId() == customer.getCustomerId()) {
 				this.showInsuranceData(contract.getInsurance());
@@ -509,6 +522,7 @@ public class Home {
 		System.out.println("-----------------\n");
 	}
 	
+
 	// 보험 가입하기
 	private void contractInsurnace(Customer customer) {
 		Insurance insurance = null;
@@ -517,32 +531,17 @@ public class Home {
 			insurance = this.insuranceList.select(scn.next());
 			if (insurance != null) {
 				Insurant insurant = this.selectInsurant(customer);
-				if(customer != null) {
+				if (customer != null) {
 					Contract contract = new Contract();
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
 					System.out.println("!!!!보험가입이 완료되었습니다!!!!");
 				}
 			} else {
-				System.out.print("해당 보험이 존재하지 않습니다");
+				System.out.println("해당 보험이 존재하지 않습니다");
 			}
 		}
 	}
-	
-	// 고객 선택
-	private Customer selectCustomer() {
-		Customer customer = null;
-		while (customer == null) {
-			System.out.print("가입할 고객 아이디를 입력해주세요 : ");
-			String customerId = scn.next();
-			customer = this.customerList.select(customerId);
-			if(customer == null) {
-				System.out.println("해당 고객이 존재하지 않습니다");
-			}
-		}
-		return customer;
-	}
-
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer) {
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
@@ -1006,7 +1005,6 @@ public class Home {
 			break;
 		}
 		
-		
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
 			newInsurance.setName(scn.next());
@@ -1110,8 +1108,6 @@ public class Home {
 		
 		// 특화 요율 설정하기 코딩해야함
 		switch (newInsurance.getType()) {
-		case actualCostInsurance:
-			break;
 		case cancerInsurance:
 			break;
 		case dentalInsurance:
@@ -1121,6 +1117,8 @@ public class Home {
 		case fireInsurance:
 			break;
 		case tripInsurance:
+			break;
+		case actualCostInsurance:
 			break;
 		default:
 			break;

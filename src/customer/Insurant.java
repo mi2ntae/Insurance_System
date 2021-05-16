@@ -9,11 +9,11 @@ import global.Constants.eUsageOfStructure;
 public class Insurant {
 
 	// Attributes
+	private String insurantId;
+	private String name;
 	private int accidentHistory;
 	private String address;
 	private int age;
-	private String insurantId;
-	private String name;
 	private String phoneNumber;
 	private long postedPriceOfStructure;
 	private eUsageOfStructure usageOfStructure;
