@@ -1,6 +1,12 @@
 package customer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CustomerListImpl implements CustomerList {
 
@@ -11,8 +17,9 @@ public class CustomerListImpl implements CustomerList {
 	 private Customer customer;
 
 	// Constructor
-	public CustomerListImpl() {
+	public CustomerListImpl() throws FileNotFoundException {
 		this.customerList = new ArrayList<Customer>();
+		this.readFromFile();
 	}
 	
 	// Getters & Setters
@@ -22,6 +29,7 @@ public class CustomerListImpl implements CustomerList {
 	// Public Methods
 	public boolean insert(Customer customer) {
 		if (this.customerList.add(customer)) {
+			this.writeToFile(customer);
 			return true;
 		} else {
 			return false;
@@ -72,6 +80,26 @@ public class CustomerListImpl implements CustomerList {
 			}
 		}
 		return -1;
+	}
+	
+	private void writeToFile(Customer customer) {
+		File file = new File("data/customer");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+		    writer.append(customer.writeToFile());
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+	private void readFromFile() throws FileNotFoundException {
+		File file = new File("data/customer");
+		Scanner sc = new Scanner(file);
+		while (sc.hasNext()) {
+			Customer customer = new Customer();
+			customer.readFromFile(sc);
+			this.customerList.add(customer);
+		}	
+		
 	}
 	
 }
