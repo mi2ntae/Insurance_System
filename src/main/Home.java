@@ -101,7 +101,7 @@ public class Home {
 										switch (scn.nextInt()) {
 										case 1:
 											this.showAllInsurance();
-											this.contractInsurnace();
+											this.contractInsurnace(customer);
 											break;
 										case 2:
 											break;
@@ -509,22 +509,23 @@ public class Home {
 		System.out.println("-----------------\n");
 	}
 	
-	// 보험 가입하기 to do
-	private void contractInsurnace() {
+	// 보험 가입하기
+	private void contractInsurnace(Customer customer) {
 		Insurance insurance = null;
-		System.out.print("가입할 보험 ID를 입력해주세요 : ");
-		insurance = this.insuranceList.select(scn.next());
-		if (insurance != null) {
-			Customer customer = this.selectCustomer();
-			Insurant insurant = this.selectInsurant(customer);
-			if(customer != null) {
-				Contract contract = new Contract();
-				contract.joinInsurance(customer, insurance, insurant);
-				this.contractList.insert(contract);
-				System.out.print("!!!!보험가입이 완료되었습니다!!!!");
+		while(insurance == null) {
+			System.out.print("가입할 보험 ID를 입력해주세요 : ");
+			insurance = this.insuranceList.select(scn.next());
+			if (insurance != null) {
+				Insurant insurant = this.selectInsurant(customer);
+				if(customer != null) {
+					Contract contract = new Contract();
+					contract.joinInsurance(customer, insurance, insurant);
+					this.contractList.insert(contract);
+					System.out.println("!!!!보험가입이 완료되었습니다!!!!");
+				}
+			} else {
+				System.out.print("해당 보험이 존재하지 않습니다");
 			}
-		} else {
-			System.out.print("해당 보험이 존재하지 않습니다");
 		}
 	}
 	
@@ -544,7 +545,7 @@ public class Home {
 
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer) {
-		System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
+		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		int input = scn.nextInt();
 		while(input != 1 && input != 2) {
 			System.out.println("잘못된 입력입니다");
@@ -558,7 +559,7 @@ public class Home {
 				String InsurantId = scn.next();
 				if(customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
-					this.contractInsurnace();
+					this.contractInsurnace(customer);
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
 				}
@@ -599,7 +600,7 @@ public class Home {
 		long postedPriceOfStructure = scn.nextLong();
 		insurant.setPostedPriceOfStructure(postedPriceOfStructure);
 		
-		System.out.print("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
+		System.out.println("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
 		eUsageOfStructure usageOfStructure = null;
 		while (usageOfStructure == null) {
 			switch (scn.nextInt()) {
