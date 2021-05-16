@@ -101,7 +101,20 @@ public class Home {
 										switch (scn.nextInt()) {
 										case 1:
 											this.showAllInsurance();
-											this.contractInsurnace();
+											while (true) {
+												System.out.println("보험을 가입하시겠습니까?(y/n)");
+												String input = scn.next();
+												if (input.equals("y")) {
+													this.contractInsurnace(customer); // customer를 받아가서 아이디를 받거나, customer.getCustomerId()로 아이디를 받아갈 것
+													break;
+												} else if (input.equals("n")) {
+													break;
+												} else {
+													System.out.println("error : 정해진 문자를 사용해주세요");
+													System.out.println("-----------------------");
+													continue;
+												}
+											}
 											break;
 										case 2:
 											break;
@@ -360,8 +373,7 @@ public class Home {
 	}
 	
 	// 가입한 보험 리스트 보기
-	private void showSubscribedInsurance() {
-		Customer customer = this.selectCustomer();
+	private void showSubscribedInsurance(Customer customer) {
 		for (Contract contract : this.contractList.getContractList()) {
 			if(contract.getCustomer().getCustomerId() == customer.getCustomerId()) {
 				this.showInsuranceData(contract.getInsurance());
@@ -510,38 +522,24 @@ public class Home {
 	}
 	
 	// 보험 가입하기 to do
-	private void contractInsurnace() {
+	private void contractInsurnace(Customer customer) {
 		Insurance insurance = null;
-		System.out.print("가입할 보험 ID를 입력해주세요 : ");
-		insurance = this.insuranceList.select(scn.next());
-		if (insurance != null) {
-			Customer customer = this.selectCustomer();
-			Insurant insurant = this.selectInsurant(customer);
-			if(customer != null) {
-				Contract contract = new Contract();
-				contract.joinInsurance(customer, insurance, insurant);
-				this.contractList.insert(contract);
-				System.out.print("!!!!보험가입이 완료되었습니다!!!!");
-			}
-		} else {
-			System.out.print("해당 보험이 존재하지 않습니다");
-		}
-	}
-	
-	// 고객 선택
-	private Customer selectCustomer() {
-		Customer customer = null;
-		while (customer == null) {
-			System.out.print("가입할 고객 아이디를 입력해주세요 : ");
-			String customerId = scn.next();
-			customer = this.customerList.select(customerId);
-			if(customer == null) {
-				System.out.println("해당 고객이 존재하지 않습니다");
+		while (insurance == null) {
+			System.out.print("가입할 보험 ID를 입력해주세요 : ");
+			insurance = this.insuranceList.select(scn.next());
+			if (insurance != null) {
+				Insurant insurant = this.selectInsurant(customer);
+				if (customer != null) {
+					Contract contract = new Contract();
+					contract.joinInsurance(customer, insurance, insurant);
+					this.contractList.insert(contract);
+					System.out.println("!!!!보험가입이 완료되었습니다!!!!");
+				}
+			} else {
+				System.out.println("해당 보험이 존재하지 않습니다");
 			}
 		}
-		return customer;
 	}
-
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer) {
 		System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
@@ -558,7 +556,7 @@ public class Home {
 				String InsurantId = scn.next();
 				if(customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
-					this.contractInsurnace();
+					this.contractInsurnace(customer);
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
 				}
@@ -599,7 +597,7 @@ public class Home {
 		long postedPriceOfStructure = scn.nextLong();
 		insurant.setPostedPriceOfStructure(postedPriceOfStructure);
 		
-		System.out.print("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
+		System.out.println("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
 		eUsageOfStructure usageOfStructure = null;
 		while (usageOfStructure == null) {
 			switch (scn.nextInt()) {
@@ -1005,7 +1003,6 @@ public class Home {
 			break;
 		}
 		
-		
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
 			newInsurance.setName(scn.next());
@@ -1109,8 +1106,6 @@ public class Home {
 		
 		// 특화 요율 설정하기 코딩해야함
 		switch (newInsurance.getType()) {
-		case actualCostInsurance:
-			break;
 		case cancerInsurance:
 			break;
 		case dentalInsurance:
@@ -1120,6 +1115,8 @@ public class Home {
 		case fireInsurance:
 			break;
 		case tripInsurance:
+			break;
+		case actualCostInsurance:
 			break;
 		default:
 			break;

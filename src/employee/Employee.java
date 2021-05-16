@@ -40,15 +40,15 @@ public class Employee {
 		
 	}
 	
-	public void readFromFile(Scanner sc) {
-		this.setName(sc.next());
-		this.setPhoneNumber(sc.next());
-		int input = sc.nextInt();
+	public void readFromFile(Scanner scn) {
+		this.name = scn.next();
+		this.phoneNumber = scn.next();
+		int input = scn.nextInt();
 		for(eEmployeeRole employeeRole : eEmployeeRole.values()) {
-			if(employeeRole.getNum() == input) this.setEmployeeRole(employeeRole);
+			if(employeeRole.getNum() == input) this.employeeRole = employeeRole;
 		}
-		this.setEmployeeId(sc.next());
-		this.setPassword(sc.next());
+		this.employeeId = scn.next();
+		this.password = scn.next();
 	}
 	
 	// Private Methods

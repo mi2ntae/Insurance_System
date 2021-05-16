@@ -43,6 +43,7 @@ public class DriverInsurance extends Insurance {
 			fee *= this.getRateOfGender()[1];
 		}
 		
+		
 		//자동차 등급에 따른 요율 계산
 		switch(insurant.getRankOfCar()) {
 		case high :
