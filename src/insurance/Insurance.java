@@ -18,6 +18,7 @@ public abstract class Insurance {
 	private int warrantyPeriod;
 	private boolean confirmedStatus = false;
 	private boolean specialContract;
+	private boolean clone;
 	
 	// Composition Class
 	private MembershipCondition membershipCondition;
@@ -71,6 +72,9 @@ public abstract class Insurance {
 	
 	public boolean isSpecialContract() {return specialContract;}
 	public void setSpecialContract(boolean specialContract) {this.specialContract = specialContract;}
+	
+	public boolean isClone() {return clone;}
+	public void setClone(boolean clone) {this.clone = clone;}
 	
 	// Methods
 	abstract public int calculateFee(int insurantId);
