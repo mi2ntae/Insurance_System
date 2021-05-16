@@ -17,6 +17,7 @@ public abstract class Insurance {
 	private int specialContractFee;
 	private int warrantyPeriod;
 	private boolean confirmedStatus = false;
+	private boolean specialContract;
 	
 	// Composition Class
 	private MembershipCondition membershipCondition;
@@ -67,6 +68,9 @@ public abstract class Insurance {
 	
 	public eGender getDeniedGender() {return deniedGender;}
 	public void setDeniedGender(eGender deniedGender) {this.deniedGender = deniedGender;}
+	
+	public boolean isSpecialContract() {return specialContract;}
+	public void setSpecialContract(boolean specialContract) {this.specialContract = specialContract;}
 	
 	// Methods
 	abstract public int calculateFee(int insurantId);

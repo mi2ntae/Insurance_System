@@ -56,5 +56,25 @@ public class Constants {
 
 		public int getNum() {return num;}
 	}
+	
+//	public static enum eRateOfAge{
+//		baby("영유아 : "),
+//		teen("10대 : "),
+//		twenties("20대 : "),
+//		thirties("30대 : "),
+//		fourties("40대 : "),
+//		fifties("50대 : "),
+//		Upfifties("노년층 : ");
+//		
+//		private String print;
+//		
+//		private eRateOfAge(String print) {
+//			this.print = print;
+//		}
+//
+//		public String getPrint() {
+//			return this.print;
+//		}
+//	}
 
 }
