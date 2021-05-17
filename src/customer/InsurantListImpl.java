@@ -1,6 +1,12 @@
 package customer;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import global.Constants.eGender;
 import global.Constants.eJob;
@@ -17,8 +23,9 @@ public class InsurantListImpl implements InsurantList {
 	 private Insurant selectedInsurant;
 
 	// Constructor
-	public InsurantListImpl() {
+	public InsurantListImpl() throws FileNotFoundException {
 		this.insurantList = new ArrayList<Insurant>();
+		this.readFromFile();
 	}
 	
 	// Getters & Setters
@@ -28,10 +35,10 @@ public class InsurantListImpl implements InsurantList {
 	public Insurant getSelectedInsurant() {return selectedInsurant;}
 	public void setSelectedInsurant(Insurant selectedInsurant) {this.selectedInsurant = selectedInsurant;}
 
-	// Methods
-	@Override
+	// Public Methods
 	public void insert(Insurant insurant) {
 		this.insurantList.add(insurant);
+		this.writeToFile(insurant);
 	}
 	
 	public Insurant select(String insurantId) {
@@ -72,8 +79,28 @@ public class InsurantListImpl implements InsurantList {
 		return -1;
 	}
 
-	@Override
 	public boolean isEmpty() {
 		return this.insurantList.isEmpty();
+	}
+	
+	// Private Methods
+	private void writeToFile(Insurant insurant) {
+		File file = new File("data/insurant");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+		    writer.append(insurant.writeToFile());
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+	private void readFromFile() throws FileNotFoundException {
+		File file = new File("data/insurant");
+		Scanner sc = new Scanner(file);
+		while (sc.hasNext()) {
+			Insurant insurant = new Insurant();
+			insurant.readFromFile(sc);
+			this.insurantList.add(insurant);
+		}	
+		
 	}
 }

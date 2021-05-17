@@ -1,5 +1,6 @@
 package customer;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,7 +26,12 @@ public class Customer {
 
 	// Constructor
 	public Customer(){
-		this.insurantList = new InsurantListImpl();
+		try {
+			this.insurantList = new InsurantListImpl();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// getters & setters
