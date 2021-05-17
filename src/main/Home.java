@@ -114,7 +114,6 @@ public class Home {
 													continue;
 												}
 											}
-											this.contractInsurnace(customer);
 											break;
 										case 2:
 											break;
@@ -397,7 +396,8 @@ public class Home {
 			contract = this.contractList.search(scn.next());
 			if (contract != null) {
 				System.out.println("------보험료 산출정보------");
-				System.out.println(contract.getInsurance().calculateFee(contract.getInsurance().getBasicFee()) + "원");				
+				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");				
+				System.out.println("1.승인\n2.거부");
 				String input = scn.next();
 				while(input != "1" || input != "2") {
 					System.out.println("1.승인\n2.거부");
@@ -535,6 +535,12 @@ public class Home {
 				Insurant insurant = this.selectInsurant(customer);
 				if (customer != null) {
 					Contract contract = new Contract();
+					if(this.contractList.getContractList().isEmpty()) {
+						contract.setContractId(Integer.toString(1));
+					} else {
+						contract.setContractId(Integer.toString(Integer.parseInt(this.contractList.getContractList().get(this.contractList.getContractList().size() - 1).getContractId()) + 1));
+						
+					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
 					System.out.println("!!!!보험가입이 완료되었습니다!!!!");

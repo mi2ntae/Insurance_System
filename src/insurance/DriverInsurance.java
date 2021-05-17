@@ -20,9 +20,8 @@ public class DriverInsurance extends Insurance {
 	
 	
 	// Methods
-	public int calculateFee(int insurantId){
+	public int calculateFee(Insurant insurant){
 		double fee = this.getBasicFee();
-		Insurant insurant = new Insurant();
 		
 		// 나이에 따른 요율 계산
 		if (insurant.getAge() >= 10 && insurant.getAge() < 20) {
