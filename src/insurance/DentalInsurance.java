@@ -56,6 +56,10 @@ public class DentalInsurance extends Insurance {
 			return -1;
 		}
 	}
+
+	public Insurance newInstance() {
+		return new DentalInsurance();
+	}
 	
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ' + this.getAnnualLimitCount() + ' ' + this.getUseCount() + '\n';

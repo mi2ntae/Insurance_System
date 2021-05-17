@@ -89,9 +89,10 @@ public abstract class Insurance {
 	abstract public int calculateFee(Insurant Insurnat);
 	abstract public void readFromSelectedFile(Scanner scn);
 	abstract public String writeToSelectedFile();
+	abstract public Insurance newInstance();
 	
 	public String writeToFile() {
-		String output = this.type.getNum() + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
+		String output = String.valueOf(this.type.getNum()) + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
 		for (double rate : rateOfAge) {
 			output += rate;
 			output += ' ';
@@ -136,6 +137,7 @@ public abstract class Insurance {
 		this.specialContract = Boolean.parseBoolean(scn.next());
 		this.confirmedStatus = Boolean.parseBoolean(scn.next());
 	}
+
 
 	
 

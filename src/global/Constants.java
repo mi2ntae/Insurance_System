@@ -57,27 +57,27 @@ public class Constants {
 
 	}
 
-	public static enum eInsuranceType {
-		driverInsurance(1, new DriverInsurance(), "data/driverInsurance"),
-		dentalInsurance(2, new DentalInsurance(), "data/dentalInsurance"),
-		actualCostInsurance(3, new ActualCostInsurance(), "data/actualCostInsurance"),
-		fireInsurance(4, new FireInsurance(), "data/fireInsurance"),
-		cancerInsurance(5, new CancerInsurance(), "data/cancerInsurance"),
-		tripInsurance(6, new TripInsurance(), "data/tripInsurance");
+	public enum eInsuranceType {
+		driverInsurance(1, new DriverInsurance(), "driverInsurance"),
+		dentalInsurance(2, new DentalInsurance(), "dentalInsurance"),
+		actualCostInsurance(3, new ActualCostInsurance(), "actualCostInsurance"),
+		fireInsurance(4, new FireInsurance(), "fireInsurance"),
+		cancerInsurance(5, new CancerInsurance(), "cancerInsurance"),
+		tripInsurance(6, new TripInsurance(), "tripInsurance");
 
-		final private int num;
-		final private Insurance selectedInsurance;
-		final private String selectedFile;
+		private int num;
+		private Insurance selectedInsurance;
+		private String name;
 		
-		private eInsuranceType(int num, Insurance selectedInsurance, String selectedFile) {
+		private eInsuranceType(int num, Insurance selectedInsurance, String name) {
 			this.num = num;
 			this.selectedInsurance = selectedInsurance;
-			this.selectedFile = selectedFile;
+			this.name = name;
 		}
 
-		public int getNum() {return num;}
-		public Insurance getSelectedInsurance() {return selectedInsurance;}
-		public String getSelectedFile() {return selectedFile;}
+		public int getNum() {return this.num;}
+		public Insurance getSelectedInsurance() {return this.selectedInsurance;}
+		public String getName() {return this.name;}
 	}
 
 	public static enum eFamilyMedicalDisease {

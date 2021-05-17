@@ -66,6 +66,10 @@ public class TripInsurance extends Insurance {
 		
 		return (int) fee;
 	}
+
+	public Insurance newInstance() {
+		return new TripInsurance();
+	}
 	
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ';

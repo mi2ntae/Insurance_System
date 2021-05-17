@@ -937,14 +937,23 @@ public class Home {
 			System.out.println("1.남자\n2.여자\n3.남자,여자\n0.돌아가기");
 			System.out.printf("가입 가능 성별을 입력하세요 : ");
 			try {
-				int inputGender = scn.nextInt();
-				if (inputGender == 1) {
+				switch(scn.nextInt()) {
+				case 1:
 					newInsurance.setGender(eGender.female);
-				} else if (inputGender == 2) {
+					break;
+				case 2:
 					newInsurance.setGender(eGender.male);
-				} else if (inputGender == 0) {
+					break;
+				case 3:
+					newInsurance.setGender(eGender.both);
+					break;
+				case 0:
 					System.out.println("이전 화면으로 돌아갑니다.");
 					return null;
+				default:
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					break;
 				}
 			} catch (InputMismatchException e) {
 				System.out.println("error : 숫자를 입력해주세요");
@@ -972,6 +981,7 @@ public class Home {
 					String inputIndex = scn.next();
 					boolean isExist = false;
 					for (Insurance insurance: this.insuranceList.getInsuranceList()) {
+						if(insurance == null) break;
 						if (inputIndex.equals(insurance.getInsuranceId())) {
 							isExist = true;
 						}

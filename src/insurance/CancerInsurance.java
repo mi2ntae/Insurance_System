@@ -87,6 +87,10 @@ public class CancerInsurance extends Insurance {
 		return (int)fee;
 	}
 	
+	public Insurance newInstance() {
+		return new CancerInsurance();
+	}
+	
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ';
 		for (double rate : rateOfFamilyMedicaldisease) {
