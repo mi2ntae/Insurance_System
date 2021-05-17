@@ -3,9 +3,27 @@ package global;
 import insurance.*;
 
 public class Constants {
-//	public static enum eAge {
-//		teen, twenties, thirties, fourties, fifties, sixties, seventies;
-//	}
+	public static enum eAge {
+		kids(1, "영유아"),
+		teen(2, "10대"),
+		twenties(3, "20대"),
+		thirties(4, "30대"),
+		fourties(5, "40대"),
+		fifties(6, "50대"),
+		older(7, "노년층");
+
+		final private int num;
+		final private String name;
+		
+		private eAge(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+
+		public int getNum() {return num;}
+		public String getName() {return this.name;}
+	}
+	
 	public static enum eAccidentType {
 		driver(1),
 		dental(2),
@@ -24,21 +42,41 @@ public class Constants {
 	}
 
 	public static enum eGender {
-		male(1),
-		female(2),
-		both(3);
+		male(1, "남성"),
+		female(2, "여성"),
+		both(3, "남성/여성");
 
 		final private int num;
+		final private String name;
 		
-		private eGender(int num) {
+		private eGender(int num, String name) {
 			this.num = num;
+			this.name = name;
 		}
 
 		public int getNum() {return num;}
+		public String getName() {return this.name;}
 	}
 
 	public static enum eJob {
-		officeWorker, driver, factoryWorker, student, teacher, soldier, etc
+		officeWorker(1, "사무직"),
+		driver(2, "운송업"),
+		factoryWorker(3, "현장직"),
+		student(4, "학생"),
+		teacher(5, "교육직"),
+		soldier(6, "군인"),
+		etc(7, "기타");
+
+		final private int num;
+		final private String name;
+		
+		private eJob(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+
+		public int getNum() {return num;}
+		public String getName() {return this.name;}
 	}
 
 	public static enum eRankOfCar {
@@ -46,7 +84,15 @@ public class Constants {
 	}
 
 	public static enum eUsageOfStructure {
-		house, study, factory, warehouse, office, publicFacility
+		house(1), study(2), factory(3), warehouse(4), office(5), publicFacility(6);
+		
+		final private int num;
+		
+		private eUsageOfStructure(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 	public static enum eRiskOfTripCountry {
@@ -85,12 +131,7 @@ public class Constants {
 	}
 
 	public static enum eEmployeeRole {
-		insuranceDeveloper(1),
-		insuranceConfirmer(2),
-		salesperson(3),
-		contractManager(4),
-		compensationHandler(5),
-		underWriter(6);
+		insuranceDeveloper(1), insuranceConfirmer(2), salesperson(3), contractManager(4), compensationHandler(5), underWriter(6);
 		
 		final private int num;
 		

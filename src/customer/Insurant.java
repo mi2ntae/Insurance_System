@@ -1,5 +1,7 @@
 package customer;
 
+import java.util.Scanner;
+
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
@@ -11,10 +13,10 @@ public class Insurant {
 	// Attributes
 	private String insurantId;
 	private String name;
-	private int accidentHistory;
 	private String address;
-	private int age;
 	private String phoneNumber;
+	private int age;
+	private int accidentHistory;
 	private long postedPriceOfStructure;
 	private eUsageOfStructure usageOfStructure;
 	private eGender gender;
@@ -68,6 +70,25 @@ public class Insurant {
 	public void setFamilyMedicalHistory(FamilyMedicalHistory familyMedicalHistory) {this.familyMedicalHistory = familyMedicalHistory;}
 
 	public eRiskOfTripCountry getRiskOfTripCountry() {return riskOfTripCountry;}
-	public void setRiskOfTripCountry(eRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}	
+	public void setRiskOfTripCountry(eRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}
+	
+	// Public Methods
+	public String writeToFile() {
+		String output = null;
+		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
+				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
+				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum();
+		
+		return output;
+		
+	}
+	
+	public void readFromFile(Scanner sc) {
+		this.name = sc.next();
+		this.address = sc.next();
+		this.phoneNumber = sc.next();
+		this.customerId = sc.next();
+		this.password = sc.next();
+	}
 	
 }

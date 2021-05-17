@@ -15,6 +15,7 @@ import employee.EmployeeList;
 import employee.EmployeeListImpl;
 import employee.UnderWriter;
 import global.Constants;
+import global.Constants.eAge;
 import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -1070,58 +1071,53 @@ public class Home {
 			break;
 		}
 		if (!newInsurance.isClone()) {
-			String[] ageArray = {"영유아","10대","20대","30대","40대","50대","노년층"};
-			int ageIndex = 0;
-			double[] tmpRateOfAge = new double[ageArray.length];
+			double[] tmpRateOfAge = new double[eAge.values().length];
 			System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
-			while (ageIndex < ageArray.length) {
+			
+			for (int i = 0; i < eAge.values().length; i++) {
 				try {
-					System.out.printf(ageArray[ageIndex]+" : ");
-					tmpRateOfAge[ageIndex] = scn.nextDouble();
+					System.out.printf(eAge.values()[i].getName() + " : ");
+					tmpRateOfAge[i] = scn.nextDouble();
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
 					scn.nextLine();
-					continue;
+					i--;
 				}
-				ageIndex++;
 			}
 			newInsurance.setRateOfAge(tmpRateOfAge);
 			
-			double[] tmpRateOfGender = new double[2];
-			while (true) {
+			double[] tmpRateOfGender = new double[eGender.values().length - 1];
+			System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
+			for (int i = 0; i < eGender.values().length - 1; i++) {
 				try {
-					System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
-					System.out.printf("남자 : ");
-					tmpRateOfGender[0] = scn.nextDouble();
-					System.out.printf("여자 : ");
-					tmpRateOfGender[1] = scn.nextDouble();
+					System.out.printf(eGender.values()[i].getName() + " : ");
+					tmpRateOfAge[i] = scn.nextDouble();
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
 					scn.nextLine();
-					continue;
+					i--;
 				}
-				break;
 			}
 			newInsurance.setRateOfGender(tmpRateOfGender);
 			
-			String[] jobArray = {"직장인","운전기사","공장노동직","학생","교사(수)","군인","기타직업"};
-			int jobIndex = 0;
-			double[] tmpRateOfJob = new double[jobArray.length];
+			double[] tmpRateOfJob = new double[eJob.values().length];
 			System.out.println("직업에 대한 요율을 설정합니다. ex) 직장 : 1.0)");
-			while (jobIndex < jobArray.length) {
+			
+			for (int i = 0; i < eJob.values().length; i++) {
 				try {
-					System.out.printf(jobArray[jobIndex]+" : ");
-					tmpRateOfJob[jobIndex] = scn.nextDouble();
+					System.out.printf(eJob.values()[i].getName() + " : ");
+					tmpRateOfJob[i] = scn.nextDouble();
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
 					scn.nextLine();
-					continue;
+					i--;
 				}
-				jobIndex++;
 			}
+			
+			
 			newInsurance.setRateOfJob(tmpRateOfJob);
 		} 
 		
