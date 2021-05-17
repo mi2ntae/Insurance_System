@@ -9,7 +9,7 @@ public class CancerInsurance extends Insurance {
 	private double[] rateOfFamilyMedicalRelationship = {1.4, 1.3, 1.2, 1.1}; // index[0: 1촌/ 1: 2촌/ 2: 3촌/ 3: 4촌]
 		
 	// Constructor
-	public CancerInsurance(){
+	public CancerInsurance() {
 		
 	}
 	
