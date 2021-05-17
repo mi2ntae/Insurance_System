@@ -87,10 +87,11 @@ public abstract class Insurance {
 
 	// Public Methods
 	abstract public int calculateFee(Insurant Insurnat);
+	abstract public void readFromSelectedFile(Scanner scn);
+	abstract public String writeToSelectedFile();
 	
 	public String writeToFile() {
-		String output = null;
-		output = this.insuranceId + ' ' + this.name + ' ' + this.type.getNum() + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
+		String output = this.type.getNum() + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
 		for (double rate : rateOfAge) {
 			output += rate;
 			output += ' ';
@@ -108,14 +109,13 @@ public abstract class Insurance {
 		return output;
 	}
 
-	public void readFromFile(Scanner scn) {
+	public void readFromFile(Scanner scn, int input) {
+		for (eInsuranceType type : eInsuranceType.values()) {
+			if (type.getNum() == input)
+				this.type = type;
+		}
 		this.insuranceId = scn.next();
 		this.name = scn.next();
-		int input = scn.nextInt();
-		for (eInsuranceType insuranceType : eInsuranceType.values()) {
-			if (insuranceType.getNum() == input)
-				this.type = insuranceType;
-		}
 		input = scn.nextInt();
 		for (eGender gender : eGender.values()) {
 			if (gender.getNum() == input)
@@ -136,5 +136,7 @@ public abstract class Insurance {
 		this.specialContract = Boolean.parseBoolean(scn.next());
 		this.confirmedStatus = Boolean.parseBoolean(scn.next());
 	}
+
+	
 
 }

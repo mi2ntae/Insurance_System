@@ -1,5 +1,7 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 import global.Constants.eGender;
 
@@ -83,6 +85,29 @@ public class CancerInsurance extends Insurance {
 		}
 		
 		return (int)fee;
+	}
+	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ';
+		for (double rate : rateOfFamilyMedicaldisease) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfFamilyMedicalRelationship) {
+			output += rate;
+			output += ' ';
+		}
+		output += '\n';
+		return output;
+	}
+
+	public void readFromSelectedFile(Scanner scn) {
+		for (int i = 0; i < this.rateOfFamilyMedicaldisease.length; i++) {
+			this.rateOfFamilyMedicaldisease[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfFamilyMedicalRelationship.length; i++) {
+			this.rateOfFamilyMedicalRelationship[i] = scn.nextDouble();
+		}
 	}
 
 }

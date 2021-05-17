@@ -1,5 +1,7 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 import global.Constants.eGender;
 
@@ -17,6 +19,9 @@ public class DentalInsurance extends Insurance {
 	// getters & setters
 	public int getAnnualLimitCount() {return annualLimitCount;}
 	public void setAnnualLimitCount(int annualLimitCount) {	this.annualLimitCount = annualLimitCount;}
+	
+	public int getUseCount() {return useCount;}
+	public void setUseCount(int useCount) {this.useCount = useCount;}
 
 	// Methods
 	public int calculateFee(Insurant insurant){
@@ -50,6 +55,16 @@ public class DentalInsurance extends Insurance {
 		} else {
 			return -1;
 		}
+	}
+	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ' + this.getAnnualLimitCount() + ' ' + this.getUseCount() + '\n';
+		return output;
+	}
+	
+	public void readFromSelectedFile(Scanner scn) {
+		this.annualLimitCount = scn.nextInt();
+		this.useCount = scn.nextInt();
 	}
 
 }

@@ -1,5 +1,7 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 
 public class FireInsurance extends Insurance {
@@ -64,7 +66,28 @@ public class FireInsurance extends Insurance {
 		
 		return (int) fee;
 	}
-
 	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ';
+		for (double rate : rateOfPostedPrice) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfStructureUsage) {
+			output += rate;
+			output += ' ';
+		}
+		output += '\n';
+		return output;
+	}
+
+	public void readFromSelectedFile(Scanner scn) {
+		for (int i = 0; i < this.rateOfPostedPrice.length; i++) {
+			this.rateOfPostedPrice[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfStructureUsage.length; i++) {
+			this.rateOfStructureUsage[i] = scn.nextDouble();
+		}
+	}
 
 }

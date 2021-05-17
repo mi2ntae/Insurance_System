@@ -1,5 +1,7 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 import global.Constants.eGender;
 
@@ -63,6 +65,22 @@ public class TripInsurance extends Insurance {
 		}
 		
 		return (int) fee;
+	}
+	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ';
+		for (double rate : rateOfCountryRisk) {
+			output += rate;
+			output += ' ';
+		}
+		output += '\n';
+		return output;
+	}
+	
+	public void readFromSelectedFile(Scanner scn) {
+		for (int i = 0; i < this.rateOfCountryRisk.length; i++) {
+			this.rateOfCountryRisk[i] = scn.nextDouble();
+		}
 	}
 
 }

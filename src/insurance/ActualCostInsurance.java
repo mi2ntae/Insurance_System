@@ -1,5 +1,7 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 import global.Constants.eGender;
 
@@ -50,6 +52,13 @@ public class ActualCostInsurance extends Insurance {
 		
 		return (int)fee;
 	}
+	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ' + this.selfBurdenRate + '\n';
+		return output;
+	}
 
-
+	public void readFromSelectedFile(Scanner scn) {
+		this.selfBurdenRate = scn.nextDouble();
+	}
 }
