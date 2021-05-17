@@ -9,7 +9,7 @@ public class DriverInsurance extends Insurance {
 
 	// Attributes
 	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4};
-	private double[] rateOfCarRank = {2, 1.5, 1.0};
+	private double[] rateOfCarRank = {2, 1.7, 1.6, 1.5, 1.0};
 
 	// Constructor
 	public DriverInsurance(){
@@ -54,14 +54,20 @@ public class DriverInsurance extends Insurance {
 		
 		//자동차 등급에 따른 요율 계산
 		switch(insurant.getRankOfCar()) {
-		case high :
+		case bus :
 			fee *= this.rateOfCarRank[0];
 			break;
-		case middle :
+		case van :
 			fee *= this.rateOfCarRank[1];
 			break;
-		case low :
+		case suv :
 			fee *= this.rateOfCarRank[2];
+			break;
+		case foreign :
+			fee *= this.rateOfCarRank[3];
+			break;
+		case etc :
+			fee *= this.rateOfCarRank[4];
 			break;
 		}
 		

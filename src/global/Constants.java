@@ -80,15 +80,40 @@ public class Constants {
 	}
 
 	public static enum eRankOfCar {
-		high(1), middle(2), low(3);
+		bus(1, "버스"),
+		van(2, "승합차"),
+		suv(3, "SUV"),
+		foreign(3, "외제차"),
+		etc(4, "기타");
 
 		final private int num;
+		final private String name;
 		
-		private eRankOfCar(int num) {
+		private eRankOfCar(int num, String name) {
 			this.num = num;
+			this.name = name;
 		}
 
 		public int getNum() {return num;}
+		public String getName() {return name;}
+	}
+	
+	public static enum eRateOfAccident {
+		exemplary(1, "모범"),
+		skilled(2, "숙련자"),
+		beginner(3, "초심자"),
+		troublemaker(4, "사고뭉치");
+
+		final private int num;
+		final private String name;
+		
+		private eRateOfAccident(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+
+		public int getNum() {return num;}
+		public String getName() {return name;}
 	}
 
 	public static enum eUsageOfStructure {
