@@ -2,6 +2,7 @@ package customer;
 
 import java.util.Scanner;
 
+import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
@@ -77,18 +78,36 @@ public class Insurant {
 		String output = null;
 		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
-				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum();
+				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum();
 		
 		return output;
 		
 	}
 	
-	public void readFromFile(Scanner sc) {
-		this.name = sc.next();
-		this.address = sc.next();
-		this.phoneNumber = sc.next();
-		this.customerId = sc.next();
-		this.password = sc.next();
+	public void readFromFile(Scanner scn) {
+		this.insurantId = scn.next();
+		this.name = scn.next();
+		this.address = scn.next();
+		this.phoneNumber = scn.next();
+		this.age = scn.nextInt();
+		this.accidentHistory = scn.nextInt();
+		this.postedPriceOfStructure = scn.nextInt();
+		int input = scn.nextInt();
+		for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) {
+			if(usageOfStructure.getNum() == input) this.usageOfStructure = usageOfStructure;
+		}
+		input = scn.nextInt();
+		for(eGender gender : eGender.values()) {
+			if(gender.getNum() == input) this.gender = gender;
+		}
+		input = scn.nextInt();
+		for(eRankOfCar rankOfCar : eRankOfCar.values()) {
+			if(rankOfCar.getNum() == input) this.rankOfCar = rankOfCar;
+		}
+		input = scn.nextInt();
+		for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
+			if(riskOfTripCountry.getNum() == input) this.riskOfTripCountry = riskOfTripCountry;
+		}
 	}
 	
 }

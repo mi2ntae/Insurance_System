@@ -80,7 +80,15 @@ public class Constants {
 	}
 
 	public static enum eRankOfCar {
-		high, middle, low;
+		high(1), middle(2), low(3);
+
+		final private int num;
+		
+		private eRankOfCar(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 	public static enum eUsageOfStructure {
@@ -96,7 +104,16 @@ public class Constants {
 	}
 
 	public static enum eRiskOfTripCountry {
-		safe, first, second, third
+		safe(1), first(2), second(3), third(4);
+
+		final private int num;
+		
+		private eRiskOfTripCountry(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
+		
 	}
 
 	public static enum eGuaranteePlanGuaranteeItem {
