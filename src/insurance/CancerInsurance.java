@@ -7,7 +7,7 @@ import global.Constants.eGender;
 
 public class CancerInsurance extends Insurance {
 	// Attributes
-	private double[] rateOfFamilyMedicaldisease = {1.6, 1.5, 1.4, 1.3, 1.2}; // index[0: thyroid/ 1: testicular/ 2: ovarian/ 3: esophageal/ 4: lung]
+	private double[] rateOfFamilyMedicalDisease = {1.6, 1.5, 1.4, 1.3, 1.2}; // index[0: thyroid/ 1: testicular/ 2: ovarian/ 3: esophageal/ 4: lung]
 	private double[] rateOfFamilyMedicalRelationship = {1.4, 1.3, 1.2, 1.1}; // index[0: 1촌/ 1: 2촌/ 2: 3촌/ 3: 4촌]
 		
 	// Constructor
@@ -16,8 +16,8 @@ public class CancerInsurance extends Insurance {
 	}
 	
 	// getters & setters
-	public double[] getRateOfFamilyMedicaldisease() {return rateOfFamilyMedicaldisease;}
-	public void setRateOfFamilyMedicaldisease(double[] rateOfFamilyMedicaldisease) {this.rateOfFamilyMedicaldisease = rateOfFamilyMedicaldisease;}
+	public double[] getRateOfFamilyMedicalDisease() {return rateOfFamilyMedicalDisease;}
+	public void setRateOfFamilyMedicalDisease(double[] rateOfFamilyMedicalDisease) {this.rateOfFamilyMedicalDisease = rateOfFamilyMedicalDisease;}
 
 	public double[] getRateOfFamilyMedicalRelationship() {return rateOfFamilyMedicalRelationship;}
 	public void setRateOfFamilyMedicalRelationship(double[] rateOfFamilyMedicalRelationship) {this.rateOfFamilyMedicalRelationship = rateOfFamilyMedicalRelationship;}
@@ -50,6 +50,33 @@ public class CancerInsurance extends Insurance {
 			fee *= this.getRateOfGender()[1];
 		}
 		
+		// 직업에 따른 요율 계산
+		switch (insurant.getJob()) {
+		case officeWorker:
+			fee *= this.getRateOfJob()[0];
+			break;
+		case driver:
+			fee *= this.getRateOfJob()[1];
+			break;
+		case factoryWorker:
+			fee *= this.getRateOfJob()[2];
+			break;
+		case student:
+			fee *= this.getRateOfJob()[3];
+			break;
+		case teacher:
+			fee *= this.getRateOfJob()[4];
+			break;
+		case soldier:
+			fee *= this.getRateOfJob()[5];
+			break;
+		case etc:
+			fee *= this.getRateOfJob()[6];
+			break;
+		default:
+			break;
+		}
+		
 		// 가족병력에 따른 요율 계산
 		switch (insurant.getFamilyMedicalHistory().getRelationship()) {
 		case 1:
@@ -68,19 +95,19 @@ public class CancerInsurance extends Insurance {
 		
 		switch (insurant.getFamilyMedicalHistory().getDisease()) {
 		case thyroid:
-			fee *= rateOfFamilyMedicaldisease[0];
+			fee *= rateOfFamilyMedicalDisease[0];
 			break;
 		case esophageal:
-			fee *= rateOfFamilyMedicaldisease[1];
+			fee *= rateOfFamilyMedicalDisease[1];
 			break;
 		case lung:
-			fee *= rateOfFamilyMedicaldisease[2];
+			fee *= rateOfFamilyMedicalDisease[2];
 			break;
 		case ovarian:
-			fee *= rateOfFamilyMedicaldisease[3];
+			fee *= rateOfFamilyMedicalDisease[3];
 			break;
 		case testicular:
-			fee *= rateOfFamilyMedicaldisease[4];
+			fee *= rateOfFamilyMedicalDisease[4];
 			break;
 		}
 		
@@ -93,7 +120,7 @@ public class CancerInsurance extends Insurance {
 	
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ';
-		for (double rate : rateOfFamilyMedicaldisease) {
+		for (double rate : rateOfFamilyMedicalDisease) {
 			output += rate;
 			output += ' ';
 		}
@@ -106,8 +133,8 @@ public class CancerInsurance extends Insurance {
 	}
 
 	public void readFromSelectedFile(Scanner scn) {
-		for (int i = 0; i < this.rateOfFamilyMedicaldisease.length; i++) {
-			this.rateOfFamilyMedicaldisease[i] = scn.nextDouble();
+		for (int i = 0; i < this.rateOfFamilyMedicalDisease.length; i++) {
+			this.rateOfFamilyMedicalDisease[i] = scn.nextDouble();
 		}
 		for (int i = 0; i < this.rateOfFamilyMedicalRelationship.length; i++) {
 			this.rateOfFamilyMedicalRelationship[i] = scn.nextDouble();

@@ -47,8 +47,32 @@ public class ActualCostInsurance extends Insurance {
 			fee *= this.getRateOfGender()[1];
 		}
 		
-		// 자기부담비율에 따른 요율 계산
-		fee *= selfBurdenRate;
+		// 직업에 따른 요율 계산
+		switch (insurant.getJob()) {
+		case officeWorker:
+			fee *= this.getRateOfJob()[0];
+			break;
+		case driver:
+			fee *= this.getRateOfJob()[1];
+			break;
+		case factoryWorker:
+			fee *= this.getRateOfJob()[2];
+			break;
+		case student:
+			fee *= this.getRateOfJob()[3];
+			break;
+		case teacher:
+			fee *= this.getRateOfJob()[4];
+			break;
+		case soldier:
+			fee *= this.getRateOfJob()[5];
+			break;
+		case etc:
+			fee *= this.getRateOfJob()[6];
+			break;
+		default:
+			break;
+		}
 		
 		return (int)fee;
 	}

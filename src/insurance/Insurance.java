@@ -18,7 +18,7 @@ public abstract class Insurance {
 	private int basicFee;
 	private double[] rateOfAge = {1.1, 1.0, 1.0, 1.1, 1.2, 1.3, 1.4}; // index[0 : 영유아/ 1 : 10대/ 2 : 20대/ 3 : 30대/ 4 : 40대/ 5 : 50대/ 6 : 노년층]
 	private double[] rateOfGender = {1.0, 1.1}; // index[0 : 남성/ 1 : 여성]
-	private double[] rateOfJob = {1.0, 1.2, 1.3, 1.0, 1.0, 1.2, 1.1}; // index[0 : 직장인/ 1 : 운전기사/ 2 : 공장 노동직/ 3 : 학생/ 4 : 교사(수)직/ 5 : 군인/ 6 : 기타]
+	private double[] rateOfJob = {1.0, 1.2, 1.3, 1.0, 1.0, 1.2, 1.1}; // index[0 : 사무직/ 1 : 운송업/ 2 : 현장직/ 3 : 학생/ 4 : 교사(수)직/ 5 : 군인/ 6 : 기타]
 	private int specialContractFee;
 	private int warrantyPeriod;
 	private boolean confirmedStatus = false;
