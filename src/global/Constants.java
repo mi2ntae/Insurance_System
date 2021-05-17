@@ -92,28 +92,41 @@ public class Constants {
 	}
 
 	public static enum eUsageOfStructure {
-		house(1), study(2), factory(3), warehouse(4), office(5), publicFacility(6);
+		house(1,"주택"), 
+		study(2, "교육"), 
+		factory(3, "공장"), 
+		warehouse(4, "창고"), 
+		office(5, "사무"), 
+		publicFacility(6, "공공시설");
 		
 		final private int num;
+		final private String name;
 		
-		private eUsageOfStructure(int num) {
+		private eUsageOfStructure(int num, String name) {
 			this.num = num;
+			this.name = name;
 		}
 
 		public int getNum() {return num;}
+		public String getName() {return name;}
 	}
 
 	public static enum eRiskOfTripCountry {
-		safe(1), first(2), second(3), third(4);
+		safe(1, "안전"), 
+		first(2, "1단계"), 
+		second(3, "2단계"), 
+		third(4, "3단계");
 
 		final private int num;
+		final private String name;
 		
-		private eRiskOfTripCountry(int num) {
+		private eRiskOfTripCountry(int num, String name) {
 			this.num = num;
+			this.name = name;
 		}
 
 		public int getNum() {return num;}
-		
+		public String getName() {return name;}
 	}
 
 	public static enum eGuaranteePlanGuaranteeItem {
@@ -144,7 +157,44 @@ public class Constants {
 	}
 
 	public static enum eFamilyMedicalDisease {
-		thyroid, testicular, ovarian, esophageal, lung;
+		thyroid("갑상선암"), 
+		testicular("고환암"), 
+		ovarian("난소암"), 
+		esophageal("식도암"), 
+		lung("폐암");
+		
+		final private String name;
+		
+		private eFamilyMedicalDisease(String name) {
+			this.name = name;
+		}
+
+		public String getName() {return this.name;}
+	}
+	
+	public static String[] eFamilyMedicalRelationship = {"1촌","2촌","3촌","4촌"};
+	
+	public static String[] ePostedPrice = {"(공시가)<=5천만원", "5천만원<(공시가)<=5억", "5억<(공시가)<=10억", "10억<(공시가)<=20억", "20억<(공시가)"};
+	
+	public static enum eCancer {
+		thyroid(1,"갑상선암"), 
+		testicular(2, "고환암"), 
+		ovarian(3, "난소암"), 
+		esophageal(4, "식도암"), 
+		lung(5, "폐암"),
+		liver(6, "간암"),
+		colorectal(7, "대장암");
+		
+		final private int num;
+		final private String name;
+		
+		private eCancer(int num, String name) {
+			this.num = num;
+			this.name = name;
+		}
+
+		public int getNum() {return num;}
+		public String getName() {return this.name;}
 	}
 
 	public static enum eEmployeeRole {

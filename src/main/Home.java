@@ -17,6 +17,7 @@ import employee.UnderWriter;
 import global.Constants;
 import global.Constants.eAge;
 import global.Constants.eEmployeeRole;
+import global.Constants.eFamilyMedicalDisease;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 import global.Constants.eJob;
@@ -931,7 +932,7 @@ public class Home {
 			}
 		}
 	}
-	
+
 	// 보험 설계하기
 	private Insurance createPlanInsurance(Insurance newInsurance) {
 		while (true) {
@@ -978,8 +979,13 @@ public class Home {
 					System.out.println("확인할 수 있는 보험이 존재하지 않습니다. 세부설정 단계로 넘어갑니다.");
 					return newInsurance;
 				} else{
+					System.out.println("(적용을 원하는 보험이 없으면 0을 입력하세요)");
 					System.out.printf("적용을 원하는 보험의 ID를 입력하세요 : ");
 					String inputIndex = scn.next();
+					if (inputIndex.equals("0")) {
+						System.out.println("보험 설계가 완료되었습니다. 세부설정 단계로 넘어갑니다.");
+						return newInsurance;
+					}
 					boolean isExist = false;
 					for (Insurance insurance: this.insuranceList.getInsuranceList()) {
 						if(insurance == null) break;
@@ -1006,23 +1012,14 @@ public class Home {
 				System.out.println("잘못 입력하셨습니다. 기획 화면으로 돌아갑니다.");
 				continue;
 			}
+			
 		}
 	}
 	
 	// 보험 세부설정하기
 	private Insurance createDetailInsurance(Insurance newInsurance) {
-		getid:while (true) {
-			System.out.printf("만드실 보험의 ID를 입력해주세요 : ");
-			String inputId = scn.next();
-			for (Insurance insurance: this.insuranceList.getInsuranceList()) {
-				if (inputId.equals(insurance.getInsuranceId())) {
-					System.out.println("이미 존재하는 ID입니다. 다시 입력해주세요");
-					continue getid;
-				}
-			}
-			newInsurance.setInsuranceId(inputId);
-			break;
-		}
+		String newId = Integer.toString(Integer.parseInt(this.insuranceList.getInsuranceList().get(this.insuranceList.getInsuranceList().size()-1).getInsuranceId())+1);
+		newInsurance.setInsuranceId(newId);
 		
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
@@ -1122,22 +1119,125 @@ public class Home {
 		} 
 		
 		// 특화 요율 설정하기 코딩해야함
-		switch (newInsurance.getType()) {
-		case cancerInsurance:
-			break;
-		case dentalInsurance:
-			break;
-		case driverInsurance:
-			break;
-		case fireInsurance:
-			break;
-		case tripInsurance:
-			break;
-		case actualCostInsurance:
-			break;
-		default:
+		while (true) {
+			switch (newInsurance.getType()) {
+			case cancerInsurance:
+				System.out.println("가족 병력에 따른 요율을 설정합니다.");
+				double[] tmpRateOfFamilyDisease = new double[5];
+				for (int i = 0; i < eFamilyMedicalDisease.values().length; i++) {
+					System.out.printf(eFamilyMedicalDisease.values()[i].getName()+" : ");
+					try {
+						tmpRateOfFamilyDisease[i] = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						i--;
+					}
+				}
+				System.out.println("병력이 있는 가족과의 관계에 따른 요율을 설정합니다.");
+				double[] tmpRateOfFamilyRelationship = new double[4];
+				for (int i = 0; i < Constants.eFamilyMedicalRelationship.length; i++) {
+					System.out.printf(Constants.eFamilyMedicalRelationship[i]+" : ");
+					try {
+						tmpRateOfFamilyRelationship[i] = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						i--;
+					}
+				}
+				((CancerInsurance)newInsurance).setRateOfFamilyMedicalDisease(tmpRateOfFamilyDisease);
+				((CancerInsurance)newInsurance).setRateOfFamilyMedicalRelationship(tmpRateOfFamilyRelationship);
+				break;
+			case dentalInsurance:
+				int annuallimit = 0;
+				while (true) {
+					System.out.printf("연간 한도 횟수를 입력해주세요 : ");
+					try {
+						annuallimit = scn.nextInt();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 정수를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						continue;
+					}
+					break;
+				}
+				((DentalInsurance)newInsurance).setAnnualLimitCount(annuallimit);
+				break;
+			case driverInsurance:
+				// 코딩해야
+				break;
+			case fireInsurance:
+				System.out.println("공시가격에 따른 요율을 설정합니다.");
+				double[] tmpRateOfPostedPrice = new double[5];
+				for (int i = 0; i < Constants.ePostedPrice.length; i++) {
+					System.out.printf(Constants.ePostedPrice[i]+" : ");
+					try {
+						tmpRateOfPostedPrice[i] = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						i--;
+					}
+				}
+				System.out.println("건물용도에 따른 요율을 설정합니다.");
+				double[] tmpRateOfUsageOfStructure = new double[6];
+				for (int i = 0; i < eUsageOfStructure.values().length; i++) {
+					System.out.printf(eUsageOfStructure.values()[i].getName()+" : ");
+					try {
+						tmpRateOfUsageOfStructure[i] = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						i--;
+					}
+				}
+				((FireInsurance)newInsurance).setRateOfPostedPrice(tmpRateOfPostedPrice);
+				((FireInsurance)newInsurance).setRateOfStructureUsage(tmpRateOfUsageOfStructure);
+				break;
+			case tripInsurance:
+				System.out.println("여행국가의 위험정도에 따른 요율을 설정합니다.");
+				double[] tmpRateOfRiskOfTripCountry = new double[4];
+				for (int i = 0; i < eRiskOfTripCountry.values().length; i++) {
+					System.out.printf(eRiskOfTripCountry.values()[i].getName()+" : ");
+					try {
+						tmpRateOfRiskOfTripCountry[i] = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						i--;
+					}
+				}
+				((TripInsurance)newInsurance).setRateOfCountryRank(tmpRateOfRiskOfTripCountry);
+				break;
+			case actualCostInsurance:
+				double selfBurden = 0;
+				while (true) {
+					System.out.printf("자기부담비율을 입력해주세요 ex) 0.3 : ");
+					try {
+						selfBurden = scn.nextDouble();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						continue;
+					}
+					break;
+				}
+				((ActualCostInsurance)newInsurance).setSelfBurdenRate(selfBurden);
+				break;
+			default:
+				break;
+			}
 			break;
 		}
+	
 		while (true) {
 			// 보장 내역 설정하기 코딩해야함
 			break;
