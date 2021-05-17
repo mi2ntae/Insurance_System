@@ -110,6 +110,7 @@ public abstract class Insurance {
 			if (insuranceType.getNum() == input)
 				this.type = insuranceType;
 		}
+		input = scn.nextInt();
 		for (eGender gender : eGender.values()) {
 			if (gender.getNum() == input)
 				this.gender = gender;
