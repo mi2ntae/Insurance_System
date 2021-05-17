@@ -1,12 +1,14 @@
 package insurance;
 
+import java.util.Scanner;
+
 import customer.Insurant;
 import global.Constants.eGender;
 
 public class DriverInsurance extends Insurance {
 
 	// Attributes
-	private double rateOfAccident;
+	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4};
 	private double[] rateOfCarRank = {2, 1.5, 1.0};
 
 	// Constructor
@@ -15,9 +17,11 @@ public class DriverInsurance extends Insurance {
 	}
 	
 	// Getters & Setters
-	public double getRateOfAccident() {return rateOfAccident;}
-	public void setRateOfAccident(double rateOfAccident) {this.rateOfAccident = rateOfAccident;}
+	public double[] getRateOfAccident() {return rateOfAccident;}
+		public void setRateOfAccident(double[] rateOfAccident) {this.rateOfAccident = rateOfAccident;}
 	
+	public double[] getRateOfCarRank() {return rateOfCarRank;}	
+	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarRank = rateOfCarRank;}
 	
 	// Methods
 	public int calculateFee(Insurant insurant){
@@ -61,9 +65,31 @@ public class DriverInsurance extends Insurance {
 			break;
 		}
 		
-		fee = fee * this.rateOfAccident;
 		
 		return (int)fee;
+	}
+	
+	public String writeToSelectedFile() {
+		String output = this.getInsuranceId() + ' ';
+		for (double rate : rateOfAccident) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfCarRank) {
+			output += rate;
+			output += ' ';
+		}
+		output += '\n';
+		return output;
+	}
+
+	public void readFromSelectedFile(Scanner scn) {
+		for (int i = 0; i < this.rateOfAccident.length; i++) {
+			this.rateOfAccident[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfCarRank.length; i++) {
+			this.rateOfCarRank[i] = scn.nextDouble();
+		}
 	}
 
 }

@@ -1,5 +1,7 @@
 package global;
 
+import insurance.*;
+
 public class Constants {
 //	public static enum eAge {
 //		teen, twenties, thirties, fourties, fifties, sixties, seventies;
@@ -56,22 +58,26 @@ public class Constants {
 	}
 
 	public static enum eInsuranceType {
-		
-		
-		driverInsurance(1),
-		dentalInsurance(2),
-		actualCostInsurance(3),
-		fireInsurance(4),
-		cancerInsurance(5),
-		tripInsurance(6);
+		driverInsurance(1, new DriverInsurance(), "data/driverInsurance"),
+		dentalInsurance(2, new DentalInsurance(), "data/dentalInsurance"),
+		actualCostInsurance(3, new ActualCostInsurance(), "data/actualCostInsurance"),
+		fireInsurance(4, new FireInsurance(), "data/fireInsurance"),
+		cancerInsurance(5, new CancerInsurance(), "data/cancerInsurance"),
+		tripInsurance(6, new TripInsurance(), "data/tripInsurance");
 
 		final private int num;
+		final private Insurance selectedInsurance;
+		final private String selectedFile;
 		
-		private eInsuranceType(int num) {
+		private eInsuranceType(int num, Insurance selectedInsurance, String selectedFile) {
 			this.num = num;
+			this.selectedInsurance = selectedInsurance;
+			this.selectedFile = selectedFile;
 		}
 
 		public int getNum() {return num;}
+		public Insurance getSelectedInsurance() {return selectedInsurance;}
+		public String getSelectedFile() {return selectedFile;}
 	}
 
 	public static enum eFamilyMedicalDisease {

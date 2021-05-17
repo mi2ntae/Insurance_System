@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import employee.Employee;
+import global.Constants.eInsuranceType;
 
 public class InsuranceListImpl implements InsuranceList {
 
@@ -83,15 +84,41 @@ public class InsuranceListImpl implements InsuranceList {
 		}
 	}
 	
+	private void writeToSelectedFile(Insurance insurance) {
+		File file = new File(insurance.getType().getSelectedFile());
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+		    writer.append(insurance.writeToSelectedFile());
+		} catch (IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
 	private void readFromFile() throws FileNotFoundException {
 		File file = new File("data/insurance");
 		Scanner scn = new Scanner(file);
+		int i = 0;
 		while (scn.hasNext()) {
-			Insurance insurance = new ActualCostInsurance();
-			insurance.readFromFile(scn);
-			this.insuranceList.add(insurance);
+			int input = scn.nextInt();
+			for (eInsuranceType insuranceType : eInsuranceType.values()) {
+				if (insuranceType.getNum() == input) {
+					Insurance insurance = insuranceType.getSelectedInsurance();
+					insurance.readFromFile(scn, input);
+					insurance = this.readFromSelectedFile(insurance);
+					this.insuranceList.add(insurance);
+				}
+			}
 		}	
-		
 	}
-
+	
+	private Insurance readFromSelectedFile(Insurance insurance) throws FileNotFoundException {
+		File file = new File(insurance.getType().getSelectedFile());
+		Scanner scn = new Scanner(file);
+		while (scn.hasNext()) {
+			if (scn.next().equals(insurance.getInsuranceId())) {
+				insurance.readFromSelectedFile(scn);
+				return insurance;
+			}
+		}
+		return null;
+	}
 }
