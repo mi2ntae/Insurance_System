@@ -6,13 +6,18 @@ import global.Constants.eGender;
 public class DriverInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfAccident;
+	private double rateOfAccident;
 	private double[] rateOfCarRank = {2, 1.5, 1.0};
 
 	// Constructor
 	public DriverInsurance(){
 
 	}
+	
+	// Getters & Setters
+	public double getRateOfAccident() {return rateOfAccident;}
+	public void setRateOfAccident(double rateOfAccident) {this.rateOfAccident = rateOfAccident;}
+	
 	
 	// Methods
 	public int calculateFee(int insurantId){
@@ -56,6 +61,8 @@ public class DriverInsurance extends Insurance {
 			fee *= this.rateOfCarRank[2];
 			break;
 		}
+		
+		fee = fee * this.rateOfAccident;
 		
 		return (int)fee;
 	}
