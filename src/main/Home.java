@@ -33,7 +33,6 @@ import insurance.InsuranceListImpl;
 import insurance.TripInsurance;
 
 /* 	
- * 
  * 공통 : 요율 refactoring enum으로
  * 		 employee extend하기, home에서 employee함수를 통해서 작업(프린트문x, 데이터만 옮겨가기)
 		 Guarantee Plan 생각하기
@@ -324,6 +323,7 @@ public class Home {
 										try {
 											switch (scn.nextInt()) {
 											case 1:
+												this.judgeContract();
 												// 보험계약 심사하기
 												break;
 											case 0:
@@ -396,6 +396,8 @@ public class Home {
 			System.out.println("'심사'할 계약 ID를 입력하세요");
 			contract = this.contractList.search(scn.next());
 			if (contract != null) {
+				System.out.println("------보험료 산출정보------");
+				System.out.println(contract.getInsurance().calculateFee(contract.getInsurance().getBasicFee()) + "원");				
 				String input = scn.next();
 				while(input != "1" || input != "2") {
 					System.out.println("1.승인\n2.거부");
