@@ -56,6 +56,8 @@ public class Constants {
 	}
 
 	public static enum eInsuranceType {
+		
+		
 		driverInsurance(1),
 		dentalInsurance(2),
 		actualCostInsurance(3),

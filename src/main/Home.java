@@ -1019,6 +1019,7 @@ public class Home {
 					newInsurance.setSpecialContractFee(scn.nextInt());
 				} else if (inputSpecial.equals("n")) {
 					newInsurance.setSpecialContract(false);
+					newInsurance.setSpecialContractFee(0);
 				} else {
 					System.out.println("error : 정해진 문자를 사용해주세요");
 					System.out.println("-----------------------");

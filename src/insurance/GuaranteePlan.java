@@ -1,5 +1,9 @@
 package insurance;
 
+import java.util.Scanner;
+
+import global.Constants.eEmployeeRole;
+
 public class GuaranteePlan {
 	// Attributes
 	private String insuranceId;
@@ -28,4 +32,20 @@ public class GuaranteePlan {
 
 	public double getRate() {return rate;}
 	public void setRate(double rate) {this.rate = rate;}
+	
+	// Public Methods
+	public String writeToFile() {
+		String output = null;
+		output = this.insuranceId + ' ' + String.valueOf(this.special) + ' ' + this.content + ' ' + this.compensation + ' ' + this.rate + '\n';
+		return output;
+		
+	}
+	
+	public void readFromFile(Scanner scn) {
+		this.insuranceId = scn.next();
+		this.special = Boolean.parseBoolean(scn.next());
+		this.content = scn.next();
+		this.compensation = scn.nextInt();
+		this.rate = scn.nextDouble();
+	}
 }
