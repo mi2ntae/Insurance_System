@@ -20,9 +20,8 @@ public class FireInsurance extends Insurance {
 	public void setRateOfStructureUsage(double[] rateOfStructureUsage) {this.rateOfStructureUsage = rateOfStructureUsage;}
 		
 	// Methods
-	public int calculateFee(int insurantId){
+	public int calculateFee(Insurant insurant){
 		double fee = this.getBasicFee();
-		Insurant insurant = new Insurant();
 
 		// 재산 규모에 따른 요율 계산
 		if (insurant.getPostedPriceOfStructure() > 0 && insurant.getPostedPriceOfStructure() <= 50000000) {

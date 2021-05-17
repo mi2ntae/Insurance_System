@@ -3,6 +3,7 @@ package insurance;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import customer.Insurant;
 import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -85,7 +86,7 @@ public abstract class Insurance {
 	public void setGuaranteePlanList(GuaranteePlanList guaranteePlanList) {this.guaranteePlanList = guaranteePlanList;}
 
 	// Public Methods
-	abstract public int calculateFee(int insurantId);
+	abstract public int calculateFee(Insurant Insurnat);
 	
 	public String writeToFile() {
 		String output = null;
