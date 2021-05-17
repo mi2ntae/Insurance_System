@@ -1,5 +1,6 @@
 package insurance;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import global.Constants.eEmployeeRole;
@@ -25,12 +26,16 @@ public abstract class Insurance {
 	
 	// Composition Class
 	private MembershipCondition membershipCondition;
-	private GuaranteePlan guaranteePlan;
+	private GuaranteePlanList guaranteePlanList;
 
 	// Constructor
-	public Insurance(){
-		this.membershipCondition = new MembershipCondition();
-		this.guaranteePlan = new GuaranteePlan();
+	public Insurance() {
+		try {
+			this.membershipCondition = new MembershipCondition();
+			this.guaranteePlanList = new GuaranteePlanListImpl();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// getters & setters
@@ -66,9 +71,6 @@ public abstract class Insurance {
 
 	public MembershipCondition getM_membershipCondition() {return membershipCondition;}
 	public void setM_membershipCondition(MembershipCondition m_membershipCondition) {this.membershipCondition = m_membershipCondition;}
-
-	public GuaranteePlan getM_GuaranteePlan() {return guaranteePlan;}
-	public void setM_GuaranteePlan(GuaranteePlan m_GuaranteePlan) {this.guaranteePlan = m_GuaranteePlan;}
 	
 	public eGender getGender() {return gender;}
 	public void setGender(eGender gender) {this.gender = gender;}
@@ -79,6 +81,9 @@ public abstract class Insurance {
 	public boolean isClone() {return clone;}
 	public void setClone(boolean clone) {this.clone = clone;}
 	
+	public GuaranteePlanList getGuaranteePlanList() {return guaranteePlanList;}
+	public void setGuaranteePlanList(GuaranteePlanList guaranteePlanList) {this.guaranteePlanList = guaranteePlanList;}
+
 	// Public Methods
 	abstract public int calculateFee(int insurantId);
 	
@@ -110,6 +115,7 @@ public abstract class Insurance {
 			if (insuranceType.getNum() == input)
 				this.type = insuranceType;
 		}
+		input = scn.nextInt();
 		for (eGender gender : eGender.values()) {
 			if (gender.getNum() == input)
 				this.gender = gender;
