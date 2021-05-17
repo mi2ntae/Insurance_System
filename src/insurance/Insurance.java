@@ -1,5 +1,8 @@
 package insurance;
 
+import java.util.Scanner;
+
+import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 
@@ -9,7 +12,7 @@ public abstract class Insurance {
 	private String insuranceId;
 	private String name;
 	private eInsuranceType type;
-	private eGender deniedGender;
+	private eGender gender;
 	private int basicFee;
 	private double[] rateOfAge = {1.1, 1.0, 1.0, 1.1, 1.2, 1.3, 1.4}; // index[0 : 영유아/ 1 : 10대/ 2 : 20대/ 3 : 30대/ 4 : 40대/ 5 : 50대/ 6 : 노년층]
 	private double[] rateOfGender = {1.0, 1.1}; // index[0 : 남성/ 1 : 여성]
@@ -67,8 +70,8 @@ public abstract class Insurance {
 	public GuaranteePlan getM_GuaranteePlan() {return guaranteePlan;}
 	public void setM_GuaranteePlan(GuaranteePlan m_GuaranteePlan) {this.guaranteePlan = m_GuaranteePlan;}
 	
-	public eGender getDeniedGender() {return deniedGender;}
-	public void setDeniedGender(eGender deniedGender) {this.deniedGender = deniedGender;}
+	public eGender getGender() {return gender;}
+	public void setGender(eGender gender) {this.gender = gender;}
 	
 	public boolean isSpecialContract() {return specialContract;}
 	public void setSpecialContract(boolean specialContract) {this.specialContract = specialContract;}
@@ -76,7 +79,55 @@ public abstract class Insurance {
 	public boolean isClone() {return clone;}
 	public void setClone(boolean clone) {this.clone = clone;}
 	
-	// Methods
+	// Public Methods
 	abstract public int calculateFee(int insurantId);
+	
+	public String writeToFile() {
+		String output = null;
+		output = this.insuranceId + ' ' + this.name + ' ' + this.type.getNum() + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
+		for (double rate : rateOfAge) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfGender) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfJob) {
+			output += rate;
+			output += ' ';
+		}
+		output += this.warrantyPeriod;
+		output += ' ' + String.valueOf(this.specialContract) + ' ' + String.valueOf(this.confirmedStatus) + '\n';
+		return output;
+	}
+
+	public void readFromFile(Scanner scn) {
+		this.insuranceId = scn.next();
+		this.name = scn.next();
+		int input = scn.nextInt();
+		for (eInsuranceType insuranceType : eInsuranceType.values()) {
+			if (insuranceType.getNum() == input)
+				this.type = insuranceType;
+		}
+		for (eGender gender : eGender.values()) {
+			if (gender.getNum() == input)
+				this.gender = gender;
+		}
+		this.basicFee = scn.nextInt();
+		this.specialContractFee = scn.nextInt();
+		for (int i = 0; i < this.rateOfAge.length; i++) {
+			this.rateOfAge[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfGender.length; i++) {
+			this.rateOfGender[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfJob.length; i++) {
+			this.rateOfJob[i] = scn.nextDouble();
+		}
+		this.warrantyPeriod = scn.nextInt();
+		this.specialContract = Boolean.parseBoolean(scn.next());
+		this.confirmedStatus = Boolean.parseBoolean(scn.next());
+	}
 
 }

@@ -931,9 +931,9 @@ public class Home {
 			try {
 				int inputGender = scn.nextInt();
 				if (inputGender == 1) {
-					newInsurance.setDeniedGender(eGender.female);
+					newInsurance.setGender(eGender.female);
 				} else if (inputGender == 2) {
-					newInsurance.setDeniedGender(eGender.male);
+					newInsurance.setGender(eGender.male);
 				} else if (inputGender == 0) {
 					System.out.println("이전 화면으로 돌아갑니다.");
 					return null;
@@ -950,7 +950,7 @@ public class Home {
 			if (inputCondition.equals("y")) {
 				boolean isEmpty = true;
 				for (Insurance insurance: this.insuranceList.getInsuranceList()) {
-					if ((insurance.getType() != newInsurance.getType()) && (insurance.getDeniedGender() == newInsurance.getDeniedGender())) {
+					if ((insurance.getType() != newInsurance.getType()) && (insurance.getGender() == newInsurance.getGender())) {
 						continue;
 					}
 					this.showInsuranceData(insurance);

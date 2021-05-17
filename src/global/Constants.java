@@ -5,11 +5,34 @@ public class Constants {
 //		teen, twenties, thirties, fourties, fifties, sixties, seventies;
 //	}
 	public static enum eAccidentType {
-		actual, cancer, dental, driver, fire, trip;
+		driver(1),
+		dental(2),
+		actual(3),
+		fire(4),
+		cancer(5),
+		trip(6);
+		
+		final private int num;
+		
+		private eAccidentType(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 	public static enum eGender {
-		male, female;
+		male(1),
+		female(2),
+		both(3);
+
+		final private int num;
+		
+		private eGender(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 	public static enum eJob {
@@ -33,7 +56,20 @@ public class Constants {
 	}
 
 	public static enum eInsuranceType {
-		actualCostInsurance, cancerInsurance, dentalInsurance, driverInsurance, fireInsurance, tripInsurance;
+		driverInsurance(1),
+		dentalInsurance(2),
+		actualCostInsurance(3),
+		fireInsurance(4),
+		cancerInsurance(5),
+		tripInsurance(6);
+
+		final private int num;
+		
+		private eInsuranceType(int num) {
+			this.num = num;
+		}
+
+		public int getNum() {return num;}
 	}
 
 	public static enum eFamilyMedicalDisease {
