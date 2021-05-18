@@ -6,6 +6,7 @@ import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
+import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
 import global.Constants.eUsageOfStructure;
 
@@ -22,6 +23,7 @@ public class Insurant {
 	private eUsageOfStructure usageOfStructure;
 	private eGender gender;
 	private eJob job;
+	private eTypeOfCar typeOfCar;
 	private eRankOfCar rankOfCar;
 	private eRiskOfTripCountry riskOfTripCountry;
 	
@@ -63,6 +65,9 @@ public class Insurant {
 
 	public eJob getJob() {return job;}
 	public void setJob(eJob job) {this.job = job;}
+
+	public eTypeOfCar getTypeOfCar() {return typeOfCar;}
+	public void setTypeOfCar(eTypeOfCar typeOfCar) {this.typeOfCar = typeOfCar;}
 
 	public eRankOfCar getRankOfCar() {return rankOfCar;}
 	public void setRankOfCar(eRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}

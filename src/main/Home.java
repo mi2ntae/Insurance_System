@@ -22,6 +22,7 @@ import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
+import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
 import global.Constants.eUsageOfStructure;
 import insurance.ActualCostInsurance;
@@ -534,7 +535,7 @@ public class Home {
 			System.out.print("가입할 보험 ID를 입력해주세요 : ");
 			insurance = this.insuranceList.select(scn.next());
 			if (insurance != null) {
-				Insurant insurant = this.selectInsurant(customer);
+				Insurant insurant = this.selectInsurant(customer, insurance);
 				if (customer != null) {
 					Contract contract = new Contract();
 					if(this.contractList.getContractList().isEmpty()) {
@@ -553,7 +554,7 @@ public class Home {
 		}
 	}
 	// 보험 가입자 선택하기
-	private Insurant selectInsurant(Customer customer) {
+	private Insurant selectInsurant(Customer customer, Insurance insurance) {
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		int input = scn.nextInt();
 		while(input != 1 && input != 2) {
@@ -574,12 +575,12 @@ public class Home {
 				}
 			}
 		} else {
-			this.createInsurant(customer);
+			this.createInsurant(customer, insurance);
 		}
 		return customer.getInsurantList().getSelectedInsurant();
 	}
 
-	private void createInsurant(Customer customer) {
+	private void createInsurant(Customer customer, Insurance insurance) {
 		Insurant insurant = new Insurant();
 		System.out.print("사고횟수 : ");
 		int accidentHistory = scn.nextInt();
@@ -593,9 +594,12 @@ public class Home {
 		int age = scn.nextInt();
 		insurant.setAge(age);
 		
-		System.out.print("아이디 : ");
-		String id = scn.next();
-		insurant.setInsurantId(id);
+		if(customer.getInsurantList().getInsurantList().isEmpty()) {
+			insurant.setInsurantId("1");
+		} else {
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) - 1));
+		}
+		
 		
 		System.out.print("이름 : ");
 		String name = scn.next();
@@ -605,38 +609,40 @@ public class Home {
 		String phoneNum = scn.next();
 		insurant.setPhoneNumber(phoneNum);
 		
-		System.out.print("건물가격 : ");
-		long postedPriceOfStructure = scn.nextLong();
-		insurant.setPostedPriceOfStructure(postedPriceOfStructure);
-		
-		System.out.println("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
-		eUsageOfStructure usageOfStructure = null;
-		while (usageOfStructure == null) {
-			switch (scn.nextInt()) {
-			default:
-				System.out.print("입력값이 잘못되었습니다");
-				break;
-			case 1:
-				usageOfStructure = eUsageOfStructure.house;
-				break;
-			case 2:
-				usageOfStructure = eUsageOfStructure.study;
-				break;
-			case 3:
-				usageOfStructure = eUsageOfStructure.factory;
-				break;
-			case 4:
-				usageOfStructure = eUsageOfStructure.warehouse;
-				break;
-			case 5:
-				usageOfStructure = eUsageOfStructure.office;
-				break;
-			case 6:
-				usageOfStructure = eUsageOfStructure.publicFacility;
-				break;
+		if(insurance.getType() == eInsuranceType.fireInsurance) {
+			System.out.print("건물가격 : ");
+			long postedPriceOfStructure = scn.nextLong();
+			insurant.setPostedPriceOfStructure(postedPriceOfStructure);
+			
+			System.out.println("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
+			eUsageOfStructure usageOfStructure = null;
+			while (usageOfStructure == null) {
+				switch (scn.nextInt()) {
+				default:
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1:
+					usageOfStructure = eUsageOfStructure.house;
+					break;
+				case 2:
+					usageOfStructure = eUsageOfStructure.study;
+					break;
+				case 3:
+					usageOfStructure = eUsageOfStructure.factory;
+					break;
+				case 4:
+					usageOfStructure = eUsageOfStructure.warehouse;
+					break;
+				case 5:
+					usageOfStructure = eUsageOfStructure.office;
+					break;
+				case 6:
+					usageOfStructure = eUsageOfStructure.publicFacility;
+					break;
+				}
 			}
+			insurant.setUsageOfStructure(usageOfStructure);
 		}
-		insurant.setUsageOfStructure(usageOfStructure);
 		
 		System.out.println("성별\n1.남자\n2.여");
 		eGender gender = null;
@@ -655,83 +661,117 @@ public class Home {
 		}
 		insurant.setGender(gender);
 		
-		System.out.println("직업\n1.사무직\n2.운전자\n3.현장직\n4.학생\n5.교사\n6.군인\n7.기타");
-		eJob job = null;
-		while(job == null) {
-			switch(scn.nextInt()) {
-			default :
-				System.out.print("입력값이 잘못되었습니다");
-				break;
-			case 1 :
-				job = eJob.officeWorker;
-				break;
-			case 2 :
-				job = eJob.driver;
-				break;
-			case 3 :
-				job = eJob.factoryWorker;
-				break;
-			case 4 :
-				job = eJob.student;
-				break;
-			case 5 :
-				job = eJob.teacher;
-				break;
-			case 6 :
-				job = eJob.soldier;
-				break;
-			case 7 :
-				job = eJob.etc;
-				break;
+		if(insurance.getType() != eInsuranceType.fireInsurance) {
+			System.out.println("직업\n1.사무직\n2.운전자\n3.현장직\n4.학생\n5.교사\n6.군인\n7.기타");
+			eJob job = null;
+			while(job == null) {
+				switch(scn.nextInt()) {
+				default :
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1 :
+					job = eJob.officeWorker;
+					break;
+				case 2 :
+					job = eJob.driver;
+					break;
+				case 3 :
+					job = eJob.factoryWorker;
+					break;
+				case 4 :
+					job = eJob.student;
+					break;
+				case 5 :
+					job = eJob.teacher;
+					break;
+				case 6 :
+					job = eJob.soldier;
+					break;
+				case 7 :
+					job = eJob.etc;
+					break;
+				}
 			}
+			insurant.setJob(job);
 		}
-		insurant.setJob(job);
 		
-		System.out.println("자동차등급\n1.상\n2.중\n3.하");
-		eRankOfCar rankOfCar = null;
-		while(rankOfCar == null) {
-			switch(scn.nextInt()) {
-			default :
-				System.out.print("입력값이 잘못되었습니다");
-				break;
-			case 1 :
-				rankOfCar = eRankOfCar.bus;
-				break;
-			case 2 :
-				rankOfCar = eRankOfCar.foreign;
-				break;
-			case 3 :
-				rankOfCar = eRankOfCar.suv;
-				break;
+		if(insurance.getType() == eInsuranceType.driverInsurance) {
+			System.out.println("자동차등급\n1.최고급\n2.고급\n3.보급형\n4.저가");
+			eRankOfCar rankOfCar = null;
+			while(rankOfCar == null) {
+				switch(scn.nextInt()) {
+				default :
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1 :
+					rankOfCar = eRankOfCar.Luxury;
+					break;
+				case 2 :
+					rankOfCar = eRankOfCar.high;
+					break;
+				case 3 :
+					rankOfCar = eRankOfCar.middle;
+					break;
+				case 4 :
+					rankOfCar = eRankOfCar.low;
+					break;
+				}
 			}
-		}
-		insurant.setRankOfCar(rankOfCar);
-		
-		System.out.println("여행국가 위험등급\n1.안전\n2.1등급\n3.2등급\n4.3등급");
-		eRiskOfTripCountry riskOfTripCountry = null;
-		while(riskOfTripCountry == null) {
-			switch(scn.nextInt()) {
-			default :
-				System.out.print("입력값이 잘못되었습니다");
-				break;
-			case 1 :
-				riskOfTripCountry = eRiskOfTripCountry.safe;
-				break;
-			case 2 :
-				riskOfTripCountry = eRiskOfTripCountry.first;
-				break;
-			case 3 :
-				riskOfTripCountry = eRiskOfTripCountry.second;
-				break;
-			case 4 :
-				riskOfTripCountry = eRiskOfTripCountry.third;
-				break;
+			insurant.setRankOfCar(rankOfCar);
+			
+			System.out.println("자동차종류\n1.버스\n2.승합차\n3.SUV\n4.외제차\n5.기타");
+			eTypeOfCar typeOfCar = null;
+			while(typeOfCar == null) {
+				switch(scn.nextInt()) {
+				default :
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1 :
+					typeOfCar = eTypeOfCar.bus;
+					break;
+				case 2 :
+					typeOfCar = eTypeOfCar.van;
+					break;
+				case 3 :
+					typeOfCar = eTypeOfCar.suv;
+					break;
+				case 4 :
+					typeOfCar = eTypeOfCar.foreign;
+					break;
+				case 5 :
+					typeOfCar = eTypeOfCar.etc;
+					break;
+				}
 			}
+			insurant.setTypeOfCar(typeOfCar);
 		}
-		insurant.setRiskOfTripCountry(riskOfTripCountry);
 		
+		if(insurance.getType() == eInsuranceType.tripInsurance) {
+			System.out.println("여행국가 위험등급\n1.안전\n2.1등급\n3.2등급\n4.3등급");
+			eRiskOfTripCountry riskOfTripCountry = null;
+			while(riskOfTripCountry == null) {
+				switch(scn.nextInt()) {
+				default :
+					System.out.print("입력값이 잘못되었습니다");
+					break;
+				case 1 :
+					riskOfTripCountry = eRiskOfTripCountry.safe;
+					break;
+				case 2 :
+					riskOfTripCountry = eRiskOfTripCountry.first;
+					break;
+				case 3 :
+					riskOfTripCountry = eRiskOfTripCountry.second;
+					break;
+				case 4 :
+					riskOfTripCountry = eRiskOfTripCountry.third;
+					break;
+				}
+			}
+			insurant.setRiskOfTripCountry(riskOfTripCountry);
+		}
 		customer.createInsurant(insurant);
-		customer.getInsurantList().select(id);
+		customer.getInsurantList().select(insurant.getInsurantId());
 	}
 	
 	// 고객 가입하기

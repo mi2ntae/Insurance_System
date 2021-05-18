@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 import global.Constants.eGender;
 import global.Constants.eJob;
-import global.Constants.eRankOfCar;
+import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
 import global.Constants.eUsageOfStructure;
 import insurance.InsuranceListImpl;

@@ -9,7 +9,8 @@ public class DriverInsurance extends Insurance {
 
 	// Attributes
 	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4, 1.5};
-	private double[] rateOfCarRank = {2, 1.7, 1.6, 1.5, 1.0};
+	private double[] rateOfCarType = {2, 1.7, 1.6, 1.5, 1.0};
+	private double[] rateOfCarRank = {2, 1.8, 1.2, 1.0};
 
 	// Constructor
 	public DriverInsurance(){
@@ -20,8 +21,8 @@ public class DriverInsurance extends Insurance {
 	public double[] getRateOfAccident() {return rateOfAccident;}
 		public void setRateOfAccident(double[] rateOfAccident) {this.rateOfAccident = rateOfAccident;}
 	
-	public double[] getRateOfCarRank() {return rateOfCarRank;}	
-	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarRank = rateOfCarRank;}
+	public double[] getRateOfCarRank() {return rateOfCarType;}	
+	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarType = rateOfCarRank;}
 	
 	// Methods
 	public int calculateFee(Insurant insurant){
@@ -52,21 +53,21 @@ public class DriverInsurance extends Insurance {
 		}
 		
 		//자동차 등급에 따른 요율 계산
-		switch(insurant.getRankOfCar()) {
+		switch(insurant.getTypeOfCar()) {
 		case bus :
-			fee *= this.rateOfCarRank[0];
+			fee *= this.rateOfCarType[0];
 			break;
 		case van :
-			fee *= this.rateOfCarRank[1];
+			fee *= this.rateOfCarType[1];
 			break;
 		case suv :
-			fee *= this.rateOfCarRank[2];
+			fee *= this.rateOfCarType[2];
 			break;
 		case foreign :
-			fee *= this.rateOfCarRank[3];
+			fee *= this.rateOfCarType[3];
 			break;
 		case etc :
-			fee *= this.rateOfCarRank[4];
+			fee *= this.rateOfCarType[4];
 			break;
 		}
 		
@@ -84,6 +85,21 @@ public class DriverInsurance extends Insurance {
 		} else {
 			fee *= this.rateOfAccident[5];
 		}
+
+		switch (insurant.getRankOfCar()) {
+		case Luxury:
+			fee *= this.rateOfCarRank[0];
+			break;
+		case high:
+			fee *= this.rateOfCarRank[1];
+			break;
+		case middle:
+			fee *= this.rateOfCarRank[2];
+			break;
+		case low:
+			fee *= this.rateOfCarRank[3];
+			break;
+		}
 		
 		return (int)fee;
 	}
@@ -95,6 +111,10 @@ public class DriverInsurance extends Insurance {
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ';
 		for (double rate : rateOfAccident) {
+			output += rate;
+			output += ' ';
+		}
+		for (double rate : rateOfCarType) {
 			output += rate;
 			output += ' ';
 		}
@@ -110,7 +130,10 @@ public class DriverInsurance extends Insurance {
 		for (int i = 0; i < this.rateOfAccident.length; i++) {
 			this.rateOfAccident[i] = scn.nextDouble();
 		}
-		for (int i = 0; i < this.rateOfCarRank.length; i++) {
+		for (int i = 0; i < this.rateOfCarType.length; i++) {
+			this.rateOfCarType[i] = scn.nextDouble();
+		}
+		for (int i = 0; i < this.rateOfCarType.length; i++) {
 			this.rateOfCarRank[i] = scn.nextDouble();
 		}
 	}
