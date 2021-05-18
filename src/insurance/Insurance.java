@@ -91,12 +91,13 @@ public abstract class Insurance {
 	abstract public String writeToSelectedFile();
 	abstract public Insurance newInstance();
 	
-	public void addGuaranteePlan(String content, int compensation, boolean special, double rate) {
+	public void addGuaranteePlan(String content, int compensation, boolean special, int rate) {
 		GuaranteePlan guaranteePlan = new GuaranteePlan();
 		guaranteePlan.setInsuranceId(this.insuranceId);
 		guaranteePlan.setSpecial(special);
 		guaranteePlan.setContent(content);
-		guaranteePlan.setRate(rate);
+		guaranteePlan.setRate(1 - ((double)rate/100));
+		this.guaranteePlanList.insert(guaranteePlan);
 	}
 	
 	public String writeToFile() {

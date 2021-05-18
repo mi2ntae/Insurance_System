@@ -79,7 +79,7 @@ public class Constants {
 		public String getName() {return this.name;}
 	}
 
-	public static enum eRankOfCar {
+	public static enum eTypeOfCar {
 		bus(1, "버스"),
 		van(2, "승합차"),
 		suv(3, "SUV"),
@@ -89,7 +89,7 @@ public class Constants {
 		final private int num;
 		final private String name;
 		
-		private eRankOfCar(int num, String name) {
+		private eTypeOfCar(int num, String name) {
 			this.num = num;
 			this.name = name;
 		}
@@ -98,16 +98,16 @@ public class Constants {
 		public String getName() {return name;}
 	}
 	
-	public static enum eRateOfAccident {
-		exemplary(1, "모범"),
-		skilled(2, "숙련자"),
-		beginner(3, "초심자"),
-		troublemaker(4, "사고뭉치");
+	public static enum eRankOfCar {
+		Luxury(1, "최고급"),
+		high(2, "고급"),
+		middle(3, "보급형"),
+		low(4, "저가");
 
 		final private int num;
 		final private String name;
 		
-		private eRateOfAccident(int num, String name) {
+		private eRankOfCar(int num, String name) {
 			this.num = num;
 			this.name = name;
 		}
