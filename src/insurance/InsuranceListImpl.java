@@ -32,6 +32,7 @@ public class InsuranceListImpl implements InsuranceList {
 	public boolean insert(Insurance insurance) {
 		if (this.insuranceList.add(insurance)) {
 			this.writeToFile(insurance);
+			this.writeToSelectedFile(insurance);
 			return true;
 		} else {
 			return false;
