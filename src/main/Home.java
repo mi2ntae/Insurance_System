@@ -1283,8 +1283,10 @@ public class Home {
 		makeGuaranteePlan(newInsurance, false);
 		
 		// 특약 보장내역 설정
-		System.out.println("특약 보장 내역을 설정합니다.");
-		makeGuaranteePlan(newInsurance, false);
+		if(newInsurance.isSpecialContract()) {
+			System.out.println("특약 보장 내역을 설정합니다.");
+			makeGuaranteePlan(newInsurance, true);
+		}
 		return newInsurance;
 	}
 
