@@ -8,7 +8,7 @@ import global.Constants.eGender;
 public class DriverInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4};
+	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4, 1.5};
 	private double[] rateOfCarRank = {2, 1.7, 1.6, 1.5, 1.0};
 
 	// Constructor
@@ -51,7 +51,6 @@ public class DriverInsurance extends Insurance {
 			fee *= this.getRateOfGender()[1];
 		}
 		
-		
 		//자동차 등급에 따른 요율 계산
 		switch(insurant.getRankOfCar()) {
 		case bus :
@@ -71,6 +70,20 @@ public class DriverInsurance extends Insurance {
 			break;
 		}
 		
+		int count = insurant.getAccidentHistory();
+		if(count == 0) {
+			fee *= this.rateOfAccident[0];
+		} else if(count < 2) {
+			fee *= this.rateOfAccident[1];
+		} else if(count < 4) {
+			fee *= this.rateOfAccident[2];
+		} else if(count < 6) {
+			fee *= this.rateOfAccident[3];
+		} else if(count < 8) {
+			fee *= this.rateOfAccident[4];
+		} else {
+			fee *= this.rateOfAccident[5];
+		}
 		
 		return (int)fee;
 	}
