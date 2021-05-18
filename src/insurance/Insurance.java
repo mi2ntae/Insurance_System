@@ -91,6 +91,14 @@ public abstract class Insurance {
 	abstract public String writeToSelectedFile();
 	abstract public Insurance newInstance();
 	
+	public void addGuaranteePlan(String content, int compensation, boolean special, double rate) {
+		GuaranteePlan guaranteePlan = new GuaranteePlan();
+		guaranteePlan.setInsuranceId(this.insuranceId);
+		guaranteePlan.setSpecial(special);
+		guaranteePlan.setContent(content);
+		guaranteePlan.setRate(rate);
+	}
+	
 	public String writeToFile() {
 		String output = String.valueOf(this.type.getNum()) + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
 		for (double rate : rateOfAge) {
