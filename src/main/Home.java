@@ -1315,8 +1315,7 @@ public class Home {
 								System.out.println("-----------------------");
 							}
 						}
-						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1],
-								compensation, special, 1);
+						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, 1);
 					} else if (input == 0) {
 						break;
 					} else {
@@ -1369,7 +1368,7 @@ public class Home {
 								System.out.println("-----------------------");
 							}
 						}
-						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, rate);
+						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, (1-((double)rate/100)));
 					} else if (input == 0) {
 						break;
 					} else {
