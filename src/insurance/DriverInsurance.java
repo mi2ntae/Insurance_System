@@ -133,7 +133,7 @@ public class DriverInsurance extends Insurance {
 		for (int i = 0; i < this.rateOfCarType.length; i++) {
 			this.rateOfCarType[i] = scn.nextDouble();
 		}
-		for (int i = 0; i < this.rateOfCarType.length; i++) {
+		for (int i = 0; i < this.rateOfCarRank.length; i++) {
 			this.rateOfCarRank[i] = scn.nextDouble();
 		}
 	}
