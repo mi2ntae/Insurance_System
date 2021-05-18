@@ -78,7 +78,7 @@ public class Insurant {
 		String output = null;
 		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
-				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum();
+				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum() + '\n';
 		
 		return output;
 		
@@ -99,6 +99,10 @@ public class Insurant {
 		input = scn.nextInt();
 		for(eGender gender : eGender.values()) {
 			if(gender.getNum() == input) this.gender = gender;
+		}
+		input = scn.nextInt();
+		for(eJob job : eJob.values()) {
+			if(job.getNum() == input) this.job = job;
 		}
 		input = scn.nextInt();
 		for(eRankOfCar rankOfCar : eRankOfCar.values()) {
