@@ -1238,10 +1238,13 @@ public class Home {
 			break;
 		}
 	
-		while (true) {
-			// 보장 내역 설정하기 코딩해야함
-			break;
-		}
+		// 보장내역 설정
+		System.out.println("보장 내역을 설정합니다.");
+		makeGuaranteePlan(newInsurance, false);
+		
+		// 특약 보장내역 설정
+		System.out.println("특약 보장 내역을 설정합니다.");
+		makeGuaranteePlan(newInsurance, false);
 		return newInsurance;
 	}
 
