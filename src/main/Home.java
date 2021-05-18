@@ -1288,6 +1288,38 @@ public class Home {
 		}
 	}
 	
+	// 보장내역 설정하기
+		private void makeGuaranteePlan(Insurance newInsurance) {
+			while (true) {
+				try {
+					System.out.println("보장을 원하시는 항목을 선택해주세요.");
+					for (int i = 1; i <= newInsurance.getType().getGuaranteePlan().length; i++) {
+						System.out.println(i + "." + newInsurance.getType().getGuaranteePlan()[i-1]);
+					}
+					System.out.println("0.그만하기");
+					int input = scn.nextInt();
+					if(input > 0 && input <= newInsurance.getType().getGuaranteePlan().length) {
+						System.out.println("해당 항목의 보상금액을 입력해주세요.");
+						System.out.println(newInsurance.getType().getGuaranteePlan()[input-1] + "의 보장금액 : ");
+						int compensation = scn.nextInt();
+						boolean special = scn.nextBoolean();
+						double rate = scn.nextDouble()
+	;					newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input-1], compensation, special, rate);
+					}else if (input == 0) {
+						break;
+					}else {
+
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+				}
+
+			}
+		}
+	
+	
 	// 보험 정보 출력
 	private void showInsurance(Insurance insurance) {
 		System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
