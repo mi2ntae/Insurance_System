@@ -695,10 +695,10 @@ public class Home {
 				System.out.print("입력값이 잘못되었습니다");
 				break;
 			case 1 :
-				rankOfCar = eRankOfCar.high;
+				rankOfCar = eRankOfCar.bus;
 				break;
 			case 2 :
-				rankOfCar = eRankOfCar.middle;
+				rankOfCar = eRankOfCar.foreign;
 				break;
 			case 3 :
 				rankOfCar = eRankOfCar.low;
