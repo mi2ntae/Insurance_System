@@ -6,6 +6,7 @@ import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
+import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
 import global.Constants.eUsageOfStructure;
 
@@ -22,6 +23,7 @@ public class Insurant {
 	private eUsageOfStructure usageOfStructure;
 	private eGender gender;
 	private eJob job;
+	private eTypeOfCar typeOfCar;
 	private eRankOfCar rankOfCar;
 	private eRiskOfTripCountry riskOfTripCountry;
 	
@@ -64,6 +66,9 @@ public class Insurant {
 	public eJob getJob() {return job;}
 	public void setJob(eJob job) {this.job = job;}
 
+	public eTypeOfCar getTypeOfCar() {return typeOfCar;}
+	public void setTypeOfCar(eTypeOfCar typeOfCar) {this.typeOfCar = typeOfCar;}
+
 	public eRankOfCar getRankOfCar() {return rankOfCar;}
 	public void setRankOfCar(eRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
 
@@ -78,7 +83,7 @@ public class Insurant {
 		String output = null;
 		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
-				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum();
+				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.typeOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum();
 		
 		return output;
 		
@@ -101,8 +106,8 @@ public class Insurant {
 			if(gender.getNum() == input) this.gender = gender;
 		}
 		input = scn.nextInt();
-		for(eRankOfCar rankOfCar : eRankOfCar.values()) {
-			if(rankOfCar.getNum() == input) this.rankOfCar = rankOfCar;
+		for(eTypeOfCar rankOfCar : eTypeOfCar.values()) {
+			if(rankOfCar.getNum() == input) this.typeOfCar = rankOfCar;
 		}
 		input = scn.nextInt();
 		for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
