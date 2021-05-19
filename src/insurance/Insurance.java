@@ -31,12 +31,8 @@ public abstract class Insurance {
 
 	// Constructor
 	public Insurance() {
-		try {
-			this.membershipCondition = new MembershipCondition();
-			this.guaranteePlanList = new GuaranteePlanListImpl();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+		this.membershipCondition = new MembershipCondition();
+		this.guaranteePlanList = new GuaranteePlanListImpl();
 	}
 	
 	// getters & setters
@@ -94,6 +90,7 @@ public abstract class Insurance {
 	public void addGuaranteePlan(String content, int compensation, boolean special, double rate) {
 		GuaranteePlan guaranteePlan = new GuaranteePlan();
 		guaranteePlan.setInsuranceId(this.insuranceId);
+		guaranteePlan.setCompensation(compensation);
 		guaranteePlan.setSpecial(special);
 		guaranteePlan.setContent(content);
 		guaranteePlan.setRate(rate);
@@ -101,7 +98,7 @@ public abstract class Insurance {
 	}
 	
 	public String writeToFile() {
-		String output = String.valueOf(this.type.getNum()) + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + this.basicFee + ' ' + this.specialContractFee + ' ';
+		String output = String.valueOf(this.type.getNum()) + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + String.valueOf(this.basicFee) + ' ' + String.valueOf(this.specialContractFee) + ' ';
 		for (double rate : rateOfAge) {
 			output += rate;
 			output += ' ';
@@ -119,7 +116,7 @@ public abstract class Insurance {
 		return output;
 	}
 
-	public void readFromFile(Scanner scn, int input) {
+	public void readFromFile(Scanner scn, int input) throws FileNotFoundException {
 		for (eInsuranceType type : eInsuranceType.values()) {
 			if (type.getNum() == input)
 				this.type = type;
@@ -145,9 +142,9 @@ public abstract class Insurance {
 		this.warrantyPeriod = scn.nextInt();
 		this.specialContract = Boolean.parseBoolean(scn.next());
 		this.confirmedStatus = Boolean.parseBoolean(scn.next());
+		
+		((GuaranteePlanListImpl)this.guaranteePlanList).readFromFile(insuranceId);
 	}
-
-
 	
 
 }
