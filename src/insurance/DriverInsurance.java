@@ -8,7 +8,7 @@ import global.Constants.eGender;
 public class DriverInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfAccidentHistory = {1.0, 1.2, 1.3, 1.4, 1.5};
+	private double[] rateOfAccidentHistory = {1.0, 1.2, 1.3, 1.4, 1.5, 1.6};
 	private double[] rateOfCarType = {2, 1.7, 1.6, 1.5, 1.0};
 	private double[] rateOfCarRank = {2, 1.8, 1.2, 1.0};
 

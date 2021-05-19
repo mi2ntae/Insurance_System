@@ -1567,49 +1567,49 @@ public class Home {
 		}
 		switch (insurance.getType()) {
 		case driverInsurance:
-			System.out.println("/n  <자동차종류 요율표>");
+			System.out.println("\n  <자동차종류 요율표>");
 			for (int i = 0; i < eTypeOfCar.values().length; i++) {
 				System.out.println(eTypeOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarType()[i]);
 			}
-			System.out.println("/n  <자동차등급 요율표>");
+			System.out.println("\n  <자동차등급 요율표>");
 			for (int i = 0; i < eRankOfCar.values().length; i++) {
 				System.out.println(eRankOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarRank()[i]);
 			}
-			System.out.println("/n  <사고횟수 요율표>");
+			System.out.println("\n  <사고횟수 요율표>");
 			for (int i = 0; i < Constants.accidentHistory.length; i++) {
 				System.out.println(Constants.accidentHistory[i]+" : "+((DriverInsurance)insurance).getRateOfAccidentHistory()[i]);
 			}
 			break;
 		case dentalInsurance:
-			System.out.println("/n  <연간 한도 횟수>");
+			System.out.println("\n  <연간 한도 횟수>");
 			System.out.println(((DentalInsurance)insurance).getAnnualLimitCount()+"회");
 			break;
 		case actualCostInsurance:
-			System.out.println("/n  <자기부담 비율>");
+			System.out.println("\n  <자기부담 비율>");
 			System.out.println(((ActualCostInsurance)insurance).getSelfBurdenRate());
 			break;
 		case fireInsurance:
-			System.out.println("/n  <공시가격 요율표>");
+			System.out.println("\n  <공시가격 요율표>");
 			for (int i = 0; i < Constants.postedPrice.length; i++) {
 				System.out.println(Constants.postedPrice[i]+" : "+((FireInsurance)insurance).getRateOfPostedPrice()[i]);
 			}
-			System.out.println("/n  <건축물 용도 요율표>");
+			System.out.println("\n  <건축물 용도 요율표>");
 			for (int i = 0; i < eUsageOfStructure.values().length; i++) {
 				System.out.println(eUsageOfStructure.values()[i].getName()+" : "+((FireInsurance)insurance).getRateOfStructureUsage()[i]);
 			}
 			break;
 		case cancerInsurance:
-			System.out.println("/n  <가족병력 요율표>");
+			System.out.println("\n  <가족병력 요율표>");
 			for (int i = 0; i <	eFamilyMedicalDisease.values().length; i++) {
 				System.out.println(eFamilyMedicalDisease.values()[i].getName()+" : "+((CancerInsurance)insurance).getRateOfFamilyMedicalDisease()[i]);
 			}
-			System.out.println("/n  <병력이 있는 가족과의 관계 요율표>");
+			System.out.println("\n  <병력이 있는 가족과의 관계 요율표>");
 			for (int i = 0; i < Constants.familyMedicalRelationship.length; i++) {
 				System.out.println(Constants.familyMedicalRelationship[i]+" : "+((CancerInsurance)insurance).getRateOfFamilyMedicalRelationship()[i]);
 			}
 			break;
 		case tripInsurance:
-			System.out.println("/n  <여행지역 안전도 요율표>");
+			System.out.println("\n  <여행지역 안전도 요율표>");
 			for (int i = 0; i <	eRiskOfTripCountry.values().length; i++) {
 				System.out.println(eRiskOfTripCountry.values()[i].getName()+" : "+((TripInsurance)insurance).getRateOfCountryRank()[i]);
 			}
