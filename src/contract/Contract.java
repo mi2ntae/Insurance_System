@@ -1,5 +1,7 @@
 package contract;
 
+import java.util.Scanner;
+
 import customer.Customer;
 import customer.Insurant;
 import insurance.Insurance;
@@ -7,10 +9,13 @@ import insurance.Insurance;
 public class Contract {
 	// Attributes
 	private String contractId;
+	private String insurantId;
+	private String insuranceId;
+	private String salespersonId;
 	private boolean effectiveness;
 	private int lifespanOfContract;
+	private int fee;
 	private int paidFee;
-	private int salespersonId;
 	private int unpaidPeriod;
 	
 	// Composition Class
@@ -29,6 +34,12 @@ public class Contract {
 	// Getters&Setters
 	public String getContractId() {return contractId;}
 	public void setContractId(String contractId) {this.contractId = contractId;}
+	
+	public String getInsurantId() {return insurantId;}
+	public void setInsurantId(String insurantId) {this.insurantId = insurantId;}
+
+	public String getInsuranceId() {return insuranceId;}
+	public void setInsuranceId(String insuranceId) {this.insuranceId = insuranceId;}
 
 	public Customer getCustomer() {return customer;}
 	public void setCustomer(Customer customerId) {this.customer = customerId;}
@@ -42,8 +53,8 @@ public class Contract {
 	public int getPaidFee() {return paidFee;}
 	public void setPaidFee(int paidFee) {this.paidFee = paidFee;}
 
-	public int getSalespersonId() {return salespersonId;}
-	public void setSalespersonId(int salespersonId) {this.salespersonId = salespersonId;}
+	public String getSalespersonId() {return salespersonId;}
+	public void setSalespersonId(String salespersonId) {this.salespersonId = salespersonId;}
 
 	public int getUnpaidPeriod() {return unpaidPeriod;}
 	public void setUnpaidPeriod(int unpaidPeriod) {this.unpaidPeriod = unpaidPeriod;}
@@ -63,6 +74,9 @@ public class Contract {
 		this.insurance = insurance;
 		this.insurant = insurant;
 	}
+	
+	
+	
 //
 //	public boolean payFee(enum monthOfPayment){
 //		return false;
@@ -83,5 +97,23 @@ public class Contract {
 //	public void requestInsuranceRevival(){
 //
 //	}
+	
+		public String writeToFile() {
+			String output = this.contractId + ' ' + this.insurantId + ' ' + this.insuranceId + ' ' + this.salespersonId + ' ' + String.valueOf(this.effectiveness) + ' '
+					+ String.valueOf(this.lifespanOfContract)+ ' ' + String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' ' + String.valueOf(this.unpaidPeriod) + '\n';
+			return output;
+		}
+		
+		public void readFromFile(Scanner scn) {
+			this.contractId = scn.next();
+			this.insurantId = scn.next();
+			this.insuranceId = scn.next();
+			this.salespersonId = scn.next();
+			this.effectiveness = Boolean.parseBoolean(scn.next());
+			this.lifespanOfContract = scn.nextInt();
+			this.fee = scn.nextInt();
+			this.paidFee = scn.nextInt();
+			this.unpaidPeriod = scn.nextInt();
+		}
 
 }
