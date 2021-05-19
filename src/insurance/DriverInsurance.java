@@ -8,7 +8,7 @@ import global.Constants.eGender;
 public class DriverInsurance extends Insurance {
 
 	// Attributes
-	private double[] rateOfAccident = {1.0, 1.2, 1.3, 1.4, 1.5};
+	private double[] rateOfAccidentHistory = {1.0, 1.2, 1.3, 1.4, 1.5};
 	private double[] rateOfCarType = {2, 1.7, 1.6, 1.5, 1.0};
 	private double[] rateOfCarRank = {2, 1.8, 1.2, 1.0};
 
@@ -18,9 +18,13 @@ public class DriverInsurance extends Insurance {
 	}
 	
 	// Getters & Setters
-	public double[] getRateOfAccident() {return rateOfAccident;}
-		public void setRateOfAccident(double[] rateOfAccident) {this.rateOfAccident = rateOfAccident;}
+	public double[] getRateOfAccidentHistory() {return rateOfAccidentHistory;}
+	public void setRateOfAccidentHistory(double[] rateOfAccidentHistory) {this.rateOfAccidentHistory = rateOfAccidentHistory;}
 	
+	
+	public double[] getRateOfCarType() {return rateOfCarType;}
+	public void setRateOfCarType(double[] rateOfCarType) {this.rateOfCarType = rateOfCarType;}
+
 	public double[] getRateOfCarRank() {return rateOfCarType;}	
 	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarType = rateOfCarRank;}
 	
@@ -73,17 +77,17 @@ public class DriverInsurance extends Insurance {
 		
 		int count = insurant.getAccidentHistory();
 		if(count == 0) {
-			fee *= this.rateOfAccident[0];
+			fee *= this.rateOfAccidentHistory[0];
 		} else if(count < 2) {
-			fee *= this.rateOfAccident[1];
+			fee *= this.rateOfAccidentHistory[1];
 		} else if(count < 4) {
-			fee *= this.rateOfAccident[2];
+			fee *= this.rateOfAccidentHistory[2];
 		} else if(count < 6) {
-			fee *= this.rateOfAccident[3];
+			fee *= this.rateOfAccidentHistory[3];
 		} else if(count < 8) {
-			fee *= this.rateOfAccident[4];
+			fee *= this.rateOfAccidentHistory[4];
 		} else {
-			fee *= this.rateOfAccident[5];
+			fee *= this.rateOfAccidentHistory[5];
 		}
 
 		switch (insurant.getRankOfCar()) {
@@ -110,7 +114,7 @@ public class DriverInsurance extends Insurance {
 	
 	public String writeToSelectedFile() {
 		String output = this.getInsuranceId() + ' ';
-		for (double rate : rateOfAccident) {
+		for (double rate : rateOfAccidentHistory) {
 			output += rate;
 			output += ' ';
 		}
@@ -127,8 +131,8 @@ public class DriverInsurance extends Insurance {
 	}
 
 	public void readFromSelectedFile(Scanner scn) {
-		for (int i = 0; i < this.rateOfAccident.length; i++) {
-			this.rateOfAccident[i] = scn.nextDouble();
+		for (int i = 0; i < this.rateOfAccidentHistory.length; i++) {
+			this.rateOfAccidentHistory[i] = scn.nextDouble();
 		}
 		for (int i = 0; i < this.rateOfCarType.length; i++) {
 			this.rateOfCarType[i] = scn.nextDouble();

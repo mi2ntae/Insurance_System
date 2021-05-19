@@ -2,12 +2,11 @@ package customer;
 
 import java.util.Scanner;
 
-import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
-import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
+import global.Constants.eTypeOfCar;
 import global.Constants.eUsageOfStructure;
 
 public class Insurant {

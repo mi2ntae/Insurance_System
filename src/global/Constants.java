@@ -83,8 +83,8 @@ public class Constants {
 		bus(1, "버스"),
 		van(2, "승합차"),
 		suv(3, "SUV"),
-		foreign(3, "외제차"),
-		etc(4, "기타");
+		foreign(4, "외제차"),
+		etc(5, "기타");
 
 		final private int num;
 		final private String name;
@@ -115,7 +115,9 @@ public class Constants {
 		public int getNum() {return num;}
 		public String getName() {return name;}
 	}
-
+	
+	public static String[] accidentHistory = {"0회", "1회", "2회~3회", "4회~5회", "6회~7회", "8회 이상"};
+	
 	public static enum eUsageOfStructure {
 		house(1,"주택"), 
 		study(2, "교육"), 
@@ -206,9 +208,9 @@ public class Constants {
 		public String getName() {return this.name;}
 	}
 	
-	public static String[] eFamilyMedicalRelationship = {"1촌","2촌","3촌","4촌"};
+	public static String[] familyMedicalRelationship = {"1촌","2촌","3촌","4촌"};
 	
-	public static String[] ePostedPrice = {"(공시가)<=5천만원", "5천만원<(공시가)<=5억", "5억<(공시가)<=10억", "10억<(공시가)<=20억", "20억<(공시가)"};
+	public static String[] postedPrice = {"(공시가)<=5천만원", "5천만원<(공시가)<=5억", "5억<(공시가)<=10억", "10억<(공시가)<=20억", "20억<(공시가)"};
 	
 	public static enum eCancer {
 		thyroid(1,"갑상선암"), 
@@ -242,25 +244,5 @@ public class Constants {
 
 		public int getNum() {return num;}
 	}
-	
-//	public static enum eRateOfAge{
-//		baby("영유아 : "),
-//		teen("10대 : "),
-//		twenties("20대 : "),
-//		thirties("30대 : "),
-//		fourties("40대 : "),
-//		fifties("50대 : "),
-//		Upfifties("노년층 : ");
-//		
-//		private String print;
-//		
-//		private eRateOfAge(String print) {
-//			this.print = print;
-//		}
-//
-//		public String getPrint() {
-//			return this.print;
-//		}
-//	}
 
 }
