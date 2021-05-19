@@ -397,13 +397,21 @@ public class Home {
 		}
 	}
 	
+	// 보험 간단한 정보 보기
+	private void showSimpleInsurance(Contract contract) {
+		System.out.println("보험이름 : " + contract.getInsurance().getName());
+		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
+		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
+		System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+	}
+	
 	// 보험 계약 심사하기
 	private void judgeContract() {
 		UnderWriter underwriter = new UnderWriter();
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
 			if(contract.isEffectiveness() == false) {
-				this.showContractData(contract);
+				this.showSimpleInsurance(contract);
 			}
 		}
 		Contract contract = null;
@@ -566,6 +574,7 @@ public class Home {
 			}
 		}
 	}
+	
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer, Insurance insurance) {
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
@@ -595,10 +604,12 @@ public class Home {
 
 	private void createInsurant(Customer customer, Insurance insurance) {
 		Insurant insurant = new Insurant();
-		System.out.print("사고횟수 : ");
-		int accidentHistory = scn.nextInt();
-		insurant.setAccidentHistory(accidentHistory);
-		
+		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
+			System.out.print("사고횟수 : ");
+			int accidentHistory = scn.nextInt();
+			insurant.setAccidentHistory(accidentHistory);
+		}
+
 		System.out.print("주소 : ");
 		String address = scn.next();
 		insurant.setAddress(address);
@@ -610,7 +621,7 @@ public class Home {
 		if(customer.getInsurantList().getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) - 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
 		}
 		
 		
