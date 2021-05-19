@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import employee.Employee;
-
 public class GuaranteePlanListImpl implements GuaranteePlanList {
 
 	// Components
@@ -18,9 +16,8 @@ public class GuaranteePlanListImpl implements GuaranteePlanList {
 	// Composition Class
 
 	// Constructor
-	public GuaranteePlanListImpl() throws FileNotFoundException {
+	public GuaranteePlanListImpl() {
 		this.guaranteePlanList = new ArrayList<GuaranteePlan>();
-		this.readFromFile();
 	}
 	
 	// getters & setters
@@ -61,6 +58,19 @@ public class GuaranteePlanListImpl implements GuaranteePlanList {
 		int index = this.getInsuranceIndex(insuranceId);
 	}
 
+	public void readFromFile(String insuranceId) throws FileNotFoundException {
+		File file = new File("data/guaranteePlan");
+		Scanner scn = new Scanner(file);
+		while (scn.hasNext()) {
+			String input = scn.next();
+			if (input.equals(insuranceId)) {
+				GuaranteePlan guaranteePlan = new GuaranteePlan();
+				guaranteePlan.readFromFile(scn, input);
+				this.guaranteePlanList.add(guaranteePlan);
+			}
+		}
+	}
+	
 	// Private Methods
 	private int getInsuranceIndex(String insuranceId) {
 		for (int i = 0; i < this.guaranteePlanList.size(); i++) {
@@ -78,17 +88,6 @@ public class GuaranteePlanListImpl implements GuaranteePlanList {
 		} catch (IOException e) {
 		    e.printStackTrace();
 		}
-	}
-	
-	private void readFromFile() throws FileNotFoundException {
-		File file = new File("data/guaranteePlan");
-		Scanner scn = new Scanner(file);
-		while (scn.hasNext()) {
-			GuaranteePlan guaranteePlan = new GuaranteePlan();
-			guaranteePlan.readFromFile(scn);
-			this.guaranteePlanList.add(guaranteePlan);
-		}	
-		
 	}
 
 }

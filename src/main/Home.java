@@ -30,6 +30,7 @@ import insurance.CancerInsurance;
 import insurance.DentalInsurance;
 import insurance.DriverInsurance;
 import insurance.FireInsurance;
+import insurance.GuaranteePlan;
 import insurance.Insurance;
 import insurance.InsuranceList;
 import insurance.InsuranceListImpl;
@@ -1482,6 +1483,58 @@ public class Home {
 			}
 		}
 	}
+	// 사고 접수
+	
+	// 보장내역 리스트 출력
+	private void showGuaranteePlan(Insurance insurance) {
+		System.out.println("\n  <보장 내역>");
+		if (insurance.getType().equals(eInsuranceType.dentalInsurance)
+				|| insurance.getType().equals(eInsuranceType.cancerInsurance)) {
+			int index = 1;
+			System.out.println("*기본계약");
+			for(GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				if(!guaranteePlan.isSpecial()) {
+					System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
+					System.out.println("  보장금액 : " + guaranteePlan.getCompensation());
+					index++;
+				}
+			}
+			System.out.println("*선택특약");
+			for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				if (guaranteePlan.isSpecial()) {
+					System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
+					System.out.println("  보장금액 : " + guaranteePlan.getCompensation());
+					index++;
+				}
+			}
+
+		} else if (insurance.getType().equals(eInsuranceType.fireInsurance)
+				|| insurance.getType().equals(eInsuranceType.tripInsurance)
+				|| insurance.getType().equals(eInsuranceType.driverInsurance)) {
+			int index = 1;
+			System.out.println("*기본계약");
+			for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				if (!guaranteePlan.isSpecial()) {
+					System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
+					System.out.println("  최대 보장금액 : " + guaranteePlan.getCompensation());
+					System.out.println("  보장비율 : 피해액의 " + (int) (100 * guaranteePlan.getRate()) + "%");
+					index++;
+				}
+			}
+			System.out.println("*선택특약");
+			for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				if (guaranteePlan.isSpecial()) {
+					System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
+					System.out.println("  최대 보장금액 : " + guaranteePlan.getCompensation());
+					System.out.println("  보장비율 : 피해액의 " + (int) (100 * guaranteePlan.getRate()) + "%");
+					index++;
+				}
+			}
+		} else if (insurance.getType().equals(eInsuranceType.actualCostInsurance)) {
+			System.out.println("병ㆍ의원 및 약국에서 실제로 지출한 의료비의 "
+					+ (int) (100 * (1 - ((ActualCostInsurance) insurance).getSelfBurdenRate())) + "%");
+		}
+	}
 	
 	// 보험 정보 출력
 	private void showInsurance(boolean confirmStatus) {
@@ -1502,15 +1555,15 @@ public class Home {
 		System.out.println("  기본보험료 : "+insurance.getBasicFee());
 		System.out.println("  <나이 요율표>");
 		for (int i = 0; i < eAge.values().length; i++) {
-			System.out.println(eAge.values()[i] + " : " + insurance.getRateOfAge()[i]);
+			System.out.println(eAge.values()[i].getName() + " : " + insurance.getRateOfAge()[i]);
 		}
 		System.out.println("\n  <성별 요율표>");
 		for (int i = 0; i < eGender.values().length-1; i++) {
-			System.out.println(eAge.values()[i] + " : " + insurance.getRateOfGender()[i]);
+			System.out.println(eGender.values()[i].getName() + " : " + insurance.getRateOfGender()[i]);
 		}
 		System.out.println("\n  <직업 요율표>");
 		for (int i = 0; i < eJob.values().length-1; i++) {
-			System.out.println(eJob.values()[i] + " : " + insurance.getRateOfJob()[i]);
+			System.out.println(eJob.values()[i].getName() + " : " + insurance.getRateOfJob()[i]);
 		}
 		switch (insurance.getType()) {
 		case driverInsurance:
@@ -1565,6 +1618,7 @@ public class Home {
 			break;
 		}
 		// 보장 내역 조회하기 코딩해야함
+    showGuaranteePlan(insurance);
 		System.out.println("-------------------");		
 	}
 }

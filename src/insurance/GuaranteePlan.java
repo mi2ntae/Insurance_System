@@ -41,8 +41,8 @@ public class GuaranteePlan {
 		
 	}
 	
-	public void readFromFile(Scanner scn) {
-		this.insuranceId = scn.next();
+	public void readFromFile(Scanner scn, String input) {
+		this.insuranceId = input;
 		this.special = Boolean.parseBoolean(scn.next());
 		this.content = scn.next();
 		this.compensation = scn.nextInt();
