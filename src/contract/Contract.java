@@ -13,13 +13,14 @@ public class Contract {
 	private String insuranceId;
 	private String salespersonId;
 	private boolean effectiveness;
+	private boolean special;
 	private int lifespanOfContract;
 	private int fee;
 	private int paidFee;
 	private int unpaidPeriod;
 	
 	// Composition Class
-	public Accident accident;
+	public AccidentList accidentList;
 	
 	// Associate
 	private Customer customer;
@@ -28,7 +29,7 @@ public class Contract {
 
 	// Constructor
 	public Contract(){
-		
+		accidentList = new AccidentListImpl();
 	}
 	
 	// Getters&Setters
@@ -46,6 +47,12 @@ public class Contract {
 
 	public boolean isEffectiveness() {return effectiveness;}
 	public void setEffectiveness(boolean effectiveness) {this.effectiveness = effectiveness;}
+	
+	public boolean isSpecial() {return special;}
+	public void setSpecial(boolean special) {this.special = special;}
+
+	public int getFee() {return fee;}
+	public void setFee(int fee) {this.fee = fee;}
 
 	public int getLifespanOfContract() {return lifespanOfContract;}
 	public void setLifespanOfContract(int lifespanOfContract) {this.lifespanOfContract = lifespanOfContract;}
@@ -64,9 +71,9 @@ public class Contract {
 
 	public Insurant getInsurant() {return insurant;}
 	public void setInsurant(Insurant insurant) {this.insurant = insurant;}
-
-	public Accident getAccident() {return accident;}
-	public void setAccident(Accident accident) {this.accident = accident;}
+		
+	public AccidentList getAccidentList() {return accidentList;}
+	public void setAccidentList(AccidentList accidentList) {this.accidentList = accidentList;}
 
 	// public Method
 	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
@@ -74,9 +81,17 @@ public class Contract {
 		this.insurance = insurance;
 		this.insurant = insurant;
 	}
-	
-	
-	
+
+	public void addAccident(String accidentId, String content, int damageCost, boolean handlingStatus) {
+		Accident accident = new Accident();
+		accident.setContractId(this.contractId);
+		accident.setAccidentId(accidentId);
+		accident.setContent(content);
+		accident.setDamageCost(damageCost);
+		accident.setHandlingStatus(handlingStatus);
+		this.accidentList.insert(accident);
+	}
+
 //
 //	public boolean payFee(enum monthOfPayment){
 //		return false;
@@ -97,23 +112,26 @@ public class Contract {
 //	public void requestInsuranceRevival(){
 //
 //	}
-	
-		public String writeToFile() {
-			String output = this.contractId + ' ' + this.insurantId + ' ' + this.insuranceId + ' ' + this.salespersonId + ' ' + String.valueOf(this.effectiveness) + ' '
-					+ String.valueOf(this.lifespanOfContract)+ ' ' + String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' ' + String.valueOf(this.unpaidPeriod) + '\n';
-			return output;
-		}
-		
-		public void readFromFile(Scanner scn) {
-			this.contractId = scn.next();
-			this.insurantId = scn.next();
-			this.insuranceId = scn.next();
-			this.salespersonId = scn.next();
-			this.effectiveness = Boolean.parseBoolean(scn.next());
-			this.lifespanOfContract = scn.nextInt();
-			this.fee = scn.nextInt();
-			this.paidFee = scn.nextInt();
-			this.unpaidPeriod = scn.nextInt();
-		}
+
+	public String writeToFile() {
+		String output = this.contractId + ' ' + this.insurantId + ' ' + this.insuranceId + ' ' + this.salespersonId
+				+ ' ' + String.valueOf(this.effectiveness) + ' ' + String.valueOf(this.lifespanOfContract) + ' '
+				+ String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' '
+				+ String.valueOf(this.unpaidPeriod) + ' ' + String.valueOf(this.special) + '\n';
+		return output;
+	}
+
+	public void readFromFile(Scanner scn) {
+		this.contractId = scn.next();
+		this.insurantId = scn.next();
+		this.insuranceId = scn.next();
+		this.salespersonId = scn.next();
+		this.effectiveness = Boolean.parseBoolean(scn.next());
+		this.lifespanOfContract = scn.nextInt();
+		this.fee = scn.nextInt();
+		this.paidFee = scn.nextInt();
+		this.unpaidPeriod = scn.nextInt();
+		this.special = Boolean.parseBoolean(scn.next());
+	}
 
 }

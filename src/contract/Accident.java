@@ -3,11 +3,11 @@ package contract;
 public class Accident {
 	// Attributes
 	private String accidentId;
-	private int compensation;
+	private String contractId;
 	private String content;
-	private int contractId;
-	private boolean handlingStatus;
+	private int compensation;
 	private int damageCost;
+	private boolean handlingStatus;
 	
 	// Constructor
 	public Accident(){
@@ -24,8 +24,8 @@ public class Accident {
 	public String getContent() {return content;}
 	public void setContent(String content) {this.content = content;}
 
-	public int getContractId() {return contractId;}
-	public void setContractId(int contractId) {this.contractId = contractId;}
+	public String getContractId() {return contractId;}
+	public void setContractId(String contractId) {this.contractId = contractId;}
 
 	public boolean isHandlingStatus() {return handlingStatus;}
 	public void setHandlingStatus(boolean handlingStatus) {this.handlingStatus = handlingStatus;}
