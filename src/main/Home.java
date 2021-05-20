@@ -431,23 +431,22 @@ public class Home {
 			contract = this.contractList.search(scn.next());
 			if (contract != null) {
 				System.out.println("------보험료 산출정보------");
-				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");				
-				System.out.println("1.승인\n2.거부");
-				String input = scn.next();
-				while(input.equals("1") || input.equals("2")) {
+				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
+				int input = 0;
+				while (input != 1 && input != 2) {
 					System.out.println("1.승인\n2.거부");
-					input = scn.next();
-					switch (input) {
-					default:
-						System.out.println("잘못된 입력입니다");
-						break;
-					case "1":
-						underwriter.approveContract(contract);
-						break;
-					case "2":
-						underwriter.refuseContract(contract);
-						break;
+					input = scn.nextInt();
+					if (input != 1 && input != 2) {
+						System.out.println("잘못된 입력");
 					}
+				}
+				switch (input) {
+				case 1:
+					underwriter.approveContract(contract);
+					break;
+				case 2:
+					underwriter.refuseContract(contract);
+					break;
 				}
 			} else {
 				System.out.println("해당 계약이 존재하지 않습니다");

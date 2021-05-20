@@ -96,6 +96,5 @@ public class ContractListImpl implements ContractList {
 			contract.readFromFile(sc, insuranceList, customerList);
 			this.contractList.add(contract);
 		}
-
 	}
 }
