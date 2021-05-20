@@ -133,6 +133,40 @@ public class Home {
 											case 2:
 												break;
 											case 3:
+												showSubscribedInsurance(customer);
+												System.out.println("원하시는 메뉴를 선택해주세요.");
+												checkInsuranceList: while (true) {
+													try {
+														System.out.println("1.사고접수하기");
+														System.out.println("2.보험료 납부내역 확인하기");
+														System.out.println("3.보험 부활 신청하기");
+														System.out.println("4.보험 재계약 신청하기");
+														System.out.println("0.뒤로가기");
+														int input = scn.nextInt();
+														switch (input) {
+														case 1:
+															break;
+														case 2:
+															break;
+														case 3:
+															break;
+														case 4:
+															break;
+														case 0:
+															break checkInsuranceList;
+														default:
+															System.out.println("error : 범위 내의 숫자를 입력해주세요");
+															System.out.println("------------------------------");
+															break;
+
+														}
+														break checkInsuranceList;
+													} catch (InputMismatchException e) {
+														System.out.println("error : 숫자를 입력해주세요");
+														System.out.println("-----------------------");
+														scn.nextLine();
+													}
+												}
 												break;
 											case 4:
 												break;
@@ -1513,7 +1547,7 @@ public class Home {
 		}
 	}
 	// 사고 접수
-	private void submitAccident(Insurance insurance, Contract contract) {
+	private void submitAccident(Insurance insurance, Contract contract, Customer customer) {
 		System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
 		showGuaranteePlan(insurance, contract.isSpecial());
 		System.out.println("-----------------");
