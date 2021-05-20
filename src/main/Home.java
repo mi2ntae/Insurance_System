@@ -109,9 +109,7 @@ public class Home {
 													System.out.println("보험을 가입하시겠습니까?(y/n)");
 													String input = scn.next();
 													if (input.equals("y")) {
-														this.contractInsurnace(customer); // customer를 받아가서 아이디를 받거나,
-																							// customer.getCustomerId()로
-																							// 아이디를 받아갈 것
+														this.contractInsurnace(customer);
 														break;
 													} else if (input.equals("n")) {
 														break;
@@ -330,7 +328,6 @@ public class Home {
 												switch (scn.nextInt()) {
 												case 1:
 													this.judgeContract();
-													// 보험계약 심사하기
 													break;
 												case 0:
 													break employee2;
@@ -350,7 +347,6 @@ public class Home {
 										System.out.println("asdasdasdasdasdasd");
 										System.out.println(employee.getEmployeeRole());
 										break;
-
 									}
 								}
 								break;
