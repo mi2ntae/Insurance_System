@@ -42,7 +42,7 @@ public class ContractListImpl implements ContractList {
 		}
 	}
 
-	public Contract search(String contractId) {
+	public Contract select(String contractId) {
 		for (Contract contract : this.contractList) {
 			if (contract.getContractId().equals(contractId)) {
 				return contract;
