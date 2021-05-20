@@ -423,9 +423,10 @@ public class Home {
 		}
 		Contract contract = null;
 		while(contract == null) {
-			System.out.println("'심사'할 계약 ID를 입력하세요");
+			System.out.println("상세정보를 볼 계약 ID를 입력하세요");
 			contract = this.contractList.search(scn.next());
 			if (contract != null) {
+				this.showContractData(contract);
 				System.out.println("------보험료 산출정보------");
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
 				int input = 0;
@@ -439,9 +440,12 @@ public class Home {
 				switch (input) {
 				case 1:
 					underwriter.approveContract(contract);
+					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
+					System.out.println("------승인 되었습니다------");
 					break;
 				case 2:
 					underwriter.refuseContract(contract);
+					System.out.println("------거부 되었습니다------");
 					break;
 				}
 			} else {
