@@ -3,14 +3,17 @@ package contract;
 import java.util.Scanner;
 
 import customer.Customer;
+import customer.CustomerList;
 import customer.Insurant;
 import insurance.Insurance;
+import insurance.InsuranceList;
 
 public class Contract {
 	// Attributes
 	private String contractId;
 	private String insurantId;
 	private String insuranceId;
+	private String customerId;
 	private String salespersonId;
 	private boolean effectiveness;
 	private boolean special;
@@ -41,6 +44,9 @@ public class Contract {
 
 	public String getInsuranceId() {return insuranceId;}
 	public void setInsuranceId(String insuranceId) {this.insuranceId = insuranceId;}
+
+	public String getCustomerId() {return customerId;}
+	public void setCustomerId(String customerId) {this.customerId = customerId;}
 
 	public Customer getCustomer() {return customer;}
 	public void setCustomer(Customer customerId) {this.customer = customerId;}
@@ -114,17 +120,18 @@ public class Contract {
 //	}
 
 	public String writeToFile() {
-		String output = this.contractId + ' ' + this.insurantId + ' ' + this.insuranceId + ' ' + this.salespersonId
+		String output = this.contractId + ' ' + this.insurant.getInsurantId() + ' ' + this.insurance.getInsuranceId() + ' '  + this.customer.getCustomerId() + ' ' + this.salespersonId
 				+ ' ' + String.valueOf(this.effectiveness) + ' ' + String.valueOf(this.lifespanOfContract) + ' '
 				+ String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' '
 				+ String.valueOf(this.unpaidPeriod) + ' ' + String.valueOf(this.special) + '\n';
 		return output;
 	}
 
-	public void readFromFile(Scanner scn) {
+	public void readFromFile(Scanner scn, InsuranceList insuranceList, CustomerList customerList) {
 		this.contractId = scn.next();
 		this.insurantId = scn.next();
 		this.insuranceId = scn.next();
+		this.customerId = scn.next();
 		this.salespersonId = scn.next();
 		this.effectiveness = Boolean.parseBoolean(scn.next());
 		this.lifespanOfContract = scn.nextInt();
@@ -132,6 +139,11 @@ public class Contract {
 		this.paidFee = scn.nextInt();
 		this.unpaidPeriod = scn.nextInt();
 		this.special = Boolean.parseBoolean(scn.next());
+		
+		// Associate
+		this.customer = customerList.select(customerId);
+		this.insurant = this.customer.getInsurantList().select(insurantId);
+		this.insurance = insuranceList.select(insuranceId);
 	}
 
 }

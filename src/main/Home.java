@@ -1,8 +1,8 @@
 package main;
 
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import contract.Contract;
 import contract.ContractList;
 import contract.ContractListImpl;
@@ -59,16 +59,26 @@ public class Home {
 	
 	public Home(){
 		try {
-		this.scn = new Scanner(System.in);
-		this.insuranceList = new InsuranceListImpl();
-		this.contractList = new ContractListImpl();
-		this.customerList = new CustomerListImpl();
-		this.employeeList = new EmployeeListImpl();
+			this.scn = new Scanner(System.in);
+			this.insuranceList = new InsuranceListImpl();
+			this.contractList = new ContractListImpl();
+			this.customerList = new CustomerListImpl();
+			this.employeeList = new EmployeeListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
 			e.printStackTrace();
 		}
 	}
+	
+	public void initialize() {
+		try {
+			this.contractList.initialize(insuranceList, customerList);
+		} catch (FileNotFoundException e) {
+			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
+			e.printStackTrace();
+		}
+	}
+
 
 	public void start() {
 		while (true) {
@@ -393,13 +403,22 @@ public class Home {
 		}
 	}
 	
+	// 보험 간단한 정보 보기
+	private void showSimpleInsurance(Contract contract) {
+		System.out.println("계약ID : " + contract.getContractId());
+		System.out.println("보험이름 : " + contract.getInsurance().getName());
+		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
+		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
+		System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+	}
+	
 	// 보험 계약 심사하기
 	private void judgeContract() {
 		UnderWriter underwriter = new UnderWriter();
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
 			if(contract.isEffectiveness() == false) {
-				this.showContractData(contract);
+				this.showSimpleInsurance(contract);
 			}
 		}
 		Contract contract = null;
@@ -408,22 +427,22 @@ public class Home {
 			contract = this.contractList.search(scn.next());
 			if (contract != null) {
 				System.out.println("------보험료 산출정보------");
-				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");				
-				System.out.println("1.승인\n2.거부");
-				String input = scn.next();
-				while(input != "1" || input != "2") {
+				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
+				int input = 0;
+				while (input != 1 && input != 2) {
 					System.out.println("1.승인\n2.거부");
-					switch (input) {
-					default:
-						System.out.println("잘못된 입력입니다");
-						break;
-					case "1":
-						underwriter.approveContract(contract);
-						break;
-					case "2":
-						underwriter.refuseContract(contract);
-						break;
+					input = scn.nextInt();
+					if (input != 1 && input != 2) {
+						System.out.println("잘못된 입력");
 					}
+				}
+				switch (input) {
+				case 1:
+					underwriter.approveContract(contract);
+					break;
+				case 2:
+					underwriter.refuseContract(contract);
+					break;
 				}
 			} else {
 				System.out.println("해당 계약이 존재하지 않습니다");
@@ -551,7 +570,6 @@ public class Home {
 						contract.setContractId(Integer.toString(1));
 					} else {
 						contract.setContractId(Integer.toString(Integer.parseInt(this.contractList.getContractList().get(this.contractList.getContractList().size() - 1).getContractId()) + 1));
-						
 					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
@@ -562,6 +580,7 @@ public class Home {
 			}
 		}
 	}
+	
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer, Insurance insurance) {
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
@@ -591,10 +610,12 @@ public class Home {
 
 	private void createInsurant(Customer customer, Insurance insurance) {
 		Insurant insurant = new Insurant();
-		System.out.print("사고횟수 : ");
-		int accidentHistory = scn.nextInt();
-		insurant.setAccidentHistory(accidentHistory);
-		
+		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
+			System.out.print("사고횟수 : ");
+			int accidentHistory = scn.nextInt();
+			insurant.setAccidentHistory(accidentHistory);
+		}
+
 		System.out.print("주소 : ");
 		String address = scn.next();
 		insurant.setAddress(address);
@@ -606,7 +627,7 @@ public class Home {
 		if(customer.getInsurantList().getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) - 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
 		}
 		
 		
