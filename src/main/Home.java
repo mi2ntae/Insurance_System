@@ -403,13 +403,17 @@ public class Home {
 		}
 	}
 	
-	// 보험 간단한 정보 보기
-	private void showSimpleInsurance(Contract contract) {
+	// 계약 간단한 정보 보기
+	private void showSimpleContract(Contract contract, boolean judged) {
 		System.out.println("계약ID : " + contract.getContractId());
 		System.out.println("보험이름 : " + contract.getInsurance().getName());
 		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
 		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
-		System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+		if (judged) {
+			System.out.println("보험료 : " +contract.getFee());
+		} else {
+			System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+		}
 	}
 	
 	// 보험 계약 심사하기
@@ -418,13 +422,13 @@ public class Home {
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
 			if(contract.isEffectiveness() == false) {
-				this.showSimpleInsurance(contract);
+				this.showSimpleContract(contract, false);
 			}
 		}
 		Contract contract = null;
 		while(contract == null) {
 			System.out.println("상세정보를 볼 계약 ID를 입력하세요");
-			contract = this.contractList.search(scn.next());
+			contract = this.contractList.select(scn.next());
 			if (contract != null) {
 				this.showContractData(contract);
 				System.out.println("------보험료 산출정보------");
@@ -1736,5 +1740,62 @@ public class Home {
 		System.out.println();
 		showGuaranteePlan(insurance, true);
 		System.out.println("-------------------");		
+	}
+	
+	// 납부내역 확인하기
+	private void payFee(Customer customer) {
+		while (true) {
+			System.out.println("(이전 화면으로 돌아가려면 0을 입력하세요)");
+			System.out.printf("보험료 납부 내역을 확인하고 싶은 년도를 입력해주세요 ex)2020 : ");
+			int inputYear = 0;
+			try {
+				inputYear = scn.nextInt();
+			} catch(InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+				continue;
+			}
+			if (inputYear > 2021) {
+				System.out.println("올바른 년도를 입력해주세요.");
+				continue;
+			} else if (inputYear < 2012) {
+				System.out.println("최근 10년 이내의 납부 내역만 확인할 수 있습니다.");
+				continue;
+			} else if (inputYear == 0) {
+				return;
+			}
+			
+			for (Contract contract: this.contractList.getContractList()) {
+				if (contract.getCustomerId() == customer.getCustomerId()) {
+					this.showSimpleContract(contract, true);
+				}
+			}
+			while (true) {
+				System.out.printf("납부 내역을 확인할 계약의 ID를 입력해주세요 : ");
+				String inputId = scn.next();
+				boolean isExist = false;
+				for (Contract contract: this.contractList.getContractList()) {
+					if (contract.getCustomerId() == customer.getCustomerId()) {
+						if (inputId.equals(contract.getContractId())) {
+							isExist = true;
+						}
+					}
+				}
+				if (!isExist) {
+					System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
+					continue;
+				}
+				for (int i = 0; i < this.contractList.select(inputId).getPayHistory().length; i++) {
+					if (this.contractList.select(inputId).getPayHistory()[i]) {
+						System.out.println((i+1)+"월 : O");
+					} else {
+						System.out.println((i+1)+"월 : X");
+					}
+				}
+				break;
+			}
+			break;
+		}
 	}
 }
