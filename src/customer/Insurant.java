@@ -86,7 +86,7 @@ public class Insurant {
 		if(this.riskOfTripCountry == null) this.riskOfTripCountry = eRiskOfTripCountry.safe;
 		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
-				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum() + '\n';
+				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + this.typeOfCar.getNum() + ' ' + ' ' + this.riskOfTripCountry.getNum() + '\n';
 		
 		return output;
 		
@@ -116,6 +116,12 @@ public class Insurant {
 		for(eRankOfCar rankOfCar : eRankOfCar.values()) {
 			if(rankOfCar.getNum() == input) this.rankOfCar = rankOfCar;
 		}
+		
+		input = scn.nextInt();
+		for(eTypeOfCar typeOfCar : eTypeOfCar.values()) {
+			if(typeOfCar.getNum() == input) this.typeOfCar = typeOfCar;
+		}
+		
 		input = scn.nextInt();
 		for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
 			if(riskOfTripCountry.getNum() == input) this.riskOfTripCountry = riskOfTripCountry;

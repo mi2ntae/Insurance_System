@@ -1,8 +1,8 @@
 package main;
 
+import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
 import contract.Contract;
 import contract.ContractList;
 import contract.ContractListImpl;
@@ -59,16 +59,26 @@ public class Home {
 	
 	public Home(){
 		try {
-		this.scn = new Scanner(System.in);
-		this.insuranceList = new InsuranceListImpl();
-		this.contractList = new ContractListImpl();
-		this.customerList = new CustomerListImpl();
-		this.employeeList = new EmployeeListImpl();
+			this.scn = new Scanner(System.in);
+			this.insuranceList = new InsuranceListImpl();
+			this.contractList = new ContractListImpl();
+			this.customerList = new CustomerListImpl();
+			this.employeeList = new EmployeeListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
 			e.printStackTrace();
 		}
 	}
+	
+	public void initialize() {
+		try {
+			this.contractList.initialize(insuranceList, customerList);
+		} catch (FileNotFoundException e) {
+			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
+			e.printStackTrace();
+		}
+	}
+
 
 	public void start() {
 		while (true) {
@@ -399,6 +409,7 @@ public class Home {
 	
 	// 보험 간단한 정보 보기
 	private void showSimpleInsurance(Contract contract) {
+		System.out.println("계약ID : " + contract.getContractId());
 		System.out.println("보험이름 : " + contract.getInsurance().getName());
 		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
 		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
@@ -423,8 +434,9 @@ public class Home {
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");				
 				System.out.println("1.승인\n2.거부");
 				String input = scn.next();
-				while(input != "1" || input != "2") {
+				while(input.equals("1") || input.equals("2")) {
 					System.out.println("1.승인\n2.거부");
+					input = scn.next();
 					switch (input) {
 					default:
 						System.out.println("잘못된 입력입니다");
@@ -563,7 +575,6 @@ public class Home {
 						contract.setContractId(Integer.toString(1));
 					} else {
 						contract.setContractId(Integer.toString(Integer.parseInt(this.contractList.getContractList().get(this.contractList.getContractList().size() - 1).getContractId()) + 1));
-						
 					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
