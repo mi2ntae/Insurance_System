@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import customer.CustomerList;
 import customer.Insurant;
+import insurance.Insurance;
+import insurance.InsuranceList;
 
 public class ContractListImpl implements ContractList {
 	// Components
@@ -17,7 +20,12 @@ public class ContractListImpl implements ContractList {
 	// Constructor
 	public ContractListImpl() throws FileNotFoundException {
 		this.contractList = new ArrayList<Contract>();
-		this.readFromFile();
+	}
+	
+	// Initialize
+	@Override
+	public void initialize(InsuranceList insuranceList, CustomerList customerList) throws FileNotFoundException {
+		this.readFromFile(insuranceList, customerList);
 	}
 
 	// Getters&Setters
@@ -80,15 +88,14 @@ public class ContractListImpl implements ContractList {
 		}
 	}
 
-	private void readFromFile() throws FileNotFoundException {
+	private void readFromFile(InsuranceList insuranceList, CustomerList customerList) throws FileNotFoundException {
 		File file = new File("data/contract");
 		Scanner sc = new Scanner(file);
 		while (sc.hasNext()) {
 			Contract contract = new Contract();
-			contract.readFromFile(sc);
+			contract.readFromFile(sc, insuranceList, customerList);
 			this.contractList.add(contract);
 		}
 
 	}
-
 }
