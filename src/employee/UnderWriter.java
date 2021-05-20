@@ -22,6 +22,7 @@ public class UnderWriter {
 	// 계약 승인
 	public void approveContract(Contract contract) {
 		contract.setEffectiveness(true);
+		// DB에서 effectiveness = true;
 	}
 	
 	// 계약 거부
