@@ -3,6 +3,9 @@ package global;
 import insurance.*;
 
 public class Constants {
+	
+	public static int thisYear = 2021;
+	
 	public static enum eAge {
 		kids(1, "영유아"),
 		teen(2, "10대"),
