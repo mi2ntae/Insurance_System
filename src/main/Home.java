@@ -429,17 +429,35 @@ public class Home {
 				scn.nextLine();
 			}
 		}
-	}
+	}	
 	
 	// 가입한 보험 리스트 보기
 	private void showSubscribedInsurance(Customer customer) {
 		for (Contract contract : this.contractList.getContractList()) {
 			if(contract.getCustomer().getCustomerId() == customer.getCustomerId()) {
-				this.showInsuranceData(contract.getInsurance());
+				this.showSimpleContract(contract, contract.isEffectiveness());
 			}
 		}
+		Contract contract = null;
+		while (contract == null) {
+			System.out.println("이전 화면으로 돌아가려면 0을 입력하세요");
+			System.out.println("납부 내역을 확인할 계약의 ID를 입력하세요 : ");
+			String input = scn.next();
+			if(input == "0") {
+				return;
+			}
+			contract = this.contractList.select(input);
+			if (contract.getCustomer().getCustomerId() != customer.getCustomerId()) {
+				contract = null;
+			}
+			if (contract == null) {
+				System.out.println("해당 계약을 가입하지 않았습니다");
+			}
+		}
+		this.showInsuranceData(contract.getInsurance());
+		this.showContractData(contract);
 	}
-	
+
 	// 계약 간단한 정보 보기
 	private void showSimpleContract(Contract contract, boolean judged) {
 		System.out.println("계약ID : " + contract.getContractId());
@@ -468,6 +486,8 @@ public class Home {
 			contract = this.contractList.select(scn.next());
 			if (contract != null) {
 				this.showContractData(contract);
+				this.showInsurantData(contract.getInsurant());
+				this.showInsuranceData(contract.getInsurance());
 				System.out.println("------보험료 산출정보------");
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
 				int input = 0;
@@ -499,12 +519,12 @@ public class Home {
 	private void showContractData(Contract contract) {
 		System.out.println("------계약 상세정보------");
 		System.out.println("계약 ID : " + contract.getContractId());
+		System.out.println("특약 여부 : " + contract.isSpecial());
 		System.out.println("계약 기간 : " + contract.getLifespanOfContract());
+		System.out.println("보험료 : " + contract.getFee());
 		System.out.println("지불된 요금 : " + contract.getPaidFee());
 		System.out.println("영업사원 ID" + contract.getSalespersonId());
 		System.out.println("미납 기간 : " + contract.getUnpaidPeriod());
-		this.showInsurantData(contract.getInsurant());
-		this.showInsuranceData(contract.getInsurance());
 	}
 	
 	private void showInsurantData(Insurant insurant) {
@@ -544,10 +564,9 @@ public class Home {
 	// 전체 보험 리스트 확인하기
 	private void showAllInsurance() {
 		eInsuranceType type = null;
-		while (true) {
+		while (type == null) {
 			System.out.println("0.이전\n1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기");
 			int input = 0;
-			while(!(input > 0) &&!(input < 8)) {
 				try {
 					input = scn.nextInt();
 				} catch (InputMismatchException e) {
@@ -581,7 +600,6 @@ public class Home {
 					System.out.println("error : 범위 내의 숫자를 입력해주세요");
 					System.out.println("------------------------------");
 					continue;
-				}
 			}
 			break;
 		}
