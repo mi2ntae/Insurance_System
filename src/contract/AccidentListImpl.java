@@ -24,7 +24,7 @@ public class AccidentListImpl implements AccidentList {
 		}
 	}
 	
-	public Accident search(String accidentId) {
+	public Accident select(String accidentId) {
 		for (Accident accident : this.accidentList) {
 			if (accident.getAccidentId().equals(accidentId)) {
 				return accident;

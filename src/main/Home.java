@@ -119,9 +119,7 @@ public class Home {
 													System.out.println("보험을 가입하시겠습니까?(y/n)");
 													String input = scn.next();
 													if (input.equals("y")) {
-														this.contractInsurnace(customer); // customer를 받아가서 아이디를 받거나,
-																							// customer.getCustomerId()로
-																							// 아이디를 받아갈 것
+														this.contractInsurnace(customer);
 														break;
 													} else if (input.equals("n")) {
 														break;
@@ -135,8 +133,43 @@ public class Home {
 											case 2:
 												break;
 											case 3:
+												showSubscribedInsurance(customer);
+												System.out.println("원하시는 메뉴를 선택해주세요.");
+												checkInsuranceList: while (true) {
+													try {
+														System.out.println("1.사고접수하기");
+														System.out.println("2.보험료 납부내역 확인하기");
+														System.out.println("3.보험 부활 신청하기");
+														System.out.println("4.보험 재계약 신청하기");
+														System.out.println("0.뒤로가기");
+														int input = scn.nextInt();
+														switch (input) {
+														case 1:
+															break;
+														case 2:
+															break;
+														case 3:
+															break;
+														case 4:
+															break;
+														case 0:
+															break checkInsuranceList;
+														default:
+															System.out.println("error : 범위 내의 숫자를 입력해주세요");
+															System.out.println("------------------------------");
+															break;
+
+														}
+														break checkInsuranceList;
+													} catch (InputMismatchException e) {
+														System.out.println("error : 숫자를 입력해주세요");
+														System.out.println("-----------------------");
+														scn.nextLine();
+													}
+												}
 												break;
 											case 4:
+												this.payFee(customer);
 												break;
 											case 0:
 												break login;
@@ -340,7 +373,6 @@ public class Home {
 												switch (scn.nextInt()) {
 												case 1:
 													this.judgeContract();
-													// 보험계약 심사하기
 													break;
 												case 0:
 													break employee2;
@@ -360,7 +392,6 @@ public class Home {
 										System.out.println("asdasdasdasdasdasd");
 										System.out.println(employee.getEmployeeRole());
 										break;
-
 									}
 								}
 								break;
@@ -407,13 +438,17 @@ public class Home {
 		}
 	}
 	
-	// 보험 간단한 정보 보기
-	private void showSimpleInsurance(Contract contract) {
+	// 계약 간단한 정보 보기
+	private void showSimpleContract(Contract contract, boolean judged) {
 		System.out.println("계약ID : " + contract.getContractId());
 		System.out.println("보험이름 : " + contract.getInsurance().getName());
 		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
 		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
-		System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+		if (judged) {
+			System.out.println("보험료 : " +contract.getFee());
+		} else {
+			System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+		}
 	}
 	
 	// 보험 계약 심사하기
@@ -422,14 +457,15 @@ public class Home {
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
 			if(contract.isEffectiveness() == false) {
-				this.showSimpleInsurance(contract);
+				this.showSimpleContract(contract, false);
 			}
 		}
 		Contract contract = null;
 		while(contract == null) {
-			System.out.println("'심사'할 계약 ID를 입력하세요");
-			contract = this.contractList.search(scn.next());
+			System.out.println("상세정보를 볼 계약 ID를 입력하세요");
+			contract = this.contractList.select(scn.next());
 			if (contract != null) {
+				this.showContractData(contract);
 				System.out.println("------보험료 산출정보------");
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
 				int input = 0;
@@ -443,9 +479,12 @@ public class Home {
 				switch (input) {
 				case 1:
 					underwriter.approveContract(contract);
+					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
+					System.out.println("------승인 되었습니다------");
 					break;
 				case 2:
 					underwriter.refuseContract(contract);
+					System.out.println("------거부 되었습니다------");
 					break;
 				}
 			} else {
@@ -1517,7 +1556,7 @@ public class Home {
 		}
 	}
 	// 사고 접수
-	private void submitAccident(Insurance insurance, Contract contract) {
+	private void submitAccident(Insurance insurance, Contract contract, Customer customer) {
 		System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
 		showGuaranteePlan(insurance, contract.isSpecial());
 		System.out.println("-----------------");
@@ -1736,5 +1775,118 @@ public class Home {
 		System.out.println();
 		showGuaranteePlan(insurance, true);
 		System.out.println("-------------------");		
+	}
+	
+	// 납부내역 확인하기
+	private void payFee(Customer customer) {
+		int inputYear = 0;
+		String inputId = "";
+		pay: while (true) {
+			System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
+			System.out.printf("보험료 납부 내역을 확인하고 싶은 년도를 입력해주세요 ex)2020 : ");
+			try {
+				inputYear = scn.nextInt();
+			} catch(InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+				continue;
+			}
+			if (inputYear > Constants.thisYear) {
+				System.out.println("올바른 년도를 입력해주세요.");
+				continue;
+			} else if (inputYear < Constants.thisYear-9) {
+				System.out.println("최근 10년 이내의 납부 내역만 확인할 수 있습니다.");
+				continue;
+			} else if (inputYear == 0) {
+				return;
+			}
+			
+			boolean isContracted = false;
+			for (Contract contract: this.contractList.getContractList()) {
+				if (contract.getCustomerId() == customer.getCustomerId()) {
+					this.showSimpleContract(contract, true);
+					isContracted = true;
+				}
+			}
+			
+			if (!isContracted) {
+				System.out.println("계약이 존재하지 않습니다. 보험 가입을 먼저 진행해주세요.");
+				return;
+			}
+			while (true) {
+				System.out.println("(이전 화면으로 돌아가려면 0을 입력하세요)");
+				System.out.printf("납부 내역을 확인할 계약의 ID를 입력해주세요 : ");
+				inputId = scn.next();
+				if (inputId.equals("0")) {
+					continue pay;
+				}
+				boolean isExist = false;
+				for (Contract contract: this.contractList.getContractList()) {
+					if (contract.getCustomerId() == customer.getCustomerId()) {
+						if (inputId.equals(contract.getContractId())) {
+							isExist = true;
+						}
+					}
+				}
+				if (!isExist) {
+					System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
+					continue;
+				}
+				for (int i = 0; i < this.contractList.select(inputId).getPayHistory()[Constants.thisYear-inputYear].length; i++) {
+					if (this.contractList.select(inputId).getPayHistory()[Constants.thisYear-inputYear][i]) {
+						System.out.println((i+1)+"월 : O");
+					} else {
+						System.out.println((i+1)+"월 : X");
+					}
+				}
+				break;
+			}
+			while (true) {
+				System.out.println("0.돌아가기");
+				System.out.println("1.일괄 납부하기");
+				System.out.println("2.선택한 월의 보험료 납부하기");
+				System.out.printf("원하는 메뉴를 입력해주세요 : ");
+				int inputMenu = 0;
+				try {
+					inputMenu = scn.nextInt();
+				} catch(InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+					continue;
+				}
+				switch (inputMenu) {
+				case 0:
+					continue pay;
+				case 1:
+					System.out.printf(inputYear+"년의 납부되지 않은 보험료를 일괄납부 하시겠습니까?(y/n) : ");
+					String inputCheck = scn.next();
+					int unpaiedCount = 0;
+					if (inputCheck.equals("y")) {
+						for (int i = 0; i < this.contractList.select(inputId).getPayHistory()[Constants.thisYear-inputYear].length; i++) {
+							if (!this.contractList.select(inputId).getPayHistory()[Constants.thisYear-inputYear][i]) {
+								unpaiedCount += 1;
+								this.contractList.select(inputId).getPayHistory()[Constants.thisYear-inputYear][i] = true;
+							}
+						}
+						if (unpaiedCount*this.contractList.select(inputId).getFee() <= 0) {
+							System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
+							continue;
+						}
+						
+					} else if (inputCheck.equals("n")) {
+						continue;
+					} else {
+						System.out.println("잘못 입력하셨습니다. 이전 화면으로 돌아갑니다.");
+						continue;
+					}
+					break;
+				case 2:
+					break;
+				}
+				break;
+			}
+		}
 	}
 }

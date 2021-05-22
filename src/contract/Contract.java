@@ -21,6 +21,7 @@ public class Contract {
 	private int fee;
 	private int paidFee;
 	private int unpaidPeriod;
+	private boolean[][] payHistory = new boolean[10][12];
 	
 	// Composition Class
 	public AccidentList accidentList;
@@ -81,6 +82,9 @@ public class Contract {
 	public AccidentList getAccidentList() {return accidentList;}
 	public void setAccidentList(AccidentList accidentList) {this.accidentList = accidentList;}
 
+	public boolean[][] getPayHistory() {return payHistory;}
+	public void setPayHistory(boolean[][] payHistory) {this.payHistory = payHistory;}
+	
 	// public Method
 	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
 		this.customer = customer;
