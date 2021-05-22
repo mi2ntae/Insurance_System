@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Scanner;
 
 public class Accident {
@@ -42,7 +43,7 @@ public class Accident {
 	public void setCause(String cause) {
 		File file = new File("data/compensationCause");
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-			writer.append(cause);
+			writer.append(this.accidentId + " " + cause);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

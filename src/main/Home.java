@@ -347,10 +347,10 @@ public class Home {
 											try {
 												switch (scn.nextInt()) {
 												case 1:
-													// 배상금 산출하기
+													this.handleCompensation();
 													break;
 												case 2:
-													// 협력업체 비용 지불하기
+													this.payForCooperative();
 													break;
 												case 0:
 													break employee2;
@@ -1661,7 +1661,7 @@ public class Home {
 		}
 	}
 	
-	// 보장내역 단일 출력
+	// 보장내역 단일 출력 : 보상 처리
 	private void showSelectedGuaranteePlan(Insurance insurance, String content) {
 		switch (insurance.getType()) {
 		case dentalInsurance:
@@ -1737,10 +1737,62 @@ public class Home {
 		
 	}
 	
-	// 보상처리 리스트 출력
-	private void showCompensation(Contract contract) {
+	// 협력업체 비용 지불
+	private void payForCooperative() {
+		int fee = 0;
+		menu : while(true) {
+			try {
+				System.out.println("협력 비용을 지불할 업체를 골라주세요.");
+				System.out.println("1.병원");
+				System.out.println("2.신용정보회사");
+				System.out.println("3.긴급출동업체");
+				System.out.println("0.돌아가기");
+				switch(scn.nextInt()) {
+				case 1:
+					fee = showCooperative("제일병원", "서울특별시 서대문구", "010-4354-4353", 1000000);
+					break;
+				case 2:
+					fee = showCooperative("GOOD지키미 신용정보회사", "서울특별시 마포구", "010-1010-1112", 2000000);
+					break;
+				case 3:
+					fee = showCooperative("고고카 서비스", "서울특별시 종로구", "010-1566-3000", 30000);
+					break;
+				case 0:
+					break menu;
+				default:
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					continue menu;
+				}
+				System.out.println("비용 " + fee + "원을 협력업체에 지불 하시겠습니까? (y/n)");
+				String input = scn.next();
+				if (input.equals("y")) {
+					System.out.println("비용 총 " + fee + "원이 지불되었습니다!");
+				} else if (input.equals("n")) {
+					System.out.println("취소되었습니다.");
+					break;
+				} else {
+					System.out.println("잘못 입력하셨습니다. 'y' 혹은 'n'을 입력해 주세요.");
+				}
+				break menu;
+			}catch(InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+			}
+		}
 	}
 	
+	// 협력업체 정보 출력 : 협력업체 비용 지불
+	private int showCooperative(String name, String address, String phoneNum, int fee) {
+		System.out.println("------<협력업체 정보>------");
+		System.out.println("업체명 : " + name);
+		System.out.println("주소 : " + address);
+		System.out.println("대표 전화번호 : " + phoneNum);
+		System.out.println("비용 : " + fee);
+		System.out.println("-----------------------");
+		return fee;
+	}
 	
 	// 사고 접수
 	private void submitAccident(Contract contract) {
@@ -1823,7 +1875,7 @@ public class Home {
 		}
 	}
 	
-	// 보장내역 리스트 출력
+	// 보장내역 리스트 출력 : 사고접수, 보험 상세정보 출력하기
 	private void showGuaranteePlan(Insurance insurance, boolean special) {
 		System.out.println("  <보장 내역>");
 		switch (insurance.getType()) {
