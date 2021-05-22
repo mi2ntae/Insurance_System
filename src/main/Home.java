@@ -3,6 +3,8 @@ package main;
 import java.io.FileNotFoundException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import contract.Accident;
 import contract.Contract;
 import contract.ContractList;
 import contract.ContractListImpl;
@@ -1555,10 +1557,24 @@ public class Home {
 			}
 		}
 	}
+	
+	// 보상 처리
+	private void handleCompensation() {
+		for(Contract contract : this.contractList.getContractList()) {
+			for(Accident accident : contract.getAccidentList().getAccidentList()) {
+				if(!accident.isHandlingStatus()) {
+					System.out.println(accident.getAccidentId() + "." + contract.getInsurance().getName() + " " + contract.getInsurant().getName());
+				}
+			}
+		}
+		
+	}
+	
+	
 	// 사고 접수
-	private void submitAccident(Insurance insurance, Contract contract, Customer customer) {
-		System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
-		showGuaranteePlan(insurance, contract.isSpecial());
+	private void submitAccident(Contract contract) {
+		System.out.println(contract.getInsurance().getInsuranceId() + ". " + contract.getInsurance().getName());
+		showGuaranteePlan(contract.getInsurance(), contract.isSpecial());
 		System.out.println("-----------------");
 		String accidentId;
 		if(contract.getAccidentList().getAccidentList().isEmpty()) {
@@ -1567,7 +1583,7 @@ public class Home {
 			accidentId = String.valueOf(Integer.parseInt(contract.getAccidentList().getAccidentList().get(this.contractList.getContractList().size() - 1).getAccidentId()) + 1);
 			
 		}
-		switch(insurance.getType()) {
+		switch(contract.getInsurance().getType()) {
 		case actualCostInsurance:
 			System.out.println("병ㆍ의원 및 약국에서 지출하신 의료비를 입력해주세요");
 			while (true) {
@@ -1590,7 +1606,7 @@ public class Home {
 				try {
 					int input = scn.nextInt();
 					int index = 0;
-					for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+					for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList().getGuaranteePlanList()) {
 						if(index == input - 1) {
 							contract.addAccident(accidentId, guaranteePlan.getContent(), guaranteePlan.getCompensation(), false);
 							System.out.println("선택하신 항목(" + guaranteePlan.getContent() + ")에 대한 보험금("+ guaranteePlan.getCompensation() +")이 청구되었습니다!");
@@ -1612,7 +1628,7 @@ public class Home {
 				try {
 					int input = scn.nextInt();
 					int index = 0;
-					for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+					for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList().getGuaranteePlanList()) {
 						if(index == input - 1) {
 							System.out.println("해당 항목에 대한 피해금액을 입력해주세요.");
 							int damageCost = scn.nextInt();
