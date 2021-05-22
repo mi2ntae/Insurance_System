@@ -1,5 +1,11 @@
 package contract;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
+
 public class Accident {
 	// Attributes
 	private String accidentId;
@@ -31,5 +37,14 @@ public class Accident {
 	public void setHandlingStatus(boolean handlingStatus) {this.handlingStatus = handlingStatus;}
 
 	public int getDamageCost() {return damageCost;}
-	public void setDamageCost(int damageCost) {this.damageCost = damageCost;}	
+	public void setDamageCost(int damageCost) {this.damageCost = damageCost;}
+
+	public void setCause(String cause) {
+		File file = new File("data/compensationCause");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+			writer.append(cause);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
