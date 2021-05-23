@@ -135,38 +135,40 @@ public class Home {
 											case 2:
 												break;
 											case 3:
-												showSubscribedInsurance(customer);
-												System.out.println("원하시는 메뉴를 선택해주세요.");
-												checkInsuranceList: while (true) {
-													try {
-														System.out.println("1.사고접수하기");
-														System.out.println("2.보험료 납부내역 확인하기");
-														System.out.println("3.보험 부활 신청하기");
-														System.out.println("4.보험 재계약 신청하기");
-														System.out.println("0.뒤로가기");
-														int input = scn.nextInt();
-														switch (input) {
-														case 1:
-															break;
-														case 2:
-															break;
-														case 3:
-															break;
-														case 4:
-															break;
-														case 0:
-															break checkInsuranceList;
-														default:
-															System.out.println("error : 범위 내의 숫자를 입력해주세요");
-															System.out.println("------------------------------");
-															break;
+												Contract contarct = showSubscribedInsurance(customer);
+												if(contarct != null) {
+													System.out.println("원하시는 메뉴를 선택해주세요.");
+													checkInsuranceList: while (true) {
+														try {
+															System.out.println("1.사고접수하기");
+															System.out.println("2.보험료 납부내역 확인하기");
+															System.out.println("3.보험 부활 신청하기");
+															System.out.println("4.보험 재계약 신청하기");
+															System.out.println("0.뒤로가기");
+															int input = scn.nextInt();
+															switch (input) {
+															case 1:
+																break;
+															case 2:
+																break;
+															case 3:
+																break;
+															case 4:
+																break;
+															case 0:
+																break checkInsuranceList;
+															default:
+																System.out.println("error : 범위 내의 숫자를 입력해주세요");
+																System.out.println("------------------------------");
+																break;
 
+															}
+															break checkInsuranceList;
+														} catch (InputMismatchException e) {
+															System.out.println("error : 숫자를 입력해주세요");
+															System.out.println("-----------------------");
+															scn.nextLine();
 														}
-														break checkInsuranceList;
-													} catch (InputMismatchException e) {
-														System.out.println("error : 숫자를 입력해주세요");
-														System.out.println("-----------------------");
-														scn.nextLine();
 													}
 												}
 												break;
@@ -430,9 +432,9 @@ public class Home {
 			}
 		}
 	}	
-	
+
 	// 가입한 보험 리스트 보기
-	private void showSubscribedInsurance(Customer customer) {
+	private Contract showSubscribedInsurance(Customer customer) {
 		for (Contract contract : this.contractList.getContractList()) {
 			if(contract.getCustomer().getCustomerId() == customer.getCustomerId()) {
 				this.showSimpleContract(contract, contract.isEffectiveness());
@@ -441,14 +443,16 @@ public class Home {
 		Contract contract = null;
 		while (contract == null) {
 			System.out.println("이전 화면으로 돌아가려면 0을 입력하세요");
-			System.out.println("납부 내역을 확인할 계약의 ID를 입력하세요 : ");
+			System.out.println("상세 정보를 확인할 계약의 ID를 입력하세요 : ");
 			String input = scn.next();
-			if(input == "0") {
-				return;
+			if(input.equals("0")) {
+				return null;
 			}
 			contract = this.contractList.select(input);
-			if (contract.getCustomer().getCustomerId() != customer.getCustomerId()) {
-				contract = null;
+			if(contract != null) {
+				if (contract.getCustomer().getCustomerId() != customer.getCustomerId()) {
+					contract = null;
+				}
 			}
 			if (contract == null) {
 				System.out.println("해당 계약을 가입하지 않았습니다");
@@ -456,6 +460,7 @@ public class Home {
 		}
 		this.showInsuranceData(contract.getInsurance());
 		this.showContractData(contract);
+		return contract;
 	}
 
 	// 계약 간단한 정보 보기
@@ -486,7 +491,7 @@ public class Home {
 			contract = this.contractList.select(scn.next());
 			if (contract != null) {
 				this.showContractData(contract);
-				this.showInsurantData(contract.getInsurant());
+				this.showInsurantData(contract.getInsurant(), contract.getInsurance().getType());
 				this.showInsuranceData(contract.getInsurance());
 				System.out.println("------보험료 산출정보------");
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
@@ -527,20 +532,29 @@ public class Home {
 		System.out.println("미납 기간 : " + contract.getUnpaidPeriod());
 	}
 	
-	private void showInsurantData(Insurant insurant) {
+	private void showInsurantData(Insurant insurant, eInsuranceType insuranceType) {
 		System.out.println("------보험 가입자 상세정보------");
-		System.out.println("사고 기록 : " + insurant.getAccidentHistory());
+		if(insuranceType == eInsuranceType.driverInsurance || insuranceType == eInsuranceType.dentalInsurance) {
+			System.out.println("사고 기록 : " + insurant.getAccidentHistory());
+		}
 		System.out.println("주소 : " + insurant.getAddress());
 		System.out.println("나이 : " + insurant.getAge());
 		System.out.println("보험 가입자 ID : " + insurant.getInsurantId());
 		System.out.println("이름 : " + insurant.getName());
 		System.out.println("전화번호 : " + insurant.getPhoneNumber());
-		System.out.println("공시지가 :" + insurant.getPostedPriceOfStructure());
-		System.out.println("구조물 용도 : " + insurant.getUsageOfStructure());
+		if(insuranceType == eInsuranceType.fireInsurance) {
+			System.out.println("공시지가 :" + insurant.getPostedPriceOfStructure());
+			System.out.println("구조물 용도 : " + insurant.getUsageOfStructure());
+		}
 		System.out.println("성별 : " + insurant.getGender());
 		System.out.println("직업 : " + insurant.getJob());
-		System.out.println("자동차 등급 : " + insurant.getRankOfCar());
-		System.out.println("여행 국가 위험 등급 : " + insurant.getRiskOfTripCountry());
+		if(insuranceType == eInsuranceType.driverInsurance) {
+			System.out.println("자동차 등급 : " + insurant.getRankOfCar());
+			System.out.println("자동차 종류 : " + insurant.getTypeOfCar());
+		}
+		if(insuranceType == eInsuranceType.tripInsurance) {
+			System.out.println("여행 국가 위험 등급 : " + insurant.getRiskOfTripCountry());
+		}
 	}
 
 	private void showCustomerData(Customer customer) {
@@ -654,6 +668,9 @@ public class Home {
 			input = scn.nextInt();
 		}
 		if(input == 1 && !customer.getInsurantList().isEmpty()) {
+			for(Insurant insurant : customer.getInsurantList().getInsurantList()) {
+				this.showInsurantData(insurant, insurance.getType());
+			}
 			boolean flag = false;
 			while(!flag) {
 				System.out.print("보험가입자 ID를 입력하세요 : ");
