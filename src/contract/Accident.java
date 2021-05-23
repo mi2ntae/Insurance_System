@@ -48,4 +48,19 @@ public class Accident {
 			e.printStackTrace();
 		}
 	}
+
+	public String writeToFile() {
+		String output;
+		output = this.contractId + " " + this.accidentId + " " + this.content + " " + this.compensation + " " + this.damageCost + " " + String.valueOf(this.handlingStatus) + "\n"; 
+		return output;
+	}
+
+	public void readFromFile(Scanner scn, String input) {
+		this.contractId = input;
+		this.accidentId = scn.next();
+		this.content = scn.next();
+		this.compensation = scn.nextInt();
+		this.damageCost = scn.nextInt();
+		this.handlingStatus = Boolean.parseBoolean(scn.next());
+	}
 }

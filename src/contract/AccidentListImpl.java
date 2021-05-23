@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import customer.CustomerList;
-import insurance.InsuranceList;
-
 public class AccidentListImpl implements AccidentList {
 	// Components
 	private ArrayList<Accident> accidentList;
@@ -27,6 +24,7 @@ public class AccidentListImpl implements AccidentList {
 	// public Method
 	public boolean insert(Accident accident) {
 		if (this.accidentList.add(accident)) {
+			writeToFile(accident);
 			return true;
 		} else {
 			return false;
@@ -59,6 +57,19 @@ public class AccidentListImpl implements AccidentList {
 			this.accidentList.get(updateIndex).setContent(content);
 		}
 	}
+
+	public void readFromFile(String contractId) throws FileNotFoundException {
+		File file = new File("data/accident");
+		Scanner scn = new Scanner(file);
+		while (scn.hasNext()) {
+			String input = scn.next();
+			if (input.equals(contractId)) {
+				Accident accident = new Accident();
+				accident.readFromFile(scn, input);
+				this.accidentList.add(accident);
+			}
+		}
+	}
 	
 	// private Method
 	private int getAccidentIndex(String accidentId) {
@@ -70,6 +81,14 @@ public class AccidentListImpl implements AccidentList {
 		return -1;
 	}
 	
-	
+	private void writeToFile(Accident accident) {
+		File file = new File("data/accident");
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+			writer.append(accident.writeToFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	
 }
