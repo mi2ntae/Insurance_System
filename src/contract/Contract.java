@@ -1,10 +1,12 @@
 package contract;
 
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 import customer.Customer;
 import customer.CustomerList;
 import customer.Insurant;
+import insurance.GuaranteePlanListImpl;
 import insurance.Insurance;
 import insurance.InsuranceList;
 
@@ -131,7 +133,7 @@ public class Contract {
 		return output;
 	}
 
-	public void readFromFile(Scanner scn, InsuranceList insuranceList, CustomerList customerList) {
+	public void readFromFile(Scanner scn, InsuranceList insuranceList, CustomerList customerList) throws FileNotFoundException {
 		this.contractId = scn.next();
 		this.insurantId = scn.next();
 		this.insuranceId = scn.next();
@@ -148,6 +150,8 @@ public class Contract {
 		this.customer = customerList.select(customerId);
 		this.insurant = this.customer.getInsurantList().select(insurantId);
 		this.insurance = insuranceList.select(insuranceId);
+		
+		((AccidentListImpl)this.accidentList).readFromFile(this.contractId);
 	}
 
 }
