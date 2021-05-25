@@ -83,6 +83,7 @@ public class Constants {
 	}
 
 	public static enum eTypeOfCar {
+		none(0, "null"),
 		bus(1, "버스"),
 		van(2, "승합차"),
 		suv(3, "SUV"),
@@ -102,6 +103,7 @@ public class Constants {
 	}
 	
 	public static enum eRankOfCar {
+		none(0, "null"),
 		Luxury(1, "최고급"),
 		high(2, "고급"),
 		middle(3, "보급형"),

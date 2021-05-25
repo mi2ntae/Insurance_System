@@ -13,6 +13,7 @@ public class Insurant {
 
 	// Attributes
 	private String insurantId;
+	private String cutomerId;
 	private String name;
 	private String address;
 	private String phoneNumber;

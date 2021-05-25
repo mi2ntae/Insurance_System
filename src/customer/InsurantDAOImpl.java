@@ -37,10 +37,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				
 				
 				
-				insurant.setInsurantId(rs.getString("insurantId"));
-				insurant.setInsurantId(rs.getString("insurantId"));
-				insurant.setInsurantId(rs.getString("insurantId"));
-				insurant.setInsurantId(rs.getString("insurantId"));
+				// 여기다가 enum값을 넣는거 구현
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
