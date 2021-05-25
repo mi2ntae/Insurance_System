@@ -57,7 +57,6 @@ public class Home {
 
 	private InsuranceList insuranceList;
 	private ContractList contractList;
-	private ContractList expiredContracttList;
 	private CustomerList customerList;
 	private EmployeeList employeeList;
 	
@@ -430,14 +429,9 @@ public class Home {
 					for(Contract contract : this.contractList.getContractList()) {
 						if(contract.getLifespanOfContract() - time < 0) {
 							contract.setEffectiveness(false);
-							delet.add(contract.getContractId());
-							this.expiredContracttList.insert(contract);
 						} else {
 							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
 						}
-					}
-					for(String contractID : delet) {
-						this.contractList.delete(contractID);
 					}
 					break;
 				case 0:
@@ -460,14 +454,19 @@ public class Home {
 	// 가입자 리스트 보기
 	private void showSubscriberList() {
 		int unpaidCount = 0;
+		int lifeCount = 0;
 		for(Contract contract : this.contractList.getContractList()) {
 			if(contract.isEffectiveness() == true) {
 				if(contract.getUnpaidPeriod() > 0) {
 					unpaidCount++;
 				}
+			} else {
+				if(contract.getLifespanOfContract() - time < 0) {
+					lifeCount++;
+				}
 			}
 		}
-		System.out.println("미납계약 수 : " + unpaidCount + " 만기계약 수 : " + this.expiredContracttList.getContractList().size());
+		System.out.println("미납계약 수 : " + unpaidCount + " 만기계약 수 : " + lifeCount);
 		boolean flag = true;
 		while (flag) {
 			try {
@@ -479,11 +478,19 @@ public class Home {
 					return;
 				case 1:
 					flag = false;
-					this.manageUnpaidContract();
+					if(unpaidCount > 0) {
+						this.manageUnpaidContract();
+					} else {
+						System.out.println("미납된 계약이 없습니다");
+					}
 					break;
 				case 2:
 					flag = false;
-					this.ManageExpiredContract();
+					if(lifeCount > 0) {
+						this.ManageExpiredContract();
+					} else {
+						System.out.println("만기된 계약이 없습니다");
+					}
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -531,9 +538,10 @@ public class Home {
 
 	// 만기 계약 관리
 	private void ManageExpiredContract() {
-		
-		for(Contract contract : this.expiredContracttList.getContractList()) {
-			this.showContractData(contract);
+		for(Contract contract : this.contractList.getContractList()) {
+			if(contract.getLifespanOfContract() - time < 0) {
+				this.showContractData(contract);
+			}
 		}
 		Contract contract = null;
 		while (contract == null) {
@@ -543,7 +551,7 @@ public class Home {
 			if (input.equals("0")) {
 				return;
 			}
-			contract = this.expiredContracttList.select(input);
+			contract = this.contractList.select(input);
 			if (contract == null) {
 				System.out.println("해당 계약이 존재하지 않습니다");
 			}
@@ -559,7 +567,6 @@ public class Home {
 		}
 		if (input.equals("y")) {
 			this.changeContractData(contract);
-			this.expiredContracttList.delete(contract.getContractId());
 			this.contractList.insert(contract);
 		} else {
 			return;
@@ -796,11 +803,17 @@ public class Home {
 	// 보험 계약 심사하기
 	private void judgeContract() {
 		UnderWriter underwriter = new UnderWriter();
+		int count = 0;
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
-			if(contract.isEffectiveness() == false) {
+			if(contract.isEffectiveness() == false && contract.getLifespanOfContract() - time > 0) {
 				this.showSimpleContract(contract, false);
+				count++;
 			}
+		}
+		if(count == 0) {
+			System.out.println("심사할 계약이 없습니다");
+			return;
 		}
 		Contract contract = null;
 		while(contract == null) {
@@ -954,7 +967,7 @@ public class Home {
 	}
 	
 
-	// 보험 가입하기 1
+	// 보험 가입하기
 	private void contractInsurnace(Customer customer) {
 		Insurance insurance = null;
 		while(insurance == null) {
@@ -971,6 +984,7 @@ public class Home {
 						}
 					}
 					Contract contract = new Contract();
+					contract.setLifespanOfContract(insurance.getWarrantyPeriod() + time);
 					if(this.contractList.getContractList().isEmpty()) {
 						contract.setContractId(Integer.toString(1));
 					} else {
@@ -982,9 +996,9 @@ public class Home {
 						input = scn.next();
 					}
 					if (input.equals("y")) {
-						contract.setEffectiveness(true);
+						contract.setSpecial(true);
 					} else {
-						contract.setEffectiveness(false);
+						contract.setSpecial(false);
 					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
@@ -1561,7 +1575,7 @@ public class Home {
 						System.out.println("보장기간은 1~79년 사이에서 설정해주세요");
 						continue;
 					}
-					newInsurance.setWarrantyPeriod(inputPeriod);
+					newInsurance.setWarrantyPeriod(inputPeriod * 12);
 					break;
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
