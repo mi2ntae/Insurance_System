@@ -8,7 +8,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 
 	@Override
 	public boolean insert(Interview interview) {
-		String str = "INSERT INTO Interview (interviewId, salespersonId, customerId, confirmedStatus, date, content) values ('"
+		String str = "INSERT INTO interview (interviewId, salespersonId, customerId, confirmedStatus, date, content) values ('"
 				+ interview.getInterviewId() + "','" + interview.getSalespersonId() + "','" + interview.getCustomerId()
 				+ interview.isConfirmedStatus() + "','" + interview.getDate() + "','" + interview.getContent() + "')";
 		if (this.execute(str)) {
@@ -21,7 +21,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 	@Override
 	public ArrayList<Interview> select() {
 		ArrayList<Interview> arrayList = new ArrayList<Interview>();
-		String sql = "SELECT * FROM Interview";
+		String sql = "SELECT * FROM interview";
 		try {
 			while (rs.next()) {
 				Interview interview = new Interview();
@@ -42,7 +42,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 
 	@Override
 	public boolean delete(String interviewId) {
-		String str = "DELETE FROM Interview WHERE interviewId = " + interviewId;
+		String str = "DELETE FROM interview WHERE interviewId = " + interviewId;
 		if(this.execute(str)) {
 			return true;
 		} else {

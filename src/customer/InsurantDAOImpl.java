@@ -29,7 +29,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 	public ArrayList<Insurant> select() {
 		ArrayList<Insurant> arrayList = new ArrayList<Insurant>();
 
-		String sql = "SELECT * FROM Customer";
+		String sql = "SELECT * FROM insurant";
 		try {
 			while (rs.next()) {
 				Insurant insurant = new Insurant();
