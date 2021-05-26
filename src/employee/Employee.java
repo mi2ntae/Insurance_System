@@ -7,10 +7,11 @@ import global.Constants.eEmployeeRole;
 public class Employee {
 	// Attributes
 	private String employeeId;
+	private String password;
 	private String name;
 	private String phoneNumber;
-	private String password;
-	private eEmployeeRole employeeRole;
+	private eEmployeeRole role;
+	private int saleHistory;
 	
 	// Constructor
 	public Employee() {
@@ -29,13 +30,16 @@ public class Employee {
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
 
-	public eEmployeeRole getEmployeeRole() {return employeeRole;}
-	public void setEmployeeRole(eEmployeeRole employeeRole) {this.employeeRole = employeeRole;}
+	public eEmployeeRole getEmployeeRole() {return role;}
+	public void setEmployeeRole(eEmployeeRole role) {this.role = role;}
+	
+	public int getSaleHistory() {return saleHistory;}
+	public void setSaleHistory(int saleHistory) {this.saleHistory = saleHistory;}
 	
 	// Public Methods
 	public String writeToFile() {
 		String output = null;
-		output = this.name + ' ' + this.phoneNumber + ' ' + this.employeeRole.getNum() + ' ' + this.employeeId + ' ' + this.password + '\n';
+		output = this.name + ' ' + this.phoneNumber + ' ' + this.role.getNum() + ' ' + this.employeeId + ' ' + this.password + '\n';
 		return output;
 		
 	}
@@ -44,8 +48,8 @@ public class Employee {
 		this.name = scn.next();
 		this.phoneNumber = scn.next();
 		int input = scn.nextInt();
-		for(eEmployeeRole employeeRole : eEmployeeRole.values()) {
-			if(employeeRole.getNum() == input) this.employeeRole = employeeRole;
+		for(eEmployeeRole role : eEmployeeRole.values()) {
+			if(role.getNum() == input) this.role = role;
 		}
 		this.employeeId = scn.next();
 		this.password = scn.next();

@@ -108,7 +108,7 @@ public class Home {
 								String id = scn.next();
 								System.out.println("비밀번호를 입력하세요 : ");
 								String pw = scn.next();
-								Customer customer = loginCustomer(id, pw);
+								Customer customer = this.loginCustomer(id, pw);
 								if (customer != null) {
 									System.out.println("안녕하세요 " + customer.getName() + "님!");
 									login: while (true) {
