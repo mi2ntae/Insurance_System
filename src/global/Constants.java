@@ -172,29 +172,32 @@ public class Constants {
 	private static String[] tripGuarantee = {"사망", "상해", "해외의료비", "휴대품손해", "배상책임", "항공기납치"};
 
 	public enum eInsuranceType {
-		driverInsurance(1, new DriverInsurance(), "driverInsurance", driverGuarantee),
-		dentalInsurance(2, new DentalInsurance(), "dentalInsurance", dentalGuarantee),
-		actualCostInsurance(3, new ActualCostInsurance(), "actualCostInsurance", null),
-		fireInsurance(4, new FireInsurance(), "fireInsurance", fireGuarantee),
-		cancerInsurance(5, new CancerInsurance(), "cancerInsurance", cancerGuarantee),
-		tripInsurance(6, new TripInsurance(), "tripInsurance", tripGuarantee);
+		driverInsurance(1, new DriverInsurance(), "driverInsurance", driverGuarantee, new DriverInsuranceDAOImpl()),
+		dentalInsurance(2, new DentalInsurance(), "dentalInsurance", dentalGuarantee, new DentalInsuranceDAOImpl()),
+		actualCostInsurance(3, new ActualCostInsurance(), "actualCostInsurance", null, new ActualCostInsuranceDAOImpl()),
+		fireInsurance(4, new FireInsurance(), "fireInsurance", fireGuarantee, new FireInsuranceDAOImpl()),
+		cancerInsurance(5, new CancerInsurance(), "cancerInsurance", cancerGuarantee, new CancerInsuranceDAOImpl()),
+		tripInsurance(6, new TripInsurance(), "tripInsurance", tripGuarantee, new TripInsuranceDAOImpl());
 
 		private int num;
 		private Insurance selectedInsurance;
 		private String name;
 		private String[] GuaranteePlan;
+		private InsuranceDAO insuranceDAO;
 		
-		private eInsuranceType(int num, Insurance selectedInsurance, String name, String[] GuaranteePlan) {
+		private eInsuranceType(int num, Insurance selectedInsurance, String name, String[] GuaranteePlan, InsuranceDAO insuranceDAO) {
 			this.num = num;
 			this.selectedInsurance = selectedInsurance;
 			this.name = name;
 			this.GuaranteePlan = GuaranteePlan;
+			this.insuranceDAO = insuranceDAO;
 		}
 
 		public int getNum() {return this.num;}
 		public Insurance getSelectedInsurance() {return this.selectedInsurance;}
 		public String getName() {return this.name;}
 		public String[] getGuaranteePlan() {return this.GuaranteePlan;}
+		public InsuranceDAO getInsuranceDAO() {return this.insuranceDAO;}
 	}
 
 	public static enum eFamilyMedicalDisease {

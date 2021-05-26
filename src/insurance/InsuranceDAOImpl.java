@@ -62,7 +62,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 
 						InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
 						insurance = insuranceDao.selectTypeInsurance(insurance);
-						insurance.setGuaranteePlanList(guaranteePlanDAO.select());
+//						insurance.setGuaranteePlanList(guaranteePlanDAO.select());
 						
 						arrayList.add(insurance);
 					}
