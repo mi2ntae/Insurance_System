@@ -13,6 +13,7 @@ import customer.Customer;
 import customer.CustomerList;
 import customer.CustomerListImpl;
 import customer.Insurant;
+import employee.ContractManager;
 import employee.Employee;
 import employee.EmployeeList;
 import employee.EmployeeListImpl;
@@ -57,7 +58,7 @@ public class Home {
 
 	private InsuranceList insuranceList;
 	private ContractList contractList;
-	private CustomerList customerList;
+	private ArrayList<Customer> customerList;
 	private EmployeeList employeeList;
 	
 	//time : 달 (임시)
@@ -68,7 +69,7 @@ public class Home {
 			this.scn = new Scanner(System.in);
 			this.insuranceList = new InsuranceListImpl();
 			this.contractList = new ContractListImpl();
-			this.customerList = new CustomerListImpl();
+			this.customerList = new ArrayList<Customer>();
 			this.employeeList = new EmployeeListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
@@ -565,6 +566,7 @@ public class Home {
 			System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		}
 		if (input.equals("y")) {
+			
 			this.changeContractData(contract);
 			this.contractList.insert(contract);
 		} else {
@@ -828,13 +830,15 @@ public class Home {
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
 				int input = 0;
 				while (input != 1 && input != 2) {
-					System.out.println("1.승인\n2.거부");
+					System.out.println("0.이전\n1.승인\n2.거부");
 					input = scn.nextInt();
-					if (input != 1 && input != 2) {
+					if (input != 1 && input != 2 && input != 0) {
 						System.out.println("잘못된 입력");
 					}
 				}
 				switch (input) {
+				case 0 :
+					return;
 				case 1:
 					underwriter.approveContract(contract);
 					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
@@ -901,7 +905,7 @@ public class Home {
 		if(customer.getInsurantList().isEmpty()) {
 			System.out.print("보험 가입자 ID : null");
 		} else {
-			for(Insurant insurant : customer.getInsurantList().getInsurantList()) {
+			for(Insurant insurant : customer.getInsurantList()) {
 				System.out.print(" " + insurant.getInsurantId());
 			}
 		}
@@ -1021,7 +1025,7 @@ public class Home {
 			input = scn.next();
 		}
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
-			for (Insurant insurant : customer.getInsurantList().getInsurantList()) {
+			for (Insurant insurant : customer.getInsurantList()) {
 				if(insurant.getCutomerId().equals(customer.getCustomerId())) {
 					this.showInsurantData(insurant, insurance.getType());
 				}
@@ -1030,7 +1034,7 @@ public class Home {
 			while (!flag) {
 				System.out.print("보험가입자 ID를 입력하세요 : ");
 				String InsurantId = scn.next();
-				if (customer.getInsurantList().select(InsurantId) != null) {
+				if (customer.selectInsurant(InsurantId) != null) {
 					flag = true;
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
@@ -1039,7 +1043,7 @@ public class Home {
 		} else {
 			this.createInsurant(customer, insurance);
 		}
-		return customer.getInsurantList().getSelectedInsurant();
+		return customer.getSelectedInsurant();
 	}
 
 	private void createInsurant(Customer customer, Insurance insurance) {
@@ -1057,10 +1061,10 @@ public class Home {
 		String address = scn.next();
 		insurant.setAddress(address);
 
-		if(customer.getInsurantList().getInsurantList().isEmpty()) {
+		if(customer.getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().get(customer.getInsurantList().size() - 1).getInsurantId()) + 1));
 		}
 		
 		System.out.print("전화번호 : ");
@@ -1234,8 +1238,8 @@ public class Home {
 			}
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
-		customer.createInsurant(insurant);
-		customer.getInsurantList().select(insurant.getInsurantId());
+		customer.getInsurantList().add(insurant);
+		customer.selectInsurant(insurant.getInsurantId());
 	}
 	
 	// 고객 가입하기
@@ -1253,7 +1257,7 @@ public class Home {
 		check : while(true) {
 			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
 			String input = scn.next();
-			for (Customer customer2 : this.customerList.getCustomerList()) {
+			for (Customer customer2 : this.customerList) {
 				if (customer2.getCustomerId().equals(input)) {
 					System.out.println("이미 존재하는 ID입니다!(사용불가)");
 					System.out.println("--------------------------");
@@ -1267,13 +1271,13 @@ public class Home {
 		System.out.println("비밀번호를 입력해주세요.");
 		customer.setPassword(scn.next());
 		
-		if(customerList.insert(customer)) {
+		if(customerList.add(customer)) {
 			System.out.println("!!!회원가입이 완료되었습니다!!!!");
 		}
 	}
 	// 고객 로그인하기
 	private Customer loginCustomer(String id, String pw) {
-		for(Customer customer : this.customerList.getCustomerList()) {
+		for(Customer customer : this.customerList) {
 			if(customer.getCustomerId().equals(id)) {
 				if(customer.getPassword().equals(pw)) {
 					System.out.println("!!!로그인에 성공하였습니다!!!!");

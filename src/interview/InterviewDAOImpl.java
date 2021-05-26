@@ -39,17 +39,6 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 		return arrayList;
 	}
 
-	@Override
-	public boolean update(Interview interview) {
-		String str = "UPDATE Interview set salespersonId = " + interview.getSalespersonId() + "','"
-				+ "customerId = " + interview.getCustomerId() + "','" + "confirmedStatus = " + interview.isConfirmedStatus() + "','"
-				+ "date = " + interview.getDate() + "','" + "content = " + interview.getContent() + " WHERE InterviewId = " + interview.getInterviewId();
-		if(this.execute(str)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	@Override
 	public boolean delete(String interviewId) {
@@ -61,5 +50,33 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 		}
 	}
 
+	@Override
+	public boolean updateConfirmedStatus(String interviewId, boolean confirmedStatus) {
+		String str = "UPDATE interview set confirmedStatus = " + confirmedStatus + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	@Override
+	public boolean updateDate(String interviewId, String date) {
+		String str = "UPDATE interview set date = " + date + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updateContent(String interviewId, String content) {
+		String str = "UPDATE interview set content = " + content + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

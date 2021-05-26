@@ -3,6 +3,7 @@ package contract;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import customer.Customer;
 import customer.CustomerList;
 import insurance.InsuranceList;
 
@@ -14,7 +15,7 @@ public interface ContractList {
 	public void updateEffectivenessById(String contractId, boolean effectiveness);
 
 	// Initialize
-	public void initialize(InsuranceList insuranceList, CustomerList customerList) throws FileNotFoundException;
+	public void initialize(InsuranceList insuranceList, ArrayList<Customer> customerList) throws FileNotFoundException;
 	
 	// Getters&Setters
 	public ArrayList<Contract> getContractList();
