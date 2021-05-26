@@ -19,7 +19,7 @@ public class Contract {
 	private String salespersonId;
 	private boolean effectiveness;
 	private boolean special;
-	private int lifespanOfContract;
+	private int lifespan;
 	private int fee;
 	private int paidFee;
 	private int unpaidPeriod;
@@ -63,8 +63,8 @@ public class Contract {
 	public int getFee() {return fee;}
 	public void setFee(int fee) {this.fee = fee;}
 
-	public int getLifespanOfContract() {return lifespanOfContract;}
-	public void setLifespanOfContract(int lifespanOfContract) {this.lifespanOfContract = lifespanOfContract;}
+	public int getLifespan() {return lifespan;}
+	public void setLifespan(int lifespan) {this.lifespan = lifespan;}
 
 	public int getPaidFee() {return paidFee;}
 	public void setPaidFee(int paidFee) {this.paidFee = paidFee;}
@@ -127,7 +127,7 @@ public class Contract {
 
 	public String writeToFile() {
 		String output = this.contractId + ' ' + this.insurant.getInsurantId() + ' ' + this.insurance.getInsuranceId() + ' '  + this.customer.getCustomerId() + ' ' + this.salespersonId
-				+ ' ' + String.valueOf(this.effectiveness) + ' ' + String.valueOf(this.lifespanOfContract) + ' '
+				+ ' ' + String.valueOf(this.effectiveness) + ' ' + String.valueOf(this.lifespan) + ' '
 				+ String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' '
 				+ String.valueOf(this.unpaidPeriod) + ' ' + String.valueOf(this.special) + '\n';
 		return output;
@@ -140,7 +140,7 @@ public class Contract {
 		this.customerId = scn.next();
 		this.salespersonId = scn.next();
 		this.effectiveness = Boolean.parseBoolean(scn.next());
-		this.lifespanOfContract = scn.nextInt();
+		this.lifespan = scn.nextInt();
 		this.fee = scn.nextInt();
 		this.paidFee = scn.nextInt();
 		this.unpaidPeriod = scn.nextInt();
