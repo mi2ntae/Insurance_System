@@ -36,6 +36,9 @@ public class Insurant {
 	}
 
 	// getters & setters	
+	public String getCutomerId() {return cutomerId;}
+	public void setCutomerId(String cutomerId) {this.cutomerId = cutomerId;}
+	
 	public int getAccidentHistory() {return accidentHistory;}
 	public void setAccidentHistory(int accidentHistory) {this.accidentHistory = accidentHistory;}
 

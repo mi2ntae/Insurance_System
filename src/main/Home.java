@@ -577,23 +577,18 @@ public class Home {
 	private void changeContractData(Contract contract) {
 		Insurant insurant = contract.getInsurant();
 		Insurance insurance  = contract.getInsurance();
-		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
-			System.out.print("사고횟수 : ");
-			int accidentHistory = scn.nextInt();
-			insurant.setAccidentHistory(accidentHistory);
-		}
 
-		System.out.print("주소 : ");
-		String address = scn.next();
-		insurant.setAddress(address);
-		
+		System.out.print("이름 : ");
+		String name = scn.next();
+		insurant.setName(name);
+
 		System.out.print("나이 : ");
 		int age = scn.nextInt();
 		insurant.setAge(age);
 		
-		System.out.print("이름 : ");
-		String name = scn.next();
-		insurant.setName(name);
+		System.out.print("주소 : ");
+		String address = scn.next();
+		insurant.setAddress(address);
 		
 		System.out.print("전화번호 : ");
 		String phoneNum = scn.next();
@@ -743,6 +738,13 @@ public class Home {
 			}
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
+		
+		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
+			System.out.print("사고횟수 : ");
+			int accidentHistory = scn.nextInt();
+			insurant.setAccidentHistory(accidentHistory);
+		}
+		
 		contract.setLifespanOfContract(time + contract.getInsurance().getWarrantyPeriod());
 		contract.setFee(0);
 		contract.setPaidFee(0);
