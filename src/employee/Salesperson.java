@@ -2,7 +2,6 @@ package employee;
 
 public class Salesperson extends Employee{
 
-	private int saleHistory;
 //	public Interview m_Interview;
 
 	public Salesperson(){
@@ -25,10 +24,6 @@ public class Salesperson extends Employee{
 
 	}
 
-	/**
-	 * 
-	 * @param interviewId
-	 */
 	public void writeReport(int interviewId){
 
 	}

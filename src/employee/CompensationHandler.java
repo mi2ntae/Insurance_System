@@ -4,8 +4,6 @@ import contract.Contract;
 
 public class CompensationHandler {
 
-	public Contract m_Contract;
-
 	public CompensationHandler(){
 
 	}
