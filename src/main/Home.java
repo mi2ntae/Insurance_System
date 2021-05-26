@@ -426,7 +426,7 @@ public class Home {
 					this.time++;
 					ArrayList<String> delet = new ArrayList<String>();
 					for(Contract contract : this.contractList.getContractList()) {
-						if(contract.getLifespanOfContract() - time < 0) {
+						if(contract.getLifespan() - time < 0) {
 							contract.setEffectiveness(false);
 						} else {
 							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
@@ -460,7 +460,7 @@ public class Home {
 					unpaidCount++;
 				}
 			} else {
-				if(contract.getLifespanOfContract() - time < 0) {
+				if(contract.getLifespan() - time < 0) {
 					lifeCount++;
 				}
 			}
@@ -538,7 +538,7 @@ public class Home {
 	// 만기 계약 관리
 	private void ManageExpiredContract() {
 		for(Contract contract : this.contractList.getContractList()) {
-			if(contract.getLifespanOfContract() - time < 0) {
+			if(contract.getLifespan() - time < 0) {
 				this.showContractData(contract);
 			}
 		}
@@ -744,7 +744,7 @@ public class Home {
 			insurant.setAccidentHistory(accidentHistory);
 		}
 		
-		contract.setLifespanOfContract(time + contract.getInsurance().getWarrantyPeriod());
+		contract.setLifespan(time + contract.getInsurance().getWarrantyPeriod());
 		contract.setFee(0);
 		contract.setPaidFee(0);
 		contract.setUnpaidPeriod(0);
@@ -807,7 +807,7 @@ public class Home {
 		int count = 0;
 		underwriter.assoicate(this.contractList);
 		for(Contract contract : this.contractList.getContractList()) {
-			if(contract.isEffectiveness() == false && contract.getLifespanOfContract() - time > 0) {
+			if(contract.isEffectiveness() == false && contract.getLifespan() - time > 0) {
 				this.showSimpleContract(contract, false);
 				count++;
 			}
@@ -856,7 +856,7 @@ public class Home {
 		System.out.println("------계약 상세정보------");
 		System.out.println("계약 ID : " + contract.getContractId());
 		System.out.println("특약 여부 : " + contract.isSpecial());
-		System.out.println("계약 기간 : " + contract.getLifespanOfContract());
+		System.out.println("계약 기간 : " + contract.getLifespan());
 		System.out.println("보험료 : " + contract.getFee());
 		System.out.println("지불된 요금 : " + contract.getPaidFee());
 		System.out.println("영업사원 ID" + contract.getSalespersonId());
@@ -985,7 +985,7 @@ public class Home {
 						}
 					}
 					Contract contract = new Contract();
-					contract.setLifespanOfContract(insurance.getWarrantyPeriod() + time);
+					contract.setLifespan(insurance.getWarrantyPeriod() + time);
 					if(this.contractList.getContractList().isEmpty()) {
 						contract.setContractId(Integer.toString(1));
 					} else {
