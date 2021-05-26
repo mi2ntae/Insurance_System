@@ -85,7 +85,6 @@ public class Home {
 		}
 	}
 
-
 	public void start() {
 		while (true) {
 			System.out.println("*******보험사 메뉴*******");
@@ -882,8 +881,8 @@ public class Home {
 		System.out.println("성별 : " + insurant.getGender());
 		System.out.println("직업 : " + insurant.getJob());
 		if(insuranceType == eInsuranceType.driverInsurance) {
-			System.out.println("자동차 등급 : " + insurant.getRankOfCar());
-			System.out.println("자동차 종류 : " + insurant.getTypeOfCar());
+			System.out.println("자동차 등급 : " + insurant.getRankOfCar().getName());
+			System.out.println("자동차 종류 : " + insurant.getTypeOfCar().getName());
 		}
 		if(insuranceType == eInsuranceType.tripInsurance) {
 			System.out.println("여행 국가 위험 등급 : " + insurant.getRiskOfTripCountry());
@@ -1004,7 +1003,7 @@ public class Home {
 					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractList.insert(contract);
-					System.out.println("!!!!보험가입이 완료되었습니다!!!!");
+					System.out.println("!!!!보험가입 '신청'이 완료되었습니다!!!!");
 				}
 			} else {
 				System.out.println("해당 보험이 존재하지 않습니다");
@@ -1016,14 +1015,16 @@ public class Home {
 	private Insurant selectInsurant(Customer customer, Insurance insurance) {
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		String input = scn.next();
-		while (!input.equals("1") &&	 !input.equals("2") ) {
+		while (!input.equals("1") && !input.equals("2") ) {
 			System.out.println("잘못된 입력입니다");
 			System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
 			input = scn.next();
 		}
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
 			for (Insurant insurant : customer.getInsurantList().getInsurantList()) {
-				this.showInsurantData(insurant, insurance.getType());
+				if(insurant.getCutomerId().equals(customer.getCustomerId())) {
+					this.showInsurantData(insurant, insurance.getType());
+				}
 			}
 			boolean flag = false;
 			while (!flag) {
@@ -2463,7 +2464,6 @@ public class Home {
 					System.out.println((i+1)+"월 : X");
 				}
 			}
-		
 			while (true) {
 				System.out.println("1.일괄 납부하기");
 				System.out.println("2.선택한 월의 보험료 납부하기");
@@ -2496,7 +2496,6 @@ public class Home {
 							System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
 							continue;
 						}
-						
 					} else if (inputCheck.equals("n")) {
 						continue;
 					} else {
