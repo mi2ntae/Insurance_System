@@ -8,5 +8,8 @@ public interface ContractDAO {
 	public Contract selectContract(String contractId);
 	public boolean updateFee(String contractId, int fee);
 	public boolean updateEffectiveness(String contractId, boolean effectiveness);
+	public boolean updatePayHistory(String contractId, int month);
+	public boolean updateAnnualPayHistory();
 	public boolean delete(String contractId);
+	
 }
