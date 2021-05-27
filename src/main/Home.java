@@ -444,6 +444,17 @@ public class Home {
 							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
 						}
 					}
+					
+					if (Constants.thisMonth+1 > 12) {
+						Constants.thisYear += 1;
+						Constants.thisMonth = 1;
+						for (Contract contract: this.contractList.getContractList()) {
+							contract.setPayHistory(new boolean[12]);
+						}
+					} else {
+						Constants.thisMonth += 1;
+					}
+					
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다");
@@ -1004,6 +1015,9 @@ public class Home {
 				case 1:
 					underwriter.approveContract(contract);
 					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
+					for (int i = 0; i < Constants.thisMonth; i++) {
+						contract.getPayHistory()[i] = true;
+					}
 					System.out.println("------승인 되었습니다------");
 					break;
 				case 2:
@@ -2601,8 +2615,8 @@ public class Home {
 				continue;
 			}
 				
-			for (int i = 0; i < contract.getPayHistory()[Constants.thisYear-inputYear].length; i++) {
-				if (contract.getPayHistory()[Constants.thisYear-inputYear][i]) {
+			for (int i = 0; i < contract.getPayHistory().length; i++) {
+				if (contract.getPayHistory()[i]) {
 					System.out.println((i+1)+"월 : O");
 				} else {
 					System.out.println((i+1)+"월 : X");
@@ -2630,10 +2644,10 @@ public class Home {
 					String inputCheck = scn.next();
 					int unpaiedCount = 0;
 					if (inputCheck.equals("y")) {
-						for (int i = 0; i < contract.getPayHistory()[Constants.thisYear-inputYear].length; i++) {
-							if (!contract.getPayHistory()[Constants.thisYear-inputYear][i]) {
+						for (int i = 0; i < contract.getPayHistory().length; i++) {
+							if (!contract.getPayHistory()[i]) {
 								unpaiedCount += 1;
-								contract.getPayHistory()[Constants.thisYear-inputYear][i] = true;
+								contract.getPayHistory()[i] = true;
 							}
 						}
 						if (unpaiedCount*contract.getFee() <= 0) {
@@ -2648,6 +2662,31 @@ public class Home {
 					}
 					break;
 				case 2:
+					while(true) {
+						System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
+						System.out.printf("납부를 원하는 월을 입력해주세요 : ");
+						int inputMonth = 0;
+						try {
+							inputMonth = scn.nextInt();
+						} catch(InputMismatchException e) {
+							System.out.println("error : 숫자를 입력해주세요");
+							System.out.println("-----------------------");
+							scn.nextLine();
+							continue;
+						}
+						if (inputMonth < 0 || inputMonth > 12) {
+							System.out.println("1~12 사이의 숫자를 입력해주세요.");
+							continue;
+						}
+						if (contract.getPayHistory()[inputMonth-1]) {
+							System.out.println("이미 보험료가 납부돼있는 월입니다. 다시 입력해주세요.");
+							continue;
+						} else {
+							contract.getPayHistory()[inputMonth-1] = true;
+							System.out.println(inputMonth+"월의 보험료"+contract.getFee()+"원이 납부되었습니다.");
+							break;
+						}
+					}
 					break;
 				}
 				break;
