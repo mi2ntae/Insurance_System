@@ -7,6 +7,7 @@ public class Interview {
 	private String customerId;
 	private boolean confirmedStatus;
 	private String date;
+	private String time;
 	private String content;
 
 	// Constructor
@@ -29,6 +30,9 @@ public class Interview {
 
 	public String getDate() {return date;}
 	public void setDate(String date) {this.date = date;}
+
+	public String getTime() {return time;}
+	public void setTime(String time) {this.time = time;}
 
 	public String getContent() {return content;}
 	public void setContent(String content) {this.content = content;}

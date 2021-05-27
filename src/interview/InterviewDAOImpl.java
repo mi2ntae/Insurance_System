@@ -79,4 +79,15 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 			return false;
 		}
 	}
+	
+
+	@Override
+	public boolean updateSalespersonId(String interviewId, String salespersonId) {
+		String str = "UPDATE interview set salespersonId = " + salespersonId + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

@@ -17,6 +17,7 @@ import employee.ContractManager;
 import employee.Employee;
 import employee.EmployeeList;
 import employee.EmployeeListImpl;
+import employee.Salesperson;
 import employee.UnderWriter;
 import global.Constants;
 import global.Constants.eAge;
@@ -39,6 +40,9 @@ import insurance.Insurance;
 import insurance.InsuranceList;
 import insurance.InsuranceListImpl;
 import insurance.TripInsurance;
+import interview.Interview;
+import interview.InterviewList;
+import interview.InterviewListImpl;
 
 /* 	
  * 공통 : 요율 refactoring enum으로
@@ -60,6 +64,7 @@ public class Home {
 	private ContractList contractList;
 	private CustomerList customerList;
 	private EmployeeList employeeList;
+	private InterviewList interviewList;
 	
 	//time : 달 (임시)
 	private int time = 0;
@@ -71,6 +76,7 @@ public class Home {
 			this.contractList = new ContractListImpl();
 			this.customerList = new CustomerListImpl();
 			this.employeeList = new EmployeeListImpl();
+			this.interviewList = new InterviewListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
 			e.printStackTrace();
@@ -450,7 +456,158 @@ public class Home {
 			}
 		}
 	}
+	
+	// 면담 신청하기
+	private void requestInterview(Customer customer) {
+		for(Interview interview : this.interviewList.getinterviewList()) {
+			if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
+				System.out.println("이미 신청된 면담이 있습니다");
+				return;
+			}
+		}
+		Interview interview = new Interview();
+		interview.setCustomerId(customer.getCustomerId());
+		System.out.println("현재 날짜 : " + this.time);
+		System.out.println("원하는 면담 날짜를 입력하세요 : ");
+		try {
+			int date = Integer.MIN_VALUE;
+			while(date > time) {
+				date = scn.nextInt();
+				if(date < time) {
+					System.out.println("error : 잘못된 입력입니다");
+					System.out.println("----------------------");
+				}
+			}
+			interview.setDate(Integer.toString(date));
+			int interviewTime = Integer.MIN_VALUE;
+			while(interviewTime < 0 || interviewTime > 4) {
+				System.out.println("0.이전\n1.09시~11시\n2.11시~13시\n3.13시~15시\n4.15시~17시");
+				if(interviewTime < 0 && interviewTime > 4) {
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+				}
+			}
+			if(interviewTime == 0) {
+				return;
+			} else {
+				switch(interviewTime) {
+				case 1:
+					interview.setTime("09시~11시");
+					break;
+				case 2:
+					interview.setTime("11시~13시");
+					break;
+				case 3:
+					interview.setTime("13시~15시");
+					break;
+				case 4:
+					interview.setTime("15시~17시");
+					break;
+				}
+			}
+			if(this.interviewList.getinterviewList().isEmpty()) {
+				interview.setInterviewId("1");
+			}else {
+				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewList.getinterviewList().get(this.interviewList.getinterviewList().size() - 1 ).getInterviewId()) + 1));
+			}
+			this.interviewList.insert(interview);
+		} catch (InputMismatchException e) {
+			System.out.println("error : 숫자를 입력해주세요");
+			System.out.println("----------------------");
+		}
+	}
+	
+	// 면담 신청 리스트 확인하기
+	private void checkInterviewList() {
+		Salesperson salesperson = new Salesperson();
+		int count = 0;
+		for(Interview interview : this.interviewList.getinterviewList()) {
+			if(!interview.isConfirmedStatus()) {
+				count++;
+				Customer customer = this.customerList.select(interview.getCustomerId());
+				System.out.println("주소 : " + customer.getAddress());
+				System.out.println("고객 ID : " + customer.getCustomerId());
+				System.out.println("이름 : " + customer.getName());
+				System.out.println("전화번호 : " + customer.getPhoneNumber());
+			}
+		}
+		if(count == 0) {
+			System.out.println("------신청된 면담이 없습니다.------");
+		}
+		Customer customer = null;
+		while(customer == null) {
+			System.out.println("이전 화면으로 돌아가려면 0을 입력하세요");
+			System.out.println("세부정보를 확인할 고객의 ID를 입력하세요");
+			String input = scn.next();
+			if(input.equals("0")) {
+				return;
+			}
+			customer = this.customerList.select(input);
+			if(customer == null) {
+				System.out.println("------존재하지 않은 고객입니다------");
+			} else {
+				boolean flag = false;
+				for(Interview interview : this.interviewList.getinterviewList()) {
+					if(interview.getCustomerId().equals(input)&& !interview.isConfirmedStatus()) {
+						flag = true;
+					}
+				}
+				if(flag) {
+					System.out.println("주소 : " + customer.getAddress());
+					System.out.println("고객 ID : " + customer.getCustomerId());
+					System.out.println("이름 : " + customer.getName());
+					System.out.println("전화번호 : " + customer.getPhoneNumber());
+					System.out.println("------이전 면담 기록------");
+					for(Interview interview : this.interviewList.getinterviewList()) {
+						if(interview.getCustomerId().equals(input) && interview.isConfirmedStatus()) {
+							this.showInterviewData(interview);
+						}
+					}
+					input = null;
+					System.out.println("------면담결과 보고서를 작성하시겠습니까(y/n)------");
+					while(!input.equals("y") && !input.equals("n")) {
+						input = scn.next();
+						if(!input.equals("y") && !input.equals("n")) {
+							System.out.print("입력값이 잘못되었습니다");
+						}
+					}
+					if(input.equals("y")) {
+						for(Interview interview : this.interviewList.getinterviewList()) {
+							if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
+								this.writeReport(interview, salesperson);
+							}
+						}
+					} else {
+						return;
+					}
+				} else {
+					System.out.println("------면담을 신청하지 않은 고객입니다------");
+				}
+			}
+		}	
+	}
+	
+	private void writeReport(Interview interview, Salesperson salesperson) {
+		System.out.println("뒤로가려면 0을 입력하세여");
+		System.out.println("면담 내용을 입력하세요");
+		String input = scn.nextLine();
+		if(input.equals("0")) {
+			return;
+		} else {
+			interview.setSalespersonId(salesperson.getEmployeeId());
+			salesperson.writeReport(interview, input);
+			interview.setConfirmedStatus(true);
+		}
+	}
 
+	private void showInterviewData(Interview interview) {
+		System.out.println("인터뷰 ID : " + interview.getInterviewId());
+		System.out.println("영업사원 ID : " + interview.getSalespersonId());
+		System.out.println("고객 ID : " + interview.getCustomerId());
+		System.out.println("날짜 : " + interview.getDate());
+		System.out.println("시간 : " + interview.getTime());
+		System.out.println("내용 : " + interview.getContent());
+	}
+	
 	// 가입자 리스트 보기
 	private void showSubscriberList() {
 		int unpaidCount = 0;
