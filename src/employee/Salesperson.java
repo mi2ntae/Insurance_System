@@ -1,15 +1,15 @@
 package employee;
 
+import interview.Interview;
+import interview.InterviewList;
+import interview.InterviewListImpl;
+
 public class Salesperson extends Employee{
 
-//	public Interview m_Interview;
+	public InterviewList interviewList;
 
 	public Salesperson(){
-
-	}
-
-	public void finalize() throws Throwable {
-
+		this.interviewList = new InterviewListImpl();
 	}
 
 	public void checkInterviewList(){
@@ -24,8 +24,8 @@ public class Salesperson extends Employee{
 
 	}
 
-	public void writeReport(int interviewId){
-
+	public void writeReport(Interview interview,String input){
+		interview.setContent(input);
 	}
 
 }
