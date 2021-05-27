@@ -1191,7 +1191,7 @@ public class Home {
 			while (!flag) {
 				System.out.print("보험가입자 ID를 입력하세요 : ");
 				String InsurantId = scn.next();
-				if (customer.selectInsurant(InsurantId) != null) {
+				if (customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
@@ -1200,7 +1200,7 @@ public class Home {
 		} else {
 			this.createInsurant(customer, insurance);
 		}
-		return customer.getSelectedInsurant();
+		return customer.getInsurantList().getSelectedInsurant();
 	}
 
 	private void createInsurant(Customer customer, Insurance insurance) {
@@ -1395,8 +1395,8 @@ public class Home {
 			}
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
-		customer.getInsurantList().insert(insurant);
-		customer.selectInsurant(insurant.getInsurantId());
+		customer.createInsurant(insurant);
+		customer.getInsurantList().select(insurant.getInsurantId());
 	}
 	
 	// 고객 가입하기

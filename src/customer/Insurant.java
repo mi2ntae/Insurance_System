@@ -130,5 +130,4 @@ public class Insurant {
 			if(riskOfTripCountry.getNum() == input) this.riskOfTripCountry = riskOfTripCountry;
 		}
 	}
-	
 }
