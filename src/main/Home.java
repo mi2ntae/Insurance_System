@@ -58,7 +58,7 @@ public class Home {
 
 	private InsuranceList insuranceList;
 	private ContractList contractList;
-	private ArrayList<Customer> customerList;
+	private CustomerList customerList;
 	private EmployeeList employeeList;
 	
 	//time : 달 (임시)
@@ -69,7 +69,7 @@ public class Home {
 			this.scn = new Scanner(System.in);
 			this.insuranceList = new InsuranceListImpl();
 			this.contractList = new ContractListImpl();
-			this.customerList = new ArrayList<Customer>();
+			this.customerList = new CustomerListImpl();
 			this.employeeList = new EmployeeListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
@@ -905,7 +905,7 @@ public class Home {
 		if(customer.getInsurantList().isEmpty()) {
 			System.out.print("보험 가입자 ID : null");
 		} else {
-			for(Insurant insurant : customer.getInsurantList()) {
+			for(Insurant insurant : customer.getInsurantList().getInsurantList()) {
 				System.out.print(" " + insurant.getInsurantId());
 			}
 		}
@@ -1025,7 +1025,7 @@ public class Home {
 			input = scn.next();
 		}
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
-			for (Insurant insurant : customer.getInsurantList()) {
+			for (Insurant insurant : customer.getInsurantList().getInsurantList()) {
 				if(insurant.getCutomerId().equals(customer.getCustomerId())) {
 					this.showInsurantData(insurant, insurance.getType());
 				}
@@ -1064,7 +1064,7 @@ public class Home {
 		if(customer.getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().get(customer.getInsurantList().size() - 1).getInsurantId()) + 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
 		}
 		
 		System.out.print("전화번호 : ");
@@ -1238,7 +1238,7 @@ public class Home {
 			}
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
-		customer.getInsurantList().add(insurant);
+		customer.getInsurantList().insert(insurant);
 		customer.selectInsurant(insurant.getInsurantId());
 	}
 	
@@ -1257,7 +1257,7 @@ public class Home {
 		check : while(true) {
 			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
 			String input = scn.next();
-			for (Customer customer2 : this.customerList) {
+			for (Customer customer2 : this.customerList.getCustomerList()) {
 				if (customer2.getCustomerId().equals(input)) {
 					System.out.println("이미 존재하는 ID입니다!(사용불가)");
 					System.out.println("--------------------------");
@@ -1271,13 +1271,13 @@ public class Home {
 		System.out.println("비밀번호를 입력해주세요.");
 		customer.setPassword(scn.next());
 		
-		if(customerList.add(customer)) {
+		if(customerList.insert(customer)) {
 			System.out.println("!!!회원가입이 완료되었습니다!!!!");
 		}
 	}
 	// 고객 로그인하기
 	private Customer loginCustomer(String id, String pw) {
-		for(Customer customer : this.customerList) {
+		for(Customer customer : this.customerList.getCustomerList()) {
 			if(customer.getCustomerId().equals(id)) {
 				if(customer.getPassword().equals(pw)) {
 					System.out.println("!!!로그인에 성공하였습니다!!!!");
