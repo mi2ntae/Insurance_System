@@ -29,7 +29,7 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 				customer.setPhoneNumber(rs.getString("phoneNumber"));
 				customer.setCustomerId(rs.getString("customerId"));
 				customer.setPassword(rs.getString("password"));
-				customer.setInsurantList(insurantDAO.select());
+				//customer.setInsurantList(insurantDAO.select());
 				
 				arrayList.add(customer);
 			}
@@ -37,26 +37,6 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 			e.printStackTrace();
 		}
 		return arrayList;
-	}
-
-	@Override
-	public boolean updatePassword(String customerId, String password) {
-		String str = "UPDATE customer set password = " + password + " WHERE CustomerId = " + customerId;
-		if(this.execute(str)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean updateName(String customerId, String name) {
-		String str = "UPDATE customer set name = " + name + " WHERE CustomerId = " + customerId;
-		if(this.execute(str)) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 
 	@Override

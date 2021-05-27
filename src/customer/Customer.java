@@ -20,7 +20,7 @@ public class Customer {
 	private String password;
 	
 	// Composition Class
-	private ArrayList<Insurant> insurantList;
+	private InsurantList insurantList;
 	private Insurant selectedInsurant;
 	// private Contract contract;
 	// private Salesperson m_Salesperson;
@@ -43,8 +43,8 @@ public class Customer {
 	public String getPhoneNumber() {return phoneNumber;}
 	public void setPhoneNumber(String phoneNumber) {this.phoneNumber = phoneNumber;}
 	
-	public ArrayList<Insurant> getInsurantList() {return insurantList;}
-	public void setInsurantList(ArrayList<Insurant> insurantList) {this.insurantList = insurantList;}
+	public InsurantList getInsurantList() {return insurantList;}
+	public void setInsurantList(InsurantList insurantList) {this.insurantList = insurantList;}
 	
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
@@ -74,7 +74,7 @@ public class Customer {
 	}
 	
 	public Insurant selectInsurant(String insurantId) {
-		for (Insurant insurant : this.insurantList) {
+		for (Insurant insurant : this.insurantList.getInsurantList()) {
 			if (insurant.getInsurantId().equals(insurantId)) {
 				this.selectedInsurant = insurant;
 				return insurant;
