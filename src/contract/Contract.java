@@ -148,7 +148,7 @@ public class Contract {
 		
 		// Associate
 		this.customer = customerList.select(customerId);
-		this.insurant = this.customer.selectInsurant(insurantId);
+		this.insurant = this.customer.getInsurantList().select(insurantId);
 		this.insurance = insuranceList.select(insuranceId);
 		
 		((AccidentListImpl)this.accidentList).readFromFile(this.contractId);

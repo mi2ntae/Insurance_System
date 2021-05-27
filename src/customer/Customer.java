@@ -21,13 +21,17 @@ public class Customer {
 	
 	// Composition Class
 	private InsurantList insurantList;
-	private Insurant selectedInsurant;
 	// private Contract contract;
 	// private Salesperson m_Salesperson;
 
 	// Constructor
 	public Customer(){
-		
+		try {
+			this.insurantList = new InsurantListImpl();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	// getters & setters
@@ -49,9 +53,6 @@ public class Customer {
 	public String getPassword() {return password;}
 	public void setPassword(String password) {this.password = password;}
 
-	public Insurant getSelectedInsurant() {return selectedInsurant;}
-	public void setSelectedInsurant(Insurant selectedInsurant) {this.selectedInsurant = selectedInsurant;}
-
 	// Methods
 	public void checkJoinedInsuranceList(){
 
@@ -70,17 +71,6 @@ public class Customer {
 	}
 
 	public void writeSurvey(){
-		
-	}
-	
-	public Insurant selectInsurant(String insurantId) {
-		for (Insurant insurant : this.insurantList.getInsurantList()) {
-			if (insurant.getInsurantId().equals(insurantId)) {
-				this.selectedInsurant = insurant;
-				return insurant;
-			}
-		}
-		return null;
 	}
 	
 	public String writeToFile() {
@@ -96,5 +86,9 @@ public class Customer {
 		this.phoneNumber = sc.next();
 		this.customerId = sc.next();
 		this.password = sc.next();
+	}
+
+	public void createInsurant(Insurant insurant) {
+		this.insurantList.insert(insurant);
 	}
 }
