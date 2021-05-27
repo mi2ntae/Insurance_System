@@ -2522,12 +2522,12 @@ public class Home {
 		switch (insurance.getType()) {
 		case driverInsurance:
 			System.out.println("\n  <자동차종류 요율표>");
-			for (int i = 0; i < eTypeOfCar.values().length; i++) {
-				System.out.println(eTypeOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarType()[i]);
+			for (int i = 1; i < eTypeOfCar.values().length; i++) {
+				System.out.println(eTypeOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarType()[i-1]);
 			}
 			System.out.println("\n  <자동차등급 요율표>");
-			for (int i = 0; i < eRankOfCar.values().length; i++) {
-				System.out.println(eRankOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarRank()[i]);
+			for (int i = 1; i < eRankOfCar.values().length; i++) {
+				System.out.println(eRankOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarRank()[i-1]);
 			}
 			System.out.println("\n  <사고횟수 요율표>");
 			for (int i = 0; i < Constants.accidentHistory.length; i++) {
