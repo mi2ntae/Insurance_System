@@ -2407,7 +2407,7 @@ public class Home {
 						int input = scn.nextInt();
 						int index = 0;
 						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList().getGuaranteePlanList()) {
-							if(index == input - 1 && contract.isSpecial() == guaranteePlan.isSpecial()) {
+							if(index == input - 1 && (contract.isSpecial() == guaranteePlan.isSpecial() || guaranteePlan.isSpecial() == false)) {
 								contract.addAccident(accidentId, guaranteePlan.getContent(), guaranteePlan.getCompensation(), false);
 								System.out.println("선택하신 항목(" + guaranteePlan.getContent() + ")에 대한 보험금("+ guaranteePlan.getCompensation() +"원)이 청구되었습니다!");
 								break roop;
@@ -2431,7 +2431,7 @@ public class Home {
 						int index = 0;
 						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList()
 								.getGuaranteePlanList()) {
-							if (index == input - 1 && contract.isSpecial() == guaranteePlan.isSpecial()) {
+							if (index == input - 1 && (contract.isSpecial() == guaranteePlan.isSpecial() || guaranteePlan.isSpecial() == false)) {
 								while (true) {
 									try {
 										System.out.println("해당 항목에 대한 피해금액을 입력해주세요.");
