@@ -42,115 +42,46 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				insurant.setPostedPriceOfStructure(rs.getLong("postedPriceOfStructure"));
 				
 				// 여기다가 enum값을 넣는거 구현
-				switch(rs.getInt("usageOfStructure")) {
-				case 1:
-					insurant.setUsageOfStructure(eUsageOfStructure.house);
-					break;
-				case 2:
-					insurant.setUsageOfStructure(eUsageOfStructure.study);
-					break;
-				case 3:
-					insurant.setUsageOfStructure(eUsageOfStructure.factory);
-					break;
-				case 4:
-					insurant.setUsageOfStructure(eUsageOfStructure.warehouse);
-					break;
-				case 5:
-					insurant.setUsageOfStructure(eUsageOfStructure.office);
-					break;
-				case 6:
-					insurant.setUsageOfStructure(eUsageOfStructure.publicFacility);
-					break;
+				int temp = rs.getInt("usageOfStructure");
+				for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) {
+					if(usageOfStructure.getNum() == temp) {
+						insurant.setUsageOfStructure(usageOfStructure);
+					}
 				}
 				
-				switch(rs.getInt("gender")) {
-				case 1:
-					insurant.setGender(eGender.male);
-					break;
-				case 2:
-					insurant.setGender(eGender.female);
-					break;
-				case 3:
-					insurant.setGender(eGender.both);
-					break;
+				temp = rs.getInt("gender");
+				for(eGender gender : eGender.values()) {
+					if(gender.getNum() == temp) {
+						insurant.setGender(gender);
+					}
 				}
 				
-				switch(rs.getInt("job")) {
-				case 1:
-					insurant.setJob(eJob.officeWorker);
-					break;
-				case 2:
-					insurant.setJob(eJob.driver);
-					break;
-				case 3:
-					insurant.setJob(eJob.factoryWorker);
-					break;
-				case 4:
-					insurant.setJob(eJob.student);
-					break;
-				case 5:
-					insurant.setJob(eJob.teacher);
-					break;
-				case 6:
-					insurant.setJob(eJob.soldier);
-					break;
-				case 7:
-					insurant.setJob(eJob.etc);
-					break;
+				temp = rs.getInt("job");
+				for(eJob job : eJob.values()) {
+					if(job.getNum() == temp) {
+						insurant.setJob(job);
+					}
 				}
 				
-				switch(rs.getInt("typeOfCar")) {
-				case 0:
-					insurant.setTypeOfCar(null);
-					break;
-				case 1:
-					insurant.setTypeOfCar(eTypeOfCar.bus);
-					break;
-				case 2:
-					insurant.setTypeOfCar(eTypeOfCar.van);
-					break;
-				case 3:
-					insurant.setTypeOfCar(eTypeOfCar.suv);
-					break;
-				case 4:
-					insurant.setTypeOfCar(eTypeOfCar.foreign);
-					break;
-				case 5:
-					insurant.setTypeOfCar(eTypeOfCar.etc);
-					break;
+				temp = rs.getInt("typeOfCar");
+				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) {
+					if(typeOfCar.getNum() == temp) {
+						insurant.setTypeOfCar(typeOfCar);
+					}
 				}
 				
-				switch(rs.getInt("rankOfCar")) {
-				case 0:
-					insurant.setRankOfCar(null);
-					break;
-				case 1:
-					insurant.setRankOfCar(eRankOfCar.Luxury);
-					break;
-				case 2:
-					insurant.setRankOfCar(eRankOfCar.high);
-					break;
-				case 3:
-					insurant.setRankOfCar(eRankOfCar.middle);
-					break;
-				case 4:
-					insurant.setRankOfCar(eRankOfCar.low);
-					break;
+				temp = rs.getInt("rankOfCar");
+				for(eRankOfCar rankOfCar : eRankOfCar.values()) {
+					if(rankOfCar.getNum() == temp) {
+						insurant.setRankOfCar(rankOfCar);
+					}
 				}
 				
-				switch(rs.getInt("riskOfTripCountry")) {
-				case 1:
-					insurant.setRiskOfTripCountry(eRiskOfTripCountry.safe);
-					break;
-				case 2:
-					insurant.setRiskOfTripCountry(eRiskOfTripCountry.first);
-					break;
-				case 3:
-					insurant.setRiskOfTripCountry(eRiskOfTripCountry.safe);
-					break;
-				case 4:
-					insurant.setRiskOfTripCountry(eRiskOfTripCountry.third);
-					break;
+				temp = rs.getInt("riskOfTripCountry");
+				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
+					if(riskOfTripCountry.getNum() == temp) {
+						insurant.setRiskOfTripCountry(riskOfTripCountry);
+					}
 				}
 			}
 		} catch (SQLException e) {
