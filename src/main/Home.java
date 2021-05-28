@@ -189,6 +189,8 @@ public class Home {
 												}
 												break;
 											case 4:
+												// 면담신청
+												this.requestInterview(customer);
 												break;
 											case 0:
 												break login;
@@ -311,6 +313,7 @@ public class Home {
 													break;
 												case 2:
 													// 면담신청 리스트 확인하기
+													this.checkInterviewList();
 													break;
 												case 3:
 													showAllInsurance();// 전체보험리스트 확인하기
@@ -477,29 +480,43 @@ public class Home {
 	private void requestInterview(Customer customer) {
 		for(Interview interview : this.interviewList.getinterviewList()) {
 			if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
-				System.out.println("이미 신청된 면담이 있습니다");
+				System.out.println("------이미 신청된 면담이 있습니다------");
 				return;
 			}
 		}
 		Interview interview = new Interview();
 		interview.setCustomerId(customer.getCustomerId());
-		System.out.println("현재 날짜 : " + this.time);
-		System.out.println("원하는 면담 날짜를 입력하세요 : ");
-		try {
+	
 			int date = Integer.MIN_VALUE;
-			while(date > time) {
-				date = scn.nextInt();
-				if(date < time) {
-					System.out.println("error : 잘못된 입력입니다");
+			while(date < time) {
+				System.out.println("현재 날짜 : " + this.time);
+				System.out.println("원하는 면담 날짜를 입력하세요");
+				try {
+					date = scn.nextInt();
+					if(date < time) {
+						System.out.println("error : 잘못된 입력입니다");
+						System.out.println("----------------------");
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("----------------------");
+					scn.nextLine();
 				}
 			}
 			interview.setDate(Integer.toString(date));
+			
 			int interviewTime = Integer.MIN_VALUE;
 			while(interviewTime < 0 || interviewTime > 4) {
 				System.out.println("0.이전\n1.09시~11시\n2.11시~13시\n3.13시~15시\n4.15시~17시");
-				if(interviewTime < 0 && interviewTime > 4) {
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+				try {
+					interviewTime = scn.nextInt();
+					if(interviewTime < 0 || interviewTime > 4) {
+						System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					}
+				}  catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("----------------------");
+					scn.nextLine();
 				}
 			}
 			if(interviewTime == 0) {
@@ -526,10 +543,7 @@ public class Home {
 				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewList.getinterviewList().get(this.interviewList.getinterviewList().size() - 1 ).getInterviewId()) + 1));
 			}
 			this.interviewList.insert(interview);
-		} catch (InputMismatchException e) {
-			System.out.println("error : 숫자를 입력해주세요");
-			System.out.println("----------------------");
-		}
+			System.out.println("------면담 신청이 완료되었습니다------");
 	}
 	
 	// 면담 신청 리스트 확인하기
@@ -578,25 +592,29 @@ public class Home {
 							this.showInterviewData(interview);
 						}
 					}
-					input = null;
-					System.out.println("------면담결과 보고서를 작성하시겠습니까(y/n)------");
+					input = "";
 					while(!input.equals("y") && !input.equals("n")) {
+						System.out.println("------면담결과 보고서를 작성하시겠습니까(y/n)------");
 						input = scn.next();
 						if(!input.equals("y") && !input.equals("n")) {
 							System.out.print("입력값이 잘못되었습니다");
 						}
 					}
 					if(input.equals("y")) {
+						Interview temp = null;
 						for(Interview interview : this.interviewList.getinterviewList()) {
 							if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
-								this.writeReport(interview, salesperson);
+								temp = interview;
+								
 							}
 						}
+						this.writeReport(temp, salesperson);
 					} else {
 						return;
 					}
 				} else {
 					System.out.println("------면담을 신청하지 않은 고객입니다------");
+					customer = null;
 				}
 			}
 		}	
@@ -605,13 +623,14 @@ public class Home {
 	private void writeReport(Interview interview, Salesperson salesperson) {
 		System.out.println("뒤로가려면 0을 입력하세여");
 		System.out.println("면담 내용을 입력하세요");
-		String input = scn.nextLine();
+		String input = scn.next();
 		if(input.equals("0")) {
 			return;
 		} else {
 			interview.setSalespersonId(salesperson.getEmployeeId());
 			salesperson.writeReport(interview, input);
 			interview.setConfirmedStatus(true);
+			System.out.println("------완료되었습니다------");
 		}
 	}
 
@@ -1208,7 +1227,6 @@ public class Home {
 			}
 			boolean flag = false;
 			while (!flag) {
-				System.out.print("보험가입자 ID를 입력하세요 : ");
 				String InsurantId = scn.next();
 				if (customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
