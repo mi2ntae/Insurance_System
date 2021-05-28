@@ -8,7 +8,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 
 	@Override
 	public boolean insert(Interview interview) {
-		String str = "INSERT INTO Interview (interviewId, salespersonId, customerId, confirmedStatus, date, content) values ('"
+		String str = "INSERT INTO interview (interviewId, salespersonId, customerId, confirmedStatus, date, content) values ('"
 				+ interview.getInterviewId() + "','" + interview.getSalespersonId() + "','" + interview.getCustomerId()
 				+ interview.isConfirmedStatus() + "','" + interview.getDate() + "','" + interview.getContent() + "')";
 		if (this.execute(str)) {
@@ -21,7 +21,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 	@Override
 	public ArrayList<Interview> select() {
 		ArrayList<Interview> arrayList = new ArrayList<Interview>();
-		String sql = "SELECT * FROM Interview";
+		String sql = "SELECT * FROM interview";
 		try {
 			while (rs.next()) {
 				Interview interview = new Interview();
@@ -39,21 +39,10 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 		return arrayList;
 	}
 
-	@Override
-	public boolean update(Interview interview) {
-		String str = "UPDATE Interview set salespersonId = " + interview.getSalespersonId() + "','"
-				+ "customerId = " + interview.getCustomerId() + "','" + "confirmedStatus = " + interview.isConfirmedStatus() + "','"
-				+ "date = " + interview.getDate() + "','" + "content = " + interview.getContent() + " WHERE InterviewId = " + interview.getInterviewId();
-		if(this.execute(str)) {
-			return true;
-		} else {
-			return false;
-		}
-	}
 
 	@Override
 	public boolean delete(String interviewId) {
-		String str = "DELETE FROM Interview WHERE interviewId = " + interviewId;
+		String str = "DELETE FROM interview WHERE interviewId = " + interviewId;
 		if(this.execute(str)) {
 			return true;
 		} else {
@@ -61,5 +50,44 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 		}
 	}
 
+	@Override
+	public boolean updateConfirmedStatus(String interviewId, boolean confirmedStatus) {
+		String str = "UPDATE interview set confirmedStatus = " + confirmedStatus + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
+	@Override
+	public boolean updateDate(String interviewId, String date) {
+		String str = "UPDATE interview set date = " + date + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean updateContent(String interviewId, String content) {
+		String str = "UPDATE interview set content = " + content + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+
+	@Override
+	public boolean updateSalespersonId(String interviewId, String salespersonId) {
+		String str = "UPDATE interview set salespersonId = " + salespersonId + " WHERE interviewId = " + interviewId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }

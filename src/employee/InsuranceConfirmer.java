@@ -14,8 +14,8 @@ public class InsuranceConfirmer {
 
 	}
 
-	public void confirmInsurance(){
-
+	public void confirmInsurance(Insurance insurance){
+		insurance.setConfirmedStatus(true);
 	}
 
 }

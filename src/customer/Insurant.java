@@ -88,17 +88,17 @@ public class Insurant {
 		if(this.rankOfCar == null) this.rankOfCar = eRankOfCar.high;
 		if(this.typeOfCar == null) this.typeOfCar = eTypeOfCar.etc;
 		if(this.riskOfTripCountry == null) this.riskOfTripCountry = eRiskOfTripCountry.safe;
-		output = this.insurantId + ' ' + this.name + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
+		output = this.insurantId + ' ' + this.name + ' ' + this.cutomerId + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
 				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.typeOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum() + '\n';
 		
 		return output;
-		
 	}
 	
 	public void readFromFile(Scanner scn) {
 		this.insurantId = scn.next();
 		this.name = scn.next();
+		this.cutomerId = scn.next();
 		this.address = scn.next();
 		this.phoneNumber = scn.next();
 		this.age = scn.nextInt();
@@ -130,5 +130,4 @@ public class Insurant {
 			if(riskOfTripCountry.getNum() == input) this.riskOfTripCountry = riskOfTripCountry;
 		}
 	}
-	
 }

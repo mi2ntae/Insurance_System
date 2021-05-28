@@ -3,6 +3,7 @@ package contract;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import customer.Customer;
 import customer.CustomerList;
 import insurance.InsuranceList;
 

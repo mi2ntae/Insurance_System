@@ -11,7 +11,7 @@ public class ActualCostInsuranceDAOImpl extends DBConnector implements Insurance
 	public boolean insert(Insurance insurance) {
 		ActualCostInsurance newInsurance = (ActualCostInsurance)insurance;
 		
-		String str = "INSERT INTO actualCostInsurance(insuranceId, selfBurdenRate) values('" + newInsurance.getInsuranceId() + "'," + newInsurance.getSelfBurdenRate()  + ")";
+		String str = "INSERT INTO actualCostInsurance(insuranceId, selfBurdenRate) values('" + newInsurance.getInsuranceId() + "','" + newInsurance.getSelfBurdenRate()  + ")";
 
 		if (this.execute(str)) return true;
 		else return false;

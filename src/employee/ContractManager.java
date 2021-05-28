@@ -1,16 +1,15 @@
 package employee;
 
+import java.util.ArrayList;
+
 import contract.Contract;
 
 public class ContractManager {
 
-	public Contract m_Contract;
+	public Contract contract;
+	public ArrayList<Contract> contractList;
 
 	public ContractManager(){
-
-	}
-
-	public void finalize() throws Throwable {
 
 	}
 
@@ -18,11 +17,11 @@ public class ContractManager {
 
 	}
 
-	public void manageExpiredContract(){
+	public void manageExpiredContract(Contract contract){
 
 	}
 
-	public void manageUnpaidContract(){
+	public void manageUnpaidContract(Contract contract){
 
 	}
 

@@ -16,6 +16,9 @@ import customer.Insurant;
 import employee.Employee;
 import employee.EmployeeList;
 import employee.EmployeeListImpl;
+import employee.InsuranceConfirmer;
+import employee.InsuranceDeveloper;
+import employee.Salesperson;
 import employee.UnderWriter;
 import global.Constants;
 import global.Constants.eAge;
@@ -25,8 +28,8 @@ import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
-import global.Constants.eTypeOfCar;
 import global.Constants.eRiskOfTripCountry;
+import global.Constants.eTypeOfCar;
 import global.Constants.eUsageOfStructure;
 import insurance.ActualCostInsurance;
 import insurance.CancerInsurance;
@@ -38,6 +41,9 @@ import insurance.Insurance;
 import insurance.InsuranceList;
 import insurance.InsuranceListImpl;
 import insurance.TripInsurance;
+import interview.Interview;
+import interview.InterviewList;
+import interview.InterviewListImpl;
 
 /* 	
  * 공통 : 요율 refactoring enum으로
@@ -59,7 +65,10 @@ public class Home {
 	private ContractList contractList;
 	private CustomerList customerList;
 	private EmployeeList employeeList;
+	private InterviewList interviewList;
 	
+	private InsuranceDeveloper insuranceDeveloper;
+	private InsuranceConfirmer insuranceConfirmer;
 	//time : 달 (임시)
 	private int time = 0;
 	
@@ -70,6 +79,7 @@ public class Home {
 			this.contractList = new ContractListImpl();
 			this.customerList = new CustomerListImpl();
 			this.employeeList = new EmployeeListImpl();
+			this.interviewList = new InterviewListImpl();
 		}catch(Exception e) {
 			System.out.println("error : 파일을 불러오는 오류가 발생했습니다.");
 			e.printStackTrace();
@@ -179,6 +189,8 @@ public class Home {
 												}
 												break;
 											case 4:
+												// 면담신청
+												this.requestInterview(customer);
 												break;
 											case 0:
 												break login;
@@ -230,6 +242,7 @@ public class Home {
 									System.out.println("안녕하세요 " + employee.getName() + "님!");
 									switch (employee.getEmployeeRole()) {
 									case insuranceDeveloper:
+										this.insuranceDeveloper = new InsuranceDeveloper();
 										employee2: while (true) {
 											System.out.println("*******보험개발자 메뉴*******");
 											System.out.println("1.고객 만족 설문조사 결과보기");
@@ -262,6 +275,7 @@ public class Home {
 										}
 										break;
 									case insuranceConfirmer:
+										this.insuranceConfirmer = new InsuranceConfirmer();
 										employee2: while (true) {
 											System.out.println("*******보험상품 확정자 메뉴*******");
 											System.out.println("1.보험상품 확정하기");
@@ -299,6 +313,7 @@ public class Home {
 													break;
 												case 2:
 													// 면담신청 리스트 확인하기
+													this.checkInterviewList();
 													break;
 												case 3:
 													showAllInsurance();// 전체보험리스트 확인하기
@@ -432,6 +447,17 @@ public class Home {
 							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
 						}
 					}
+					
+					if (Constants.thisMonth+1 > 12) {
+						Constants.thisYear += 1;
+						Constants.thisMonth = 1;
+						for (Contract contract: this.contractList.getContractList()) {
+							contract.setPayHistory(new boolean[12]);
+						}
+					} else {
+						Constants.thisMonth += 1;
+					}
+					
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다");
@@ -449,7 +475,174 @@ public class Home {
 			}
 		}
 	}
+	
+	// 면담 신청하기
+	private void requestInterview(Customer customer) {
+		for(Interview interview : this.interviewList.getinterviewList()) {
+			if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
+				System.out.println("------이미 신청된 면담이 있습니다------");
+				return;
+			}
+		}
+		Interview interview = new Interview();
+		interview.setCustomerId(customer.getCustomerId());
+	
+			int date = Integer.MIN_VALUE;
+			while(date < time) {
+				System.out.println("현재 날짜 : " + this.time);
+				System.out.println("원하는 면담 날짜를 입력하세요");
+				try {
+					date = scn.nextInt();
+					if(date < time) {
+						System.out.println("error : 잘못된 입력입니다");
+						System.out.println("----------------------");
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("----------------------");
+					scn.nextLine();
+				}
+			}
+			interview.setDate(Integer.toString(date));
+			
+			int interviewTime = Integer.MIN_VALUE;
+			while(interviewTime < 0 || interviewTime > 4) {
+				System.out.println("0.이전\n1.09시~11시\n2.11시~13시\n3.13시~15시\n4.15시~17시");
+				try {
+					interviewTime = scn.nextInt();
+					if(interviewTime < 0 || interviewTime > 4) {
+						System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					}
+				}  catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("----------------------");
+					scn.nextLine();
+				}
+			}
+			if(interviewTime == 0) {
+				return;
+			} else {
+				switch(interviewTime) {
+				case 1:
+					interview.setTime("09시~11시");
+					break;
+				case 2:
+					interview.setTime("11시~13시");
+					break;
+				case 3:
+					interview.setTime("13시~15시");
+					break;
+				case 4:
+					interview.setTime("15시~17시");
+					break;
+				}
+			}
+			if(this.interviewList.getinterviewList().isEmpty()) {
+				interview.setInterviewId("1");
+			}else {
+				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewList.getinterviewList().get(this.interviewList.getinterviewList().size() - 1 ).getInterviewId()) + 1));
+			}
+			this.interviewList.insert(interview);
+			System.out.println("------면담 신청이 완료되었습니다------");
+	}
+	
+	// 면담 신청 리스트 확인하기
+	private void checkInterviewList() {
+		Salesperson salesperson = new Salesperson();
+		int count = 0;
+		for(Interview interview : this.interviewList.getinterviewList()) {
+			if(!interview.isConfirmedStatus()) {
+				count++;
+				Customer customer = this.customerList.select(interview.getCustomerId());
+				System.out.println("주소 : " + customer.getAddress());
+				System.out.println("고객 ID : " + customer.getCustomerId());
+				System.out.println("이름 : " + customer.getName());
+				System.out.println("전화번호 : " + customer.getPhoneNumber());
+			}
+		}
+		if(count == 0) {
+			System.out.println("------신청된 면담이 없습니다.------");
+		}
+		Customer customer = null;
+		while(customer == null) {
+			System.out.println("이전 화면으로 돌아가려면 0을 입력하세요");
+			System.out.println("세부정보를 확인할 고객의 ID를 입력하세요");
+			String input = scn.next();
+			if(input.equals("0")) {
+				return;
+			}
+			customer = this.customerList.select(input);
+			if(customer == null) {
+				System.out.println("------존재하지 않은 고객입니다------");
+			} else {
+				boolean flag = false;
+				for(Interview interview : this.interviewList.getinterviewList()) {
+					if(interview.getCustomerId().equals(input)&& !interview.isConfirmedStatus()) {
+						flag = true;
+					}
+				}
+				if(flag) {
+					System.out.println("주소 : " + customer.getAddress());
+					System.out.println("고객 ID : " + customer.getCustomerId());
+					System.out.println("이름 : " + customer.getName());
+					System.out.println("전화번호 : " + customer.getPhoneNumber());
+					System.out.println("------이전 면담 기록------");
+					for(Interview interview : this.interviewList.getinterviewList()) {
+						if(interview.getCustomerId().equals(input) && interview.isConfirmedStatus()) {
+							this.showInterviewData(interview);
+						}
+					}
+					input = "";
+					while(!input.equals("y") && !input.equals("n")) {
+						System.out.println("------면담결과 보고서를 작성하시겠습니까(y/n)------");
+						input = scn.next();
+						if(!input.equals("y") && !input.equals("n")) {
+							System.out.print("입력값이 잘못되었습니다");
+						}
+					}
+					if(input.equals("y")) {
+						Interview temp = null;
+						for(Interview interview : this.interviewList.getinterviewList()) {
+							if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
+								temp = interview;
+								
+							}
+						}
+						this.writeReport(temp, salesperson);
+					} else {
+						return;
+					}
+				} else {
+					System.out.println("------면담을 신청하지 않은 고객입니다------");
+					customer = null;
+				}
+			}
+		}	
+	}
+	
+	private void writeReport(Interview interview, Salesperson salesperson) {
+		System.out.println("뒤로가려면 0을 입력하세여");
+		System.out.println("면담 내용을 입력하세요");
+		String input = scn.next();
+		if(input.equals("0")) {
+			return;
+		} else {
+			interview.setSalespersonId(salesperson.getEmployeeId());
+			salesperson.writeReport(interview, input);
+			interview.setConfirmedStatus(true);
+			System.out.println("------완료되었습니다------");
+		}
+	}
 
+	private void showInterviewData(Interview interview) {
+		System.out.println("인터뷰 ID : " + interview.getInterviewId());
+		System.out.println("영업사원 ID : " + interview.getSalespersonId());
+		System.out.println("고객 ID : " + interview.getCustomerId());
+		System.out.println("날짜 : " + interview.getDate());
+		System.out.println("시간 : " + interview.getTime());
+		System.out.println("내용 : " + interview.getContent());
+	}
+	
 	// 가입자 리스트 보기
 	private void showSubscriberList() {
 		int unpaidCount = 0;
@@ -565,6 +758,7 @@ public class Home {
 			System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		}
 		if (input.equals("y")) {
+			
 			this.changeContractData(contract);
 			this.contractList.insert(contract);
 		} else {
@@ -828,16 +1022,21 @@ public class Home {
 				System.out.println(contract.getInsurance().calculateFee(contract.getInsurant()) + "원");
 				int input = 0;
 				while (input != 1 && input != 2) {
-					System.out.println("1.승인\n2.거부");
+					System.out.println("0.이전\n1.승인\n2.거부");
 					input = scn.nextInt();
-					if (input != 1 && input != 2) {
+					if (input != 1 && input != 2 && input != 0) {
 						System.out.println("잘못된 입력");
 					}
 				}
 				switch (input) {
+				case 0 :
+					return;
 				case 1:
 					underwriter.approveContract(contract);
 					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
+					for (int i = 0; i < Constants.thisMonth; i++) {
+						contract.getPayHistory()[i] = true;
+					}
 					System.out.println("------승인 되었습니다------");
 					break;
 				case 2:
@@ -1028,7 +1227,6 @@ public class Home {
 			}
 			boolean flag = false;
 			while (!flag) {
-				System.out.print("보험가입자 ID를 입력하세요 : ");
 				String InsurantId = scn.next();
 				if (customer.getInsurantList().select(InsurantId) != null) {
 					flag = true;
@@ -1057,7 +1255,7 @@ public class Home {
 		String address = scn.next();
 		insurant.setAddress(address);
 
-		if(customer.getInsurantList().getInsurantList().isEmpty()) {
+		if(customer.getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
 			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
@@ -1383,39 +1581,17 @@ public class Home {
 		while (true) {
 			System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n0.돌아가기");
 			System.out.printf("어떤 보험을 기획하시겠습니까? : ");
+			int inputMenu = 0;
 			try {
-				switch (scn.nextInt()) {
-				case 1:
-					insurance = new DriverInsurance();
-					insurance.setType(eInsuranceType.driverInsurance);
-					break;
-				case 2:
-					insurance = new DentalInsurance();
-					insurance.setType(eInsuranceType.dentalInsurance);
-					break;
-				case 3:
-					insurance = new ActualCostInsurance();
-					insurance.setType(eInsuranceType.actualCostInsurance);
-					break;
-				case 4:
-					insurance = new FireInsurance();
-					insurance.setType(eInsuranceType.fireInsurance);
-					break;
-				case 5:
-					insurance = new CancerInsurance();
-					insurance.setType(eInsuranceType.cancerInsurance);
-					break;
-				case 6:
-					insurance = new TripInsurance();
-					insurance.setType(eInsuranceType.tripInsurance);
-					break;
-				case 0:
-					System.out.println("메인 메뉴로 돌아갑니다");
+				inputMenu = scn.nextInt();
+				if (inputMenu == 0) {
+					System.out.println("이전 화면으로 돌아갑니다");
 					return;
-				default:
-					System.out.println("잘못 입력하셨습니다. 다시 입력해주세요");
+				} else if (inputMenu > 6) {
+					System.out.println("범위 내의 숫자를 입력해주세요.");
 					continue;
 				}
+				insurance = this.insuranceDeveloper.designInsurance(insurance, inputMenu);
 			} catch (InputMismatchException e) {
 				System.out.println("error : 숫자를 입력해주세요");
 				System.out.println("-----------------------");
@@ -1604,7 +1780,7 @@ public class Home {
 					i--;
 				}
 			}
-			newInsurance.setRateOfAge(tmpRateOfAge);
+			newInsurance = this.insuranceDeveloper.setDetailOfInsurance(newInsurance, "age", tmpRateOfAge);
 			
 			double[] tmpRateOfGender = new double[eGender.values().length - 1];
 			System.out.println("성별에 대한 요율을 설정합니다. ex) 남자 : 1.0)");
@@ -1619,7 +1795,7 @@ public class Home {
 					i--;
 				}
 			}
-			newInsurance.setRateOfGender(tmpRateOfGender);
+			newInsurance = this.insuranceDeveloper.setDetailOfInsurance(newInsurance, "gender", tmpRateOfGender);
 			
 			double[] tmpRateOfJob = new double[eJob.values().length];
 			System.out.println("직업에 대한 요율을 설정합니다. ex) 직장 : 1.0)");
@@ -1635,9 +1811,7 @@ public class Home {
 					i--;
 				}
 			}
-			
-			
-			newInsurance.setRateOfJob(tmpRateOfJob);
+			newInsurance = this.insuranceDeveloper.setDetailOfInsurance(newInsurance, "job", tmpRateOfJob);
 		} 
 		
 		while (true) {
@@ -1690,11 +1864,11 @@ public class Home {
 				break;
 			case driverInsurance:
 				System.out.println("자동차 종류에 따른 요율을 설정합니다.");
-				double[] tmpRateOfCarType = new double[eTypeOfCar.values().length];
-				for (int i = 0; i < eTypeOfCar.values().length; i++) {
-					System.out.printf(eTypeOfCar.values()[i].getName()+" : ");
+				double[] tmpRateOfCarType = new double[eTypeOfCar.values().length-1];
+				for (int i = 1; i < eTypeOfCar.values().length-1; i++) {
+					System.out.printf(eTypeOfCar.values()[i+1].getName()+" : ");
 					try {
-						tmpRateOfCarType[i] = scn.nextDouble();
+						tmpRateOfCarType[i-1] = scn.nextDouble();
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1703,11 +1877,11 @@ public class Home {
 					}
 				}
 				System.out.println("자동차 등급에 따른 요율을 설정합니다.");
-				double[] tmpRateOfRankOfCar = new double[eRankOfCar.values().length];
-				for (int i = 0; i < eRankOfCar.values().length; i++) {
-					System.out.printf(eRankOfCar.values()[i].getName()+" : ");
+				double[] tmpRateOfRankOfCar = new double[eRankOfCar.values().length-1];
+				for (int i = 1; i < eRankOfCar.values().length-1; i++) {
+					System.out.printf(eRankOfCar.values()[i+1].getName()+" : ");
 					try {
-						tmpRateOfRankOfCar[i] = scn.nextDouble();
+						tmpRateOfRankOfCar[i-1] = scn.nextDouble();
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1872,6 +2046,7 @@ public class Home {
 							} catch (InputMismatchException e) {
 								System.out.println("error : 숫자를 입력해주세요");
 								System.out.println("-----------------------");
+								scn.nextLine();
 							}
 						}
 						int rate = 0;
@@ -1888,6 +2063,7 @@ public class Home {
 							} catch(InputMismatchException e){
 								System.out.println("error : 숫자를 입력해주세요");
 								System.out.println("-----------------------");
+								scn.nextLine();
 							}
 						}
 						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, (1-((double)rate/100)));
@@ -1933,7 +2109,7 @@ public class Home {
 					System.out.printf("해당 보험을 확정하시겠습니까?(y/n) : ");
 					String inputDecision = scn.next();
 					if (inputDecision.equals("y")) {
-						this.insuranceList.select(inputIndex).setConfirmedStatus(true);
+						this.insuranceConfirmer.confirmInsurance(this.insuranceList.select(inputIndex));
 						System.out.println("선택한 보험이 확정되었습니다!!!");
 						return;
 					} else if (inputDecision.equals("n")) {
@@ -2378,12 +2554,12 @@ public class Home {
 		switch (insurance.getType()) {
 		case driverInsurance:
 			System.out.println("\n  <자동차종류 요율표>");
-			for (int i = 0; i < eTypeOfCar.values().length; i++) {
-				System.out.println(eTypeOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarType()[i]);
+			for (int i = 1; i < eTypeOfCar.values().length; i++) {
+				System.out.println(eTypeOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarType()[i-1]);
 			}
 			System.out.println("\n  <자동차등급 요율표>");
-			for (int i = 0; i < eRankOfCar.values().length; i++) {
-				System.out.println(eRankOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarRank()[i]);
+			for (int i = 1; i < eRankOfCar.values().length; i++) {
+				System.out.println(eRankOfCar.values()[i].getName()+" : "+((DriverInsurance)insurance).getRateOfCarRank()[i-1]);
 			}
 			System.out.println("\n  <사고횟수 요율표>");
 			for (int i = 0; i < Constants.accidentHistory.length; i++) {
@@ -2457,8 +2633,8 @@ public class Home {
 				continue;
 			}
 				
-			for (int i = 0; i < contract.getPayHistory()[Constants.thisYear-inputYear].length; i++) {
-				if (contract.getPayHistory()[Constants.thisYear-inputYear][i]) {
+			for (int i = 0; i < contract.getPayHistory().length; i++) {
+				if (contract.getPayHistory()[i]) {
 					System.out.println((i+1)+"월 : O");
 				} else {
 					System.out.println((i+1)+"월 : X");
@@ -2486,10 +2662,10 @@ public class Home {
 					String inputCheck = scn.next();
 					int unpaiedCount = 0;
 					if (inputCheck.equals("y")) {
-						for (int i = 0; i < contract.getPayHistory()[Constants.thisYear-inputYear].length; i++) {
-							if (!contract.getPayHistory()[Constants.thisYear-inputYear][i]) {
+						for (int i = 0; i < contract.getPayHistory().length; i++) {
+							if (!contract.getPayHistory()[i]) {
 								unpaiedCount += 1;
-								contract.getPayHistory()[Constants.thisYear-inputYear][i] = true;
+								contract.getPayHistory()[i] = true;
 							}
 						}
 						if (unpaiedCount*contract.getFee() <= 0) {
@@ -2504,6 +2680,31 @@ public class Home {
 					}
 					break;
 				case 2:
+					while(true) {
+						System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
+						System.out.printf("납부를 원하는 월을 입력해주세요 : ");
+						int inputMonth = 0;
+						try {
+							inputMonth = scn.nextInt();
+						} catch(InputMismatchException e) {
+							System.out.println("error : 숫자를 입력해주세요");
+							System.out.println("-----------------------");
+							scn.nextLine();
+							continue;
+						}
+						if (inputMonth < 0 || inputMonth > 12) {
+							System.out.println("1~12 사이의 숫자를 입력해주세요.");
+							continue;
+						}
+						if (contract.getPayHistory()[inputMonth-1]) {
+							System.out.println("이미 보험료가 납부돼있는 월입니다. 다시 입력해주세요.");
+							continue;
+						} else {
+							contract.getPayHistory()[inputMonth-1] = true;
+							System.out.println(inputMonth+"월의 보험료"+contract.getFee()+"원이 납부되었습니다.");
+							break;
+						}
+					}
 					break;
 				}
 				break;
