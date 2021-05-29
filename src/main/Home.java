@@ -2668,10 +2668,11 @@ public class Home {
 								contract.getPayHistory()[i] = true;
 							}
 						}
-						if (unpaiedCount*contract.getFee() <= 0) {
+						if (unpaiedCount == 0) {
 							System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
 							continue;
 						}
+						System.out.println(unpaiedCount*contract.getFee()+"원의 보험료를 납부하셨습니다.");
 					} else if (inputCheck.equals("n")) {
 						continue;
 					} else {

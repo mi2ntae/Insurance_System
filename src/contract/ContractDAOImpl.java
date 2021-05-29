@@ -16,7 +16,8 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 	
 	public ArrayList<Contract> select() {
 		ArrayList<Contract> contractList = new ArrayList<Contract>();
-
+		AccidentDAO accidentDAO = new AccidentDAOImpl();
+		
 		String sql = "SELECT * FROM contract";
 		this.read(sql);
 		try {
@@ -32,7 +33,7 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 				contract.setLifespan(rs.getInt("lifespan"));
 				contract.setFee(rs.getInt("fee"));
 				contract.setUnpaidPeriod(rs.getInt("unpaidPeriod"));
-//				contract.setAccidentList(this.selectAccident(contract.getContractId()));
+//				contract.setAccidentList(accidentDAO.selectByContractId(contract.getContractId()));
 //				contract.setPayHistory(this.selectPayHistory(contract.getContractId()));
 				contractList.add(contract);
 			}
@@ -40,28 +41,6 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 			e.printStackTrace();
 		}
 		return contractList;
-	}
-	
-	public ArrayList<Accident> selectAccident(String contractId){
-		ArrayList<Accident> accidentList = new ArrayList<Accident>();
-		
-		String sql = "SELCT * FROM accident WHERE contractId = '"+contractId+"';";
-		this.read(sql);
-		try {
-			while (rs.next()) {
-				Accident accident = new Accident();
-				accident.setAccidentId(rs.getString("accidentId"));
-				accident.setContractId(rs.getString("contractId"));
-				accident.setContent(rs.getString("content"));
-				accident.setCompensation(rs.getInt("compensation"));
-				accident.setDamageCost(rs.getInt("damageCost"));
-				accident.setHandlingStatus(rs.getBoolean("handlingStatus"));
-				accidentList.add(accident);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return accidentList;
 	}
 
 	public Contract selectContract(String contractId) {
