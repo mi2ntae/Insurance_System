@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import contract.Contract;
 import contract.ContractDAO;
 
-public class UnderWriter {
+public class UnderWriter extends Employee{
 
 	private ArrayList<Contract> contractList;
 	private ContractDAO contractDAO;

@@ -3,7 +3,7 @@ package employee;
 import contract.Accident;
 import contract.Contract;
 
-public class CompensationHandler {
+public class CompensationHandler extends Employee {
 
 	public CompensationHandler(){
 

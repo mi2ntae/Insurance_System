@@ -9,7 +9,7 @@ import insurance.FireInsurance;
 import insurance.Insurance;
 import insurance.TripInsurance;
 
-public class InsuranceDeveloper {
+public class InsuranceDeveloper extends Employee {
 
 	public Insurance m_Insurance;
 

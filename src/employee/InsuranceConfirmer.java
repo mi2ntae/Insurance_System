@@ -2,7 +2,7 @@ package employee;
 
 import insurance.Insurance;
 
-public class InsuranceConfirmer {
+public class InsuranceConfirmer extends Employee {
 
 	public Insurance m_Insurance;
 
