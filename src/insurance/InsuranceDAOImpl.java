@@ -56,10 +56,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		
 		try {
 			while (rs.next()) {
-			while (rs.next()) {
-				System.out.println("-");
 				int input = rs.getInt("type");
-				System.out.println(input);
 				for (eInsuranceType insuranceType : eInsuranceType.values()) {
 					if (insuranceType.getNum() == input) {
 						Insurance insurance = insuranceType.getSelectedInsurance().newInstance();
@@ -82,15 +79,17 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
 						insurance.setSpecialContract(rs.getBoolean("specialContract"));
 
-						InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
-						insurance = insuranceDao.selectTypeInsurance(insurance);
-						insurance.setGuaranteePlanList(guaranteePlanDAO.select());
 						
 						arrayList.add(insurance);
-						System.out.println(2);
 					}
 				}
 			}
+			for(Insurance insurance : arrayList) {
+				InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
+				insurance = insuranceDao.selectTypeInsurance(insurance);
+			}
+			for(Insurance insurance : arrayList) {
+				insurance.setGuaranteePlanList(guaranteePlanDAO.selectById(insurance.getInsuranceId()));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
