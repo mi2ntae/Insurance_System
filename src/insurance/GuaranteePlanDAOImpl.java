@@ -15,12 +15,11 @@ public class GuaranteePlanDAOImpl extends DBConnector implements GuaranteePlanDA
 		else return false;
 	}
 
-	public ArrayList<GuaranteePlan> select() {
+	public ArrayList<GuaranteePlan> selectById(String insuranceId) {
 		ArrayList<GuaranteePlan> arrayList = new ArrayList<GuaranteePlan>();
 
-		String sql = "SELECT * FROM guaranteePlan";
+		String sql = "SELECT * FROM guaranteePlan WHERE insuranceId = '" + insuranceId + "'";
 		this.read(sql);
-		
 		try {
 			while (rs.next()) {
 				GuaranteePlan guaranteePlan = new GuaranteePlan();
@@ -29,6 +28,8 @@ public class GuaranteePlanDAOImpl extends DBConnector implements GuaranteePlanDA
 				guaranteePlan.setCompensation(rs.getInt("compensation"));
 				guaranteePlan.setRate(rs.getDouble("rate"));
 				guaranteePlan.setSpecial(rs.getBoolean("special"));
+				
+				arrayList.add(guaranteePlan);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

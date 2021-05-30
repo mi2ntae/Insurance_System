@@ -104,9 +104,6 @@ public class Home {
 		this.dbConnector.startDB();
 		this.dbConnector.connect();
 		this.insuranceList = this.insuranceDAO.select();
-		for(Insurance insurance : this.insuranceList) {
-			System.out.println(insurance.getName());
-		}
 		this.contractList = this.contractDAO.select();
 		this.customerList = this.customerDAO.select();
 		this.employeeList = this.employeeDAO.select();
