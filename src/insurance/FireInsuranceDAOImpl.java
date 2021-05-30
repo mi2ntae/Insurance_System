@@ -59,4 +59,10 @@ public class FireInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public Insurance selectInsurance(String insuranceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

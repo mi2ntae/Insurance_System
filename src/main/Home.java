@@ -1163,11 +1163,7 @@ public class Home {
 		while(insurance == null) {
 			System.out.print("가입할 보험 ID를 입력해주세요 : ");
 			String input = scn.next();
-			for(Insurance newInsurance : insuranceList) {
-				if(input.equals(newInsurance.getInsuranceId())) {
-					insurance = newInsurance;
-				}
-			}
+			insurance = this.insuranceDAO.selectInsurance(input);
 			if (insurance != null) {
 				Insurant insurant = this.selectInsurant(customer, insurance);
 				if (customer != null) {
@@ -2103,12 +2099,8 @@ public class Home {
 					System.out.printf("해당 보험을 확정하시겠습니까?(y/n) : ");
 					String inputDecision = scn.next();
 					if (inputDecision.equals("y")) {
-						Insurance insurance = null;
-						for(Insurance newInsurance : insuranceList) {
-							if(inputIndex.equals(newInsurance.getInsuranceId())) {
-								insurance = newInsurance;
-							}
-						}
+						Insurance insurance = tmpInsurance;
+						insurance = this.insuranceDAO.selectInsurance(inputDecision);
 						this.insuranceConfirmer.confirmInsurance(insurance);
 						System.out.println("선택한 보험이 확정되었습니다!!!");
 						return;
