@@ -104,6 +104,9 @@ public class Home {
 		this.dbConnector.startDB();
 		this.dbConnector.connect();
 		this.insuranceList = this.insuranceDAO.select();
+		for(Insurance insurance : this.insuranceList) {
+			System.out.println(insurance.getName());
+		}
 		this.contractList = this.contractDAO.select();
 		this.customerList = this.customerDAO.select();
 		this.employeeList = this.employeeDAO.select();
@@ -1734,7 +1737,6 @@ public class Home {
 	
 	// 보험 세부설정하기
 	private Insurance createDetailInsurance(Insurance newInsurance) {
-		System.out.println(this.insuranceList);
 		String newId = Integer.toString(Integer.parseInt(this.insuranceList.get(this.insuranceList.size()-1).getInsuranceId())+1);
 		newInsurance.setInsuranceId(newId);
 		
@@ -2268,7 +2270,7 @@ public class Home {
 			switch (insurance.getType()) {
 			case dentalInsurance:
 			case cancerInsurance:
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (guaranteePlan.getContent().equals(content)) {
 						System.out.println("  보장금액 : " + guaranteePlan.getCompensation());
 						System.out.print("특약여부 : ");
@@ -2280,7 +2282,7 @@ public class Home {
 			case fireInsurance:
 			case tripInsurance:
 			case driverInsurance:
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (guaranteePlan.getContent().equals(content)) {
 						System.out.println("  최대 보장금액 : " + guaranteePlan.getCompensation());
 						System.out.println("  보장비율 : 피해액의 " + (int) (100 * guaranteePlan.getRate()) + "%");
@@ -2431,7 +2433,7 @@ public class Home {
 					try {
 						int input = scn.nextInt();
 						int index = 0;
-						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList().getGuaranteePlanList()) {
+						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList()) {
 							if(index == input - 1 && (contract.isSpecial() == guaranteePlan.isSpecial() || guaranteePlan.isSpecial() == false)) {
 								contract.addAccident(accidentId, guaranteePlan.getContent(), guaranteePlan.getCompensation(), false);
 								System.out.println("선택하신 항목(" + guaranteePlan.getContent() + ")에 대한 보험금("+ guaranteePlan.getCompensation() +"원)이 청구되었습니다!");
@@ -2454,8 +2456,7 @@ public class Home {
 					try {
 						int input = scn.nextInt();
 						int index = 0;
-						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList()
-								.getGuaranteePlanList()) {
+						for (GuaranteePlan guaranteePlan : contract.getInsurance().getGuaranteePlanList()) {
 							if (index == input - 1 && (contract.isSpecial() == guaranteePlan.isSpecial() || guaranteePlan.isSpecial() == false)) {
 								while (true) {
 									try {
@@ -2500,7 +2501,7 @@ public class Home {
 			case cancerInsurance:
 				int index = 1;
 				System.out.println("*기본계약");
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (!guaranteePlan.isSpecial()) {
 						System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
 						System.out.println("  보장금액 : " + guaranteePlan.getCompensation());
@@ -2508,7 +2509,7 @@ public class Home {
 					}
 				}
 				System.out.println("*선택특약");
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (guaranteePlan.isSpecial() && special) {
 						System.out.println(index + ".보장내용 : " + guaranteePlan.getContent());
 						System.out.println("  보장금액 : " + guaranteePlan.getCompensation());
@@ -2521,7 +2522,7 @@ public class Home {
 			case driverInsurance:
 				int index2 = 1;
 				System.out.println("*기본계약");
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (!guaranteePlan.isSpecial()) {
 						System.out.println(index2 + ".보장내용 : " + guaranteePlan.getContent());
 						System.out.println("  최대 보장금액 : " + guaranteePlan.getCompensation());
@@ -2530,7 +2531,7 @@ public class Home {
 					}
 				}
 				System.out.println("*선택특약");
-				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList().getGuaranteePlanList()) {
+				for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 					if (guaranteePlan.isSpecial() && special) {
 						System.out.println(index2 + ".보장내용 : " + guaranteePlan.getContent());
 						System.out.println("  최대 보장금액 : " + guaranteePlan.getCompensation());

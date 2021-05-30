@@ -18,7 +18,7 @@ public class GuaranteePlanDAOImpl extends DBConnector implements GuaranteePlanDA
 	public ArrayList<GuaranteePlan> select() {
 		ArrayList<GuaranteePlan> arrayList = new ArrayList<GuaranteePlan>();
 
-		String sql = "SELECT * FROM Customer";
+		String sql = "SELECT * FROM guaranteePlan";
 		this.read(sql);
 		
 		try {

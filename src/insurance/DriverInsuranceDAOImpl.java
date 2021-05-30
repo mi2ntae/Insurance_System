@@ -13,13 +13,14 @@ public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		
 		String str = "INSERT INTO driverInsurance(insuranceId, rateOfAccidentHistory0, rateOfAccidentHistory1, rateOfAccidentHistory2,"
 				+ " rateOfAccidentHistory3, rateOfAccidentHistory4, rateOfAccidentHistory5, rateOfCarType0, rateOfCarType1, rateOfCarType2,"
-				+ " rateOfCarType3, rateOfCarType4, rateOfCarRank0, rateOfCarRank1, rateOfCarRank2, rateOfCarRank3,"
+				+ " rateOfCarType3, rateOfCarType4, rateOfCarRank0, rateOfCarRank1, rateOfCarRank2, rateOfCarRank3"
 				+ " ) values('" + newInsurance.getInsuranceId() + "'";
 		for (double rate : newInsurance.getRateOfAccidentHistory()) str += "," + rate;
 		for (double rate : newInsurance.getRateOfCarType()) str += "," + rate;
 		for (double rate : newInsurance.getRateOfCarRank()) str += "," + rate;
 		str += ")";
 
+		System.out.println(str);
 		if (this.execute(str)) return true;
 		else return false;
 	}

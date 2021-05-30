@@ -11,7 +11,7 @@ public class TripInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public boolean insert(Insurance insurance) {
 		TripInsurance newInsurance = (TripInsurance)insurance;
 		
-		String str = "INSERT INTO tripInsurance(insuranceId, rateOfCountryRisk0, rateOfCountryRisk1, rateOfCountryRisk2, rateOfCountryRisk3,"
+		String str = "INSERT INTO tripInsurance(insuranceId, rateOfCountryRisk0, rateOfCountryRisk1, rateOfCountryRisk2, rateOfCountryRisk3"
 				+ ") values('" + newInsurance.getInsuranceId() + "'";
 		for (double rate : newInsurance.getRateOfCountryRank()) str += "," + rate;
 		str += ")";

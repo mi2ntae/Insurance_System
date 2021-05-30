@@ -1,6 +1,7 @@
 package insurance;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import customer.Insurant;
@@ -25,14 +26,18 @@ public abstract class Insurance {
 	private boolean specialContract;
 	private boolean clone;
 	
+	// Component
+	private GuaranteePlanDAO guaranteePlanDAO;
+	
 	// Composition Class
 	private MembershipCondition membershipCondition;
-	private GuaranteePlanList guaranteePlanList;
+	private ArrayList<GuaranteePlan> guaranteePlanList;
 
 	// Constructor
 	public Insurance() {
+		guaranteePlanDAO = new GuaranteePlanDAOImpl();
 		this.membershipCondition = new MembershipCondition();
-		this.guaranteePlanList = new GuaranteePlanListImpl();
+		this.guaranteePlanList = new ArrayList<GuaranteePlan>();
 	}
 	
 	// getters & setters
@@ -78,8 +83,8 @@ public abstract class Insurance {
 	public boolean isClone() {return clone;}
 	public void setClone(boolean clone) {this.clone = clone;}
 	
-	public GuaranteePlanList getGuaranteePlanList() {return guaranteePlanList;}
-	public void setGuaranteePlanList(GuaranteePlanList guaranteePlanList) {this.guaranteePlanList = guaranteePlanList;}
+	public ArrayList<GuaranteePlan> getGuaranteePlanList() {return guaranteePlanList;}
+	public void setGuaranteePlanList(ArrayList<GuaranteePlan> guaranteePlanList) {this.guaranteePlanList = guaranteePlanList;}
 
 	// Public Methods
 	abstract public int calculateFee(Insurant Insurnat);
@@ -94,7 +99,7 @@ public abstract class Insurance {
 		guaranteePlan.setSpecial(special);
 		guaranteePlan.setContent(content);
 		guaranteePlan.setRate(rate);
-		this.guaranteePlanList.insert(guaranteePlan);
+		this.guaranteePlanDAO.insert(guaranteePlan);
 	}
 	
 	public String writeToFile() {
@@ -143,7 +148,6 @@ public abstract class Insurance {
 		this.specialContract = Boolean.parseBoolean(scn.next());
 		this.confirmedStatus = Boolean.parseBoolean(scn.next());
 		
-		((GuaranteePlanListImpl)this.guaranteePlanList).readFromFile(insuranceId);
 	}
 	
 
