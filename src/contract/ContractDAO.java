@@ -12,5 +12,4 @@ public interface ContractDAO {
 	public boolean updatePayHistory(String contractId, int month);
 	public boolean updateAnnualPayHistory();
 	public boolean delete(String contractId);
-	
 }

@@ -35,7 +35,7 @@ public abstract class Insurance {
 
 	// Constructor
 	public Insurance() {
-		guaranteePlanDAO = new GuaranteePlanDAOImpl();
+		this.guaranteePlanDAO = new GuaranteePlanDAOImpl();
 		this.membershipCondition = new MembershipCondition();
 		this.guaranteePlanList = new ArrayList<GuaranteePlan>();
 	}
@@ -101,54 +101,4 @@ public abstract class Insurance {
 		guaranteePlan.setRate(rate);
 		this.guaranteePlanDAO.insert(guaranteePlan);
 	}
-	
-	public String writeToFile() {
-		String output = String.valueOf(this.type.getNum()) + ' ' +  this.insuranceId + ' ' + this.name + ' ' + this.gender.getNum() + ' ' + String.valueOf(this.basicFee) + ' ' + String.valueOf(this.specialContractFee) + ' ';
-		for (double rate : rateOfAge) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfGender) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfJob) {
-			output += rate;
-			output += ' ';
-		}
-		output += this.warrantyPeriod;
-		output += ' ' + String.valueOf(this.specialContract) + ' ' + String.valueOf(this.confirmedStatus) + '\n';
-		return output;
-	}
-
-	public void readFromFile(Scanner scn, int input) throws FileNotFoundException {
-		for (eInsuranceType type : eInsuranceType.values()) {
-			if (type.getNum() == input)
-				this.type = type;
-		}
-		this.insuranceId = scn.next();
-		this.name = scn.next();
-		input = scn.nextInt();
-		for (eGender gender : eGender.values()) {
-			if (gender.getNum() == input)
-				this.gender = gender;
-		}
-		this.basicFee = scn.nextInt();
-		this.specialContractFee = scn.nextInt();
-		for (int i = 0; i < this.rateOfAge.length; i++) {
-			this.rateOfAge[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfGender.length; i++) {
-			this.rateOfGender[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfJob.length; i++) {
-			this.rateOfJob[i] = scn.nextDouble();
-		}
-		this.warrantyPeriod = scn.nextInt();
-		this.specialContract = Boolean.parseBoolean(scn.next());
-		this.confirmedStatus = Boolean.parseBoolean(scn.next());
-		
-	}
-	
-
 }

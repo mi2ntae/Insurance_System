@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import contract.Contract;
 import contract.ContractDAO;
-import contract.ContractList;
 
 public class UnderWriter {
 

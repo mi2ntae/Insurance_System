@@ -1,15 +1,8 @@
 package customer;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Scanner;
 
-import global.Constants.eGender;
-import global.Constants.eJob;
-import global.Constants.eTypeOfCar;
-import global.Constants.eRiskOfTripCountry;
-import global.Constants.eUsageOfStructure;
-import insurance.InsuranceListImpl;
 
 public class Customer {
 	// Attributes

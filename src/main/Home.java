@@ -1,6 +1,5 @@
 package main;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -9,20 +8,14 @@ import contract.Accident;
 import contract.Contract;
 import contract.ContractDAO;
 import contract.ContractDAOImpl;
-import contract.ContractList;
-import contract.ContractListImpl;
 import customer.Customer;
 import customer.CustomerDAO;
 import customer.CustomerDAOImpl;
-import customer.CustomerList;
-import customer.CustomerListImpl;
 import customer.Insurant;
 import employee.CompensationHandler;
 import employee.Employee;
 import employee.EmployeeDAO;
 import employee.EmployeeDAOImpl;
-import employee.EmployeeList;
-import employee.EmployeeListImpl;
 import employee.InsuranceConfirmer;
 import employee.InsuranceDeveloper;
 import employee.Salesperson;
@@ -47,27 +40,10 @@ import insurance.GuaranteePlan;
 import insurance.Insurance;
 import insurance.InsuranceDAO;
 import insurance.InsuranceDAOImpl;
-import insurance.InsuranceList;
-import insurance.InsuranceListImpl;
 import insurance.TripInsurance;
 import interview.Interview;
 import interview.InterviewDAO;
 import interview.InterviewDAOImpl;
-import interview.InterviewList;
-import interview.InterviewListImpl;
-
-/* 	
- * 공통 : 요율 refactoring enum으로
- * 		 employee extend하기, home에서 employee함수를 통해서 작업(프린트문x, 데이터만 옮겨가기)
-		 Guarantee Plan 생각하기
-		 
- * 소철 : 보험 일부 정보보기, insurant 가입할 때 case나눠서 입력받기, 예외처리 추가하고 에러메시지 통일
- * 
- * 민태 : insurance id, name 입력받는 것 추가, 예외처리 추가하고 에러메시지 통일
- * 
- * 영석 : 메뉴 추가하고 함수 연결하기, DBA(멋져) serialization으로 각 어레이리스트들 저장, 불러오기(가능하면)
- * 
- */
 
 public class Home {
 	private Scanner scn;

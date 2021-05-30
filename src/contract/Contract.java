@@ -1,14 +1,8 @@
 package contract;
 
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 import customer.Customer;
-import customer.CustomerList;
 import customer.Insurant;
-import insurance.GuaranteePlanListImpl;
 import insurance.Insurance;
-import insurance.InsuranceList;
 
 public class Contract {
 	// Attributes
@@ -124,34 +118,4 @@ public class Contract {
 //	public void requestInsuranceRevival(){
 //
 //	}
-
-	public String writeToFile() {
-		String output = this.contractId + ' ' + this.insurant.getInsurantId() + ' ' + this.insurance.getInsuranceId() + ' '  + this.customer.getCustomerId() + ' ' + this.salespersonId
-				+ ' ' + String.valueOf(this.effectiveness) + ' ' + String.valueOf(this.lifespan) + ' '
-				+ String.valueOf(this.fee) + ' ' + String.valueOf(this.paidFee) + ' '
-				+ String.valueOf(this.unpaidPeriod) + ' ' + String.valueOf(this.special) + '\n';
-		return output;
-	}
-
-	public void readFromFile(Scanner scn, InsuranceList insuranceList, CustomerList customerList) throws FileNotFoundException {
-		this.contractId = scn.next();
-		this.insurantId = scn.next();
-		this.insuranceId = scn.next();
-		this.customerId = scn.next();
-		this.salespersonId = scn.next();
-		this.effectiveness = Boolean.parseBoolean(scn.next());
-		this.lifespan = scn.nextInt();
-		this.fee = scn.nextInt();
-		this.paidFee = scn.nextInt();
-		this.unpaidPeriod = scn.nextInt();
-		this.special = Boolean.parseBoolean(scn.next());
-		
-		// Associate
-		this.customer = customerList.select(customerId);
-		this.insurant = this.customer.getInsurantList().select(insurantId);
-		this.insurance = insuranceList.select(insuranceId);
-		
-		((AccidentListImpl)this.accidentList).readFromFile(this.contractId);
-	}
-
 }
