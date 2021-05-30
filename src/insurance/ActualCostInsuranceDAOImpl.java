@@ -49,4 +49,10 @@ public class ActualCostInsuranceDAOImpl extends DBConnector implements Insurance
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public Insurance selectInsurance(String insuranceId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
