@@ -13,6 +13,7 @@ import customer.Customer;
 import customer.CustomerList;
 import customer.CustomerListImpl;
 import customer.Insurant;
+import employee.CompensationHandler;
 import employee.Employee;
 import employee.EmployeeList;
 import employee.EmployeeListImpl;
@@ -2128,6 +2129,7 @@ public class Home {
 	
 	// 보상 처리
 		private void handleCompensation() {
+			CompensationHandler compensationHandler = new CompensationHandler();
 			menu : while (true) {
 				int cnt = 0;
 				for (Contract contract : this.contractList.getContractList()) {
@@ -2205,8 +2207,7 @@ public class Home {
 												System.out.println("이대로 보상금을 확정하시고 지급하시겠습니까?(y/n)");
 												String input3 = scn.next();
 												if (input3.equals("y")) {
-													accident.setHandlingStatus(true);
-													accident.setCompensation(tmptCompensation);
+													compensationHandler.confirmCompensation(accident, tmptCompensation);
 													accident.setCause(tmptCause);
 													System.out.println("보상금 " + tmptCompensation + "원을 " + contract.getCustomer().getName() + "님께 지급하였습니다!");
 													break menu;

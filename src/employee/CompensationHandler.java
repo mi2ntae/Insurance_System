@@ -1,5 +1,6 @@
 package employee;
 
+import contract.Accident;
 import contract.Contract;
 
 public class CompensationHandler {
@@ -22,6 +23,11 @@ public class CompensationHandler {
 
 	public void renewFee(){
 
+	}
+
+	public void confirmCompensation(Accident accident, int tmptCompensation) {
+		accident.setHandlingStatus(true);
+		accident.setCompensation(tmptCompensation);
 	}
 
 }
