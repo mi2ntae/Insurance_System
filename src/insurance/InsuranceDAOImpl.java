@@ -9,22 +9,41 @@ import main.DBConnector;
 
 public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public boolean insert(Insurance insurance) {
-		String str = "INSERT INTO insurance(insuranceId, name, type, gender, basicFee, specialContractFee, warrantyPeriod,"
+		String str = "INSERT INTO insurance(insuranceId, NAME, TYPE, gender, basicFee, specialContractFee, warrantyPeriod,"
 				+ " rateOfAge0, rateOfAge1, rateOfAge2, rateOfAge3, rateOfAge4, rateOfAge5, rateOfAge6,"
-				+ " rateOfGender0, rateOfGender1, rateOfGender2, rateOfGender0, rateOfGender1, rateOfGender2,"
-				+ " rateOfGender3, rateOfGender4, rateOfGender5, rateOfGender6, confirmedStatus, specialContract) values('"
-				+ insurance.getInsuranceId() + "','" + insurance.getName() + "','" + insurance.getType().getNum() + "',"
-				+ insurance.getGender().getNum() + "','" + insurance.getBasicFee() + "','"
-				+ insurance.getSpecialContractFee() + "','" + insurance.getWarrantyPeriod() + "','";
-		for (double rate : insurance.getRateOfAge()) str += rate + ",";
-		for (double rate : insurance.getRateOfGender()) str += rate + ",";
-		for (double rate : insurance.getRateOfJob()) str += rate + ",";
+				+ " rateOfGender0, rateOfGender1, rateOfJob0, rateOfJob1, rateOfJob2,"
+				+ " rateOfJob3, rateOfJob4, rateOfJob5, rateOfJob6, confirmedStatus, specialContract) values('"
+				+ insurance.getInsuranceId() + "','" + insurance.getName() + "'," + insurance.getType().getNum() + ","
+				+ insurance.getGender().getNum() + "," + insurance.getBasicFee() + ","
+				+ insurance.getSpecialContractFee() + "," + insurance.getWarrantyPeriod() + ",";
+		int cnt = 0;
+		for (double rate : insurance.getRateOfAge()) {str += rate + ",";
+		cnt ++;
+		}
+		System.out.println(cnt);
+		cnt = 0;
+		for (double rate : insurance.getRateOfGender()) {
+			str += rate + ",";
+			cnt++;
+		}
+		System.out.println(cnt);
+		cnt = 0;
+		for (double rate : insurance.getRateOfJob()) {
+			str += rate + ",";
+			cnt++;
+		}
+		System.out.println(cnt);
 		str += insurance.isConfirmedStatus() + "," + insurance.isSpecialContract() + ")";
 		
 		InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
 
-		if (insuranceDao.insert(insurance) && this.execute(str)) return true;
-		else return false;
+		System.out.println(str);
+		if(this.execute(str)) {
+			if(insuranceDao.insert(insurance))return true;
+			else return false;
+		}else {
+			return false;
+		}
 	}
 
 	public ArrayList<Insurance> select() {
@@ -37,7 +56,8 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		
 		try {
 			while (rs.next()) {
-				int input = rs.getType();
+				int input = rs.getInt("type");
+				System.out.println(input);
 				for (eInsuranceType insuranceType : eInsuranceType.values()) {
 					if (insuranceType.getNum() == input) {
 						Insurance insurance = insuranceType.getSelectedInsurance().newInstance();

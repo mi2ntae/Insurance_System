@@ -25,8 +25,8 @@ public class DriverInsurance extends Insurance {
 	public double[] getRateOfCarType() {return rateOfCarType;}
 	public void setRateOfCarType(double[] rateOfCarType) {this.rateOfCarType = rateOfCarType;}
 
-	public double[] getRateOfCarRank() {return rateOfCarType;}	
-	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarType = rateOfCarRank;}
+	public double[] getRateOfCarRank() {return rateOfCarRank;}	
+	public void setRateOfCarRank(double[] rateOfCarRank) {this.rateOfCarRank = rateOfCarRank;}
 	
 	// Methods
 	public int calculateFee(Insurant insurant){

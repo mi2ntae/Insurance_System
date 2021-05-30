@@ -13,7 +13,7 @@ public class CancerInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		
 		String str = "INSERT INTO cancerInsurance(insuranceId, rateOfFamilyMedicalDisease0, rateOfFamilyMedicalDisease1, rateOfFamilyMedicalDisease2,"
 				+ " rateOfFamilyMedicalDisease3, rateOfFamilyMedicalDisease4, rateOfFamilyMedicalRelationship0, rateOfFamilyMedicalRelationship1,"
-				+ " rateOfFamilyMedicalRelationship2, rateOfFamilyMedicalRelationship3,"
+				+ " rateOfFamilyMedicalRelationship2, rateOfFamilyMedicalRelationship3"
 				+ " ) values('" + newInsurance.getInsuranceId() + "'";
 		for (double rate : newInsurance.getRateOfFamilyMedicalDisease()) str += "," + rate;
 		for (double rate : newInsurance.getRateOfFamilyMedicalRelationship()) str += "," + rate;

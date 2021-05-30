@@ -61,11 +61,32 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 	
 	@Override
 	public boolean delete(String customerId) {
-		String str = "DELETE FROM customer WHERE CustomerId = " + customerId;
+		String str = "DELETE FROM customer WHERE CustomerId = '" + customerId + "'";
 		if(this.execute(str)) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public Customer selectCustomer(String customerId) {
+		InsurantDAO insurantDAO = new InsurantDAOImpl();
+		Customer customer = new Customer();
+		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				customer.setName(rs.getString("name"));
+				customer.setAddress(rs.getString("address"));
+				customer.setPhoneNumber(rs.getString("phoneNumber"));
+				customer.setCustomerId(rs.getString("customerId"));
+				customer.setPassword(rs.getString("password"));
+				// customer.setInsurantList(insurantDAO.select());
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customer;
 	}
 }

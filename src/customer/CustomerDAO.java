@@ -8,4 +8,5 @@ public interface CustomerDAO {
 	public boolean updateAddress(String customerId, String address);
 	public boolean updatePhoneNumber(String customerId, String phoneNumber);
 	public boolean delete(String customerId);
+	public Customer selectCustomer(String customerId);
 }

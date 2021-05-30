@@ -1,18 +1,18 @@
 package employee;
 
+import java.util.ArrayList;
+
 import contract.Contract;
+import contract.ContractDAO;
 import contract.ContractList;
 
 public class UnderWriter {
 
-	public ContractList contractList;
+	private ArrayList<Contract> contractList;
+	private ContractDAO contractDAO;
 
-	public UnderWriter(){
-
-	}
-	
-	public void assoicate(ContractList contractList) {
-		this.contractList = contractList;
+	public UnderWriter(ContractDAO contractDAO){
+		this.contractDAO = contractDAO;
 	}
 
 	public void requestJointAcquisition(){
@@ -21,6 +21,7 @@ public class UnderWriter {
 
 	// 계약 승인
 	public void approveContract(Contract contract) {
+		contractDAO.updateEffectiveness(contract.getContractId(), true);
 		contract.setEffectiveness(true);
 		contract.setUnpaidPeriod(1);
 		// DB에서 effectiveness = true;
@@ -28,6 +29,6 @@ public class UnderWriter {
 	
 	// 계약 거부
 	public void refuseContract(Contract contract) {
-		this.contractList.delete(contract.getContractId());
+		this.contractDAO.delete(contract.getContractId());
 	}
 }
