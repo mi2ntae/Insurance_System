@@ -1211,7 +1211,7 @@ public class Home {
 		}
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
 			for (Insurant insurant : customer.getInsurantList().getInsurantList()) {
-				if(insurant.getCutomerId().equals(customer.getCustomerId())) {
+				if(insurant.getCustomerId().equals(customer.getCustomerId())) {
 					this.showInsurantData(insurant, insurance.getType());
 				}
 			}
