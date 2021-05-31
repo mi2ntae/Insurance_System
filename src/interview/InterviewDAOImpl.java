@@ -90,4 +90,25 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 			return false;
 		}
 	}
+
+	@Override
+	public Interview selectInterview(String interviewId) {
+		Interview interview = new Interview();
+		String sql = "SELECT * FROM interview WHERE interviewId = '" + interviewId +"'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				interview.setInterviewId(rs.getString("interviewId"));
+				interview.setCustomerId(rs.getString("customerId"));
+				interview.setSalespersonId(rs.getString("salespersonId"));
+				interview.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+				interview.setDate(rs.getString("date"));
+				interview.setTime(rs.getString("time"));
+				interview.setContent(rs.getString("content"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return interview;
+	}
 }
