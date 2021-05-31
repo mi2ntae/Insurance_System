@@ -101,35 +101,38 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		GuaranteePlanDAO guaranteePlanDAO = new GuaranteePlanDAOImpl();
 		
 		this.read(sql);
+		System.out.println(sql);
 		try {
-			int input = rs.getInt("type");
-			for (eInsuranceType insuranceType : eInsuranceType.values()) {
-				if (insuranceType.getNum() == input) {
-					Insurance insurance = insuranceType.getSelectedInsurance().newInstance();
-					insurance.setInsuranceId(rs.getString("insuranceId"));
-					insurance.setName(rs.getString("name"));
-					for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == input) insurance.setType(type);
-					for (eGender gender : eGender.values()) if (gender.getNum() == rs.getInt("gender")) insurance.setGender(gender);
-					insurance.setBasicFee(rs.getInt("basicFee"));
-					insurance.setSpecialContractFee(rs.getInt("specialContractFee"));
-					insurance.setWarrantyPeriod(rs.getInt("warrantyPeriod"));
-					double[] rateOfAge = new double[insurance.getRateOfAge().length];
-					for (int i = 0; i < insurance.getRateOfAge().length; i++) rateOfAge[i] = rs.getDouble("rateOfAge" + i);
-					double[] rateOfGender = new double[insurance.getRateOfGender().length];
-					for (int i = 0; i < insurance.getRateOfGender().length; i++) rateOfGender[i] = rs.getDouble("rateOfGender" + i);
-					double[] rateOfJob = new double[insurance.getRateOfJob().length];
-					for (int i = 0; i < insurance.getRateOfJob().length; i++) rateOfJob[i] = rs.getDouble("rateOfJob" + i);
-					insurance.setRateOfAge(rateOfAge);
-					insurance.setRateOfGender(rateOfGender);
-					insurance.setRateOfJob(rateOfJob);
-					insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
-					insurance.setSpecialContract(rs.getBoolean("specialContract"));
+			if (rs.next()) {
+				int input = rs.getInt("type");
+				for (eInsuranceType insuranceType : eInsuranceType.values()) {
+					if (insuranceType.getNum() == input) {
+						Insurance insurance = insuranceType.getSelectedInsurance().newInstance();
+						insurance.setInsuranceId(rs.getString("insuranceId"));
+						insurance.setName(rs.getString("name"));
+						for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == input) insurance.setType(type);
+						for (eGender gender : eGender.values()) if (gender.getNum() == rs.getInt("gender")) insurance.setGender(gender);
+						insurance.setBasicFee(rs.getInt("basicFee"));
+						insurance.setSpecialContractFee(rs.getInt("specialContractFee"));
+						insurance.setWarrantyPeriod(rs.getInt("warrantyPeriod"));
+						double[] rateOfAge = new double[insurance.getRateOfAge().length];
+						for (int i = 0; i < insurance.getRateOfAge().length; i++) rateOfAge[i] = rs.getDouble("rateOfAge" + i);
+						double[] rateOfGender = new double[insurance.getRateOfGender().length];
+						for (int i = 0; i < insurance.getRateOfGender().length; i++) rateOfGender[i] = rs.getDouble("rateOfGender" + i);
+						double[] rateOfJob = new double[insurance.getRateOfJob().length];
+						for (int i = 0; i < insurance.getRateOfJob().length; i++) rateOfJob[i] = rs.getDouble("rateOfJob" + i);
+						insurance.setRateOfAge(rateOfAge);
+						insurance.setRateOfGender(rateOfGender);
+						insurance.setRateOfJob(rateOfJob);
+						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+						insurance.setSpecialContract(rs.getBoolean("specialContract"));
 
-					InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
-					insurance = insuranceDao.selectTypeInsurance(insurance);
+						InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
+						insurance = insuranceDao.selectTypeInsurance(insurance);
 
-					insurance.setGuaranteePlanList(guaranteePlanDAO.selectById(insurance.getInsuranceId()));
-					return insurance;
+						insurance.setGuaranteePlanList(guaranteePlanDAO.selectById(insurance.getInsuranceId()));
+						return insurance;
+					}
 				}
 			}
 		} catch (SQLException e) {
