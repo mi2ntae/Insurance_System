@@ -219,4 +219,67 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 			return false;
 		}
 	}
+
+	@Override
+	public Insurant selectInsurant(String insurantId) {
+		Insurant insurant = new Insurant();
+		String sql = "SELECT * FROM insurant WHERE insurantId = '" + insurantId +"'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				insurant.setInsurantId(rs.getString("insurantId"));
+				insurant.setCustomerId(rs.getString("customerId"));
+				insurant.setName(rs.getString("name"));
+				insurant.setAddress(rs.getString("address"));
+				insurant.setPhoneNumber(rs.getString("phoneNumber"));
+				insurant.setAge(rs.getInt("age"));
+				insurant.setAccidentHistory(rs.getInt("accidentHistory"));
+				insurant.setPostedPriceOfStructure(rs.getLong("postedPriceOfStructure"));
+				int num = (rs.getInt("usageOfStructure"));
+				for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) {
+					if(usageOfStructure.getNum() == num) {
+						insurant.setUsageOfStructure(usageOfStructure);
+					}
+				}
+				
+				num = (rs.getInt("gender"));
+				for(eGender gender : eGender.values()) {
+					if(gender.getNum() == num) {
+						insurant.setGender(gender);
+					}
+				}
+				
+				num = (rs.getInt("job"));
+				for(eJob job : eJob.values()) {
+					if(job.getNum() == num) {
+						insurant.setJob(job);
+					}
+				}
+				
+				num = (rs.getInt("typeOfCar"));
+				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) {
+					if(typeOfCar.getNum() == num) {
+						insurant.setTypeOfCar(typeOfCar);
+					}
+				}
+				
+				num = (rs.getInt("rankOfCar"));
+				for(eRankOfCar rankOfCar : eRankOfCar.values()) {
+					if(rankOfCar.getNum() == num) {
+						insurant.setRankOfCar(rankOfCar);
+					}
+				}
+				
+				num = (rs.getInt("riskOfTripCountry"));
+				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
+					if(riskOfTripCountry.getNum() == num) {
+						insurant.setRiskOfTripCountry(riskOfTripCountry);
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return insurant;
+	}
 }

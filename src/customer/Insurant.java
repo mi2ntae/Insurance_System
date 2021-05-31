@@ -13,7 +13,7 @@ public class Insurant {
 
 	// Attributes
 	private String insurantId;
-	private String cutomerId;
+	private String customerId;
 	private String name;
 	private String address;
 	private String phoneNumber;
@@ -36,8 +36,8 @@ public class Insurant {
 	}
 
 	// getters & setters	
-	public String getCutomerId() {return cutomerId;}
-	public void setCutomerId(String cutomerId) {this.cutomerId = cutomerId;}
+	public String getCustomerId() {return customerId;}
+	public void setCustomerId(String customerId) {this.customerId = customerId;}
 	
 	public int getAccidentHistory() {return accidentHistory;}
 	public void setAccidentHistory(int accidentHistory) {this.accidentHistory = accidentHistory;}
@@ -88,7 +88,7 @@ public class Insurant {
 		if(this.rankOfCar == null) this.rankOfCar = eRankOfCar.high;
 		if(this.typeOfCar == null) this.typeOfCar = eTypeOfCar.etc;
 		if(this.riskOfTripCountry == null) this.riskOfTripCountry = eRiskOfTripCountry.safe;
-		output = this.insurantId + ' ' + this.name + ' ' + this.cutomerId + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
+		output = this.insurantId + ' ' + this.name + ' ' + this.customerId + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
 				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
 				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.typeOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum() + '\n';
 		
@@ -98,7 +98,7 @@ public class Insurant {
 	public void readFromFile(Scanner scn) {
 		this.insurantId = scn.next();
 		this.name = scn.next();
-		this.cutomerId = scn.next();
+		this.customerId = scn.next();
 		this.address = scn.next();
 		this.phoneNumber = scn.next();
 		this.age = scn.nextInt();

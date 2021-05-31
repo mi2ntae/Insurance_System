@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public interface InsurantDAO {
 	public boolean insert(Insurant insurant);
 	public ArrayList<Insurant> select();
+	public Insurant selectInsurant(String InsurantId);
+	
 	public boolean updateName(String insurantId, String name);
 	public boolean updateAddress(String insurantId, String address);
 	public boolean updatePhoneNumber(String insurantId, String phoneNumber);
