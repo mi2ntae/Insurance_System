@@ -9,8 +9,9 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 	public boolean insert(Contract contract) {
 		String str = "INSERT INTO contract(contractId, insurantId, insuranceId, customerId, salespersonId, effectiveness, special, lifespan"
 				+ ", fee, unpaidPeriod) values('"+contract.getContractId()+"', '"+contract.getInsurantId()+"', '"+contract.getInsuranceId()
-				+"', '"+contract.getCustomerId()+"', '"+contract.getSalespersonId()+"', false, "+contract.isSpecial()+", "+contract.getLifespan()
+				+"', '"+contract.getCustomerId()+"', "+contract.getSalespersonId()+", false, "+contract.isSpecial()+", "+contract.getLifespan()
 				+", "+contract.getFee()+", "+contract.getUnpaidPeriod()+");";
+		System.out.println(str);
 		return this.execute(str);
 	}
 	

@@ -86,6 +86,9 @@ public class Contract {
 		this.customer = customer;
 		this.insurance = insurance;
 		this.insurant = insurant;
+		this.insuranceId = insurance.getInsuranceId();
+		this.insurantId = insurant.getInsurantId();
+		this.customerId = insurant.getCustomerId();
 	}
 
 	public void addAccident(String accidentId, String content, int damageCost, boolean handlingStatus) {

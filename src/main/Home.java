@@ -12,6 +12,8 @@ import customer.Customer;
 import customer.CustomerDAO;
 import customer.CustomerDAOImpl;
 import customer.Insurant;
+import customer.InsurantDAO;
+import customer.InsurantDAOImpl;
 import employee.CompensationHandler;
 import employee.Employee;
 import employee.EmployeeDAO;
@@ -60,6 +62,7 @@ public class Home {
 	private InsuranceDAO insuranceDAO;
 	private EmployeeDAO employeeDAO;
 	private InterviewDAO interviewDAO;
+	private InsurantDAO insurantDAO;
 	
 	private InsuranceDeveloper insuranceDeveloper;
 	private InsuranceConfirmer insuranceConfirmer;
@@ -74,6 +77,7 @@ public class Home {
 		this.insuranceDAO = new InsuranceDAOImpl();
 		this.employeeDAO = new EmployeeDAOImpl();
 		this.interviewDAO = new InterviewDAOImpl();
+		this.insurantDAO = new InsurantDAOImpl();
 	}
 	
 	public void initialize() {
@@ -84,6 +88,9 @@ public class Home {
 		this.customerList = this.customerDAO.select();
 		this.employeeList = this.employeeDAO.select();
 		this.interviewList = this.interviewDAO.select();
+		for(Contract contract : contractList) {
+			System.out.println(contract.getContractId() + " " + contract.isEffectiveness());
+		}
 	}
 
 	public void start() {
@@ -939,7 +946,7 @@ public class Home {
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
 		for (Contract contract : this.contractList) {
-			if(contract.getCustomer().getCustomerId() == customer.getCustomerId()) {
+			if(contract.getCustomerId().equals(customer.getCustomerId())) {
 				if(contract.isEffectiveness()) {
 					count++;
 					this.showSimpleContract(contract, contract.isEffectiveness());
@@ -975,14 +982,17 @@ public class Home {
 
 	// 계약 간단한 정보 보기
 	private void showSimpleContract(Contract contract, boolean judged) {
+		Insurance insurance = insuranceDAO.selectInsurance(contract.getInsuranceId());
+		Insurant insurant = insurantDAO.selectInsurant(contract.getInsurantId());
+		
 		System.out.println("계약ID : " + contract.getContractId());
-		System.out.println("보험이름 : " + contract.getInsurance().getName());
-		System.out.println("가입자 나이 : " +contract.getInsurant().getAge());
-		System.out.println("가입자 성별 : " +contract.getInsurant().getGender().getName());
+		System.out.println("보험이름 : " + insurance.getName());
+		System.out.println("가입자 나이 : " + insurant.getAge());
+		System.out.println("가입자 성별 : " + insurant.getGender().getName());
 		if (judged) {
 			System.out.println("보험료 : " +contract.getFee());
 		} else {
-			System.out.println("기본 보험료 : " +contract.getInsurance().getBasicFee());
+			System.out.println("기본 보험료 : " + insurance.getBasicFee());
 		}
 	}
 	
@@ -1180,7 +1190,7 @@ public class Home {
 					} else {
 						contract.setContractId(Integer.toString(Integer.parseInt(this.contractList.get(this.contractList.size() - 1).getContractId()) + 1));
 					}
-					input = scn.next();
+					input = "";
 					while(!input.equals("y") && !input.equals("n")) {
 						System.out.println("특약 여부(y/n)");
 						input = scn.next();
@@ -1189,6 +1199,9 @@ public class Home {
 						contract.setSpecial(true);
 					} else {
 						contract.setSpecial(false);
+					}
+					for(Insurance insurance2 : insuranceList) {
+						System.out.println();
 					}
 					contract.joinInsurance(customer, insurance, insurant);
 					this.contractDAO.insert(contract);
