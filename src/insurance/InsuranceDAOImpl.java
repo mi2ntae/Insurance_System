@@ -141,8 +141,8 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		return null;
 	}
 
-	public boolean updateConfirmedStatus(String insuranceId) {
-		String str = "UPDATE insurance SET confirmedStatus = 1 WHERE insuranceId = '" + insuranceId + "'";
+	public boolean updateConfirmedStatus(String insuranceId, boolean confirmedStatus) {
+		String str = "UPDATE insurance SET confirmedStatus = "+confirmedStatus+" WHERE insuranceId = '" + insuranceId + "'";
 		if (this.execute(str)) return true;
 		else return false;
 	}
