@@ -88,9 +88,7 @@ public class Home {
 		this.customerList = this.customerDAO.select();
 		this.employeeList = this.employeeDAO.select();
 		this.interviewList = this.interviewDAO.select();
-		for(Contract contract : contractList) {
-			System.out.println(contract.getContractId() + " " + contract.isEffectiveness());
-		}
+		
 	}
 
 	public void start() {
@@ -1100,7 +1098,7 @@ public class Home {
 		if(customer.getInsurantList().isEmpty()) {
 			System.out.print("보험 가입자 ID : null");
 		} else {
-			for(Insurant insurant : customer.getInsurantList().getInsurantList()) {
+			for(Insurant insurant : customer.getInsurantList()) {
 				System.out.print(" " + insurant.getInsurantId());
 			}
 		}
@@ -1215,6 +1213,7 @@ public class Home {
 	
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer, Insurance insurance) {
+		Insurant selectedinsurant = null;
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		String input = scn.next();
 		while (!input.equals("1") && !input.equals("2") ) {
@@ -1223,7 +1222,7 @@ public class Home {
 			input = scn.next();
 		}
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
-			for (Insurant insurant : customer.getInsurantList().getInsurantList()) {
+			for (Insurant insurant : customer.getInsurantList()) {
 				if(insurant.getCustomerId().equals(customer.getCustomerId())) {
 					this.showInsurantData(insurant, insurance.getType());
 				}
@@ -1231,19 +1230,21 @@ public class Home {
 			boolean flag = false;
 			while (!flag) {
 				String InsurantId = scn.next();
-				if (customer.getInsurantList().select(InsurantId) != null) {
-					flag = true;
+				if (selectedinsurant != null) {
+					if(selectedinsurant.getCustomerId().equals(customer.getCustomerId())) {
+						flag = true;
+					}
 				} else {
 					System.out.println("해당 보험가입자가 존재하지 않습니다");
 				}
 			}
 		} else {
-			this.createInsurant(customer, insurance);
+			selectedinsurant = this.createInsurant(customer, insurance);
 		}
-		return customer.getInsurantList().getSelectedInsurant();
+		return selectedinsurant;
 	}
 
-	private void createInsurant(Customer customer, Insurance insurance) {
+	private Insurant createInsurant(Customer customer, Insurance insurance) {
 		Insurant insurant = new Insurant();
 		
 		System.out.print("이름 : ");
@@ -1261,7 +1262,7 @@ public class Home {
 		if(customer.getInsurantList().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().getInsurantList().get(customer.getInsurantList().getInsurantList().size() - 1).getInsurantId()) + 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(customer.getInsurantList().get(customer.getInsurantList().size() - 1).getInsurantId()) + 1));
 		}
 		
 		System.out.print("전화번호 : ");
@@ -1436,7 +1437,7 @@ public class Home {
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
 		customer.createInsurant(insurant);
-		customer.getInsurantList().select(insurant.getInsurantId());
+		return insurant;
 	}
 	
 	// 고객 가입하기
