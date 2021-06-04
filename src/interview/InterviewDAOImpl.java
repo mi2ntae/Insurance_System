@@ -8,9 +8,11 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 
 	@Override
 	public boolean insert(Interview interview) {
-		String str = "INSERT INTO interview (interviewId, salespersonId, customerId, confirmedStatus, date, content) values ('"
-				+ interview.getInterviewId() + "','" + interview.getSalespersonId() + "','" + interview.getCustomerId()
-				+ interview.isConfirmedStatus() + "','" + interview.getDate() + "','" + interview.getContent() + "')";
+		String str = "INSERT INTO interview (interviewId, salespersonId, customerId, confirmedStatus, date, content, time)"
+				+ "values('" + interview.getInterviewId() + "'," + interview.getSalespersonId() + ",'" + interview.getCustomerId() + "',"
+				+ interview.isConfirmedStatus() + ",'" + interview.getDate() + "','" + interview.getContent() + "','" + interview.getTime() +
+				"');";
+		System.out.println(str);
 		if (this.execute(str)) {
 			return true;
 		} else {

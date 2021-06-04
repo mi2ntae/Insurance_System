@@ -12,7 +12,7 @@ public class Interview {
 
 	// Constructor
 	public Interview(){
-
+		this.confirmedStatus = false;
 	}
 
 	// Getters&Setters
