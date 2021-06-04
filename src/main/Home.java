@@ -145,7 +145,7 @@ public class Home {
 											case 2:
 												break;
 											case 3:
-												Contract contract = showSubscribedInsurance(customer);
+												Contract contract = this.showSubscribedInsurance(customer);
 												if(contract != null) {
 													System.out.println("원하시는 메뉴를 선택해주세요.");
 													checkInsuranceList: while (true) {
@@ -238,7 +238,7 @@ public class Home {
 									System.out.println("안녕하세요 " + employee.getName() + "님!");
 									switch (employee.getEmployeeRole()) {
 									case insuranceDeveloper:
-										this.insuranceDeveloper = new InsuranceDeveloper();
+										this.insuranceDeveloper = new InsuranceDeveloper(this.insuranceDAO, this.insuranceList);
 										employee2: while (true) {
 											System.out.println("*******보험개발자 메뉴*******");
 											System.out.println("1.고객 만족 설문조사 결과보기");
@@ -457,6 +457,7 @@ public class Home {
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다");
+					this.dbConnector.close();
 					System.exit(0);
 					break;
 				default:
@@ -1037,8 +1038,9 @@ public class Home {
 				case 1:
 					underwriter.approveContract(contract);
 					contract.setFee(contract.getInsurance().calculateFee(contract.getInsurant()));
+					contract.connectContractDAO(this.contractDAO);
 					for (int i = 0; i < Constants.thisMonth; i++) {
-						contract.getPayHistory()[i] = true;
+						contract.payFee(contract, i);
 					}
 					System.out.println("------승인 되었습니다------");
 					break;
@@ -1613,8 +1615,7 @@ public class Home {
 			}
 			insurance = this.createDetailInsurance(insurance);	// 보험 세부설정하기
 			
-			if (this.insuranceDAO.insert(insurance)) {
-				this.insuranceList.add(insurance);
+			if (this.insuranceDeveloper.finishInsurance(insurance)) {
 				System.out.println("!!!보험 설계가 완료되었습니다!!!!");
 			} else {
 				System.out.println("보험 설계에 실패하였습니다. 다시 시도해주세요.");
@@ -2628,105 +2629,87 @@ public class Home {
 	
 	// 납부내역 확인하기
 	private void payFee(Contract contract) {
-		int inputYear = 0;
-		pay: while (true) {
-			System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
-			System.out.printf("보험료 납부 내역을 확인하고 싶은 년도를 입력해주세요 ex)2020 : ");
+		contract.connectContractDAO(this.contractDAO);
+		System.out.println("<" + Constants.thisYear + "년의 납부 내역>");
+		for (int i = 0; i < contract.getPayHistory().length; i++) {
+			if (contract.getPayHistory()[i]) {
+				System.out.println((i + 1) + "월 : O");
+			} else {
+				System.out.println((i + 1) + "월 : X");
+			}
+		}
+		while (true) {
+			System.out.println("1.일괄 납부하기");
+			System.out.println("2.선택한 월의 보험료 납부하기");
+			System.out.println("0.돌아가기");
+			System.out.printf("원하는 메뉴를 입력해주세요 : ");
+			int inputMenu = 0;
 			try {
-				inputYear = scn.nextInt();
-			} catch(InputMismatchException e) {
+				inputMenu = scn.nextInt();
+			} catch (InputMismatchException e) {
 				System.out.println("error : 숫자를 입력해주세요");
 				System.out.println("-----------------------");
 				scn.nextLine();
 				continue;
 			}
-			if (inputYear == 0) {
+			switch (inputMenu) {
+			case 0:
 				return;
-			} else if (inputYear < Constants.thisYear-9) {
-				System.out.println("최근 10년 이내의 납부 내역만 확인할 수 있습니다.");
-				continue;
-			} else if (inputYear > Constants.thisYear) {
-				System.out.println("올바른 년도를 입력해주세요.");
-				continue;
-			}
-				
-			for (int i = 0; i < contract.getPayHistory().length; i++) {
-				if (contract.getPayHistory()[i]) {
-					System.out.println((i+1)+"월 : O");
+			case 1:
+				System.out.printf(Constants.thisYear + "년의 납부되지 않은 보험료를 일괄납부 하시겠습니까?(y/n) : ");
+				String inputCheck = scn.next();
+				int unpaiedCount = 0;
+				if (inputCheck.equals("y")) {
+					for (int i = 0; i < contract.getPayHistory().length; i++) {
+						if (!contract.getPayHistory()[i]) {
+							unpaiedCount += 1;
+							contract.payFee(contract, i);
+						}
+					}
+					if (unpaiedCount == 0) {
+						System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
+						continue;
+					}
+					System.out.println(unpaiedCount * contract.getFee() + "원의 보험료를 납부하셨습니다.");
+				} else if (inputCheck.equals("n")) {
+					continue;
 				} else {
-					System.out.println((i+1)+"월 : X");
-				}
-			}
-			while (true) {
-				System.out.println("1.일괄 납부하기");
-				System.out.println("2.선택한 월의 보험료 납부하기");
-				System.out.println("0.돌아가기");
-				System.out.printf("원하는 메뉴를 입력해주세요 : ");
-				int inputMenu = 0;
-				try {
-					inputMenu = scn.nextInt();
-				} catch(InputMismatchException e) {
-					System.out.println("error : 숫자를 입력해주세요");
-					System.out.println("-----------------------");
-					scn.nextLine();
+					System.out.println("잘못 입력하셨습니다. 이전 화면으로 돌아갑니다.");
 					continue;
 				}
-				switch (inputMenu) {
-				case 0:
-					continue pay;
-				case 1:
-					System.out.printf(inputYear+"년의 납부되지 않은 보험료를 일괄납부 하시겠습니까?(y/n) : ");
-					String inputCheck = scn.next();
-					int unpaiedCount = 0;
-					if (inputCheck.equals("y")) {
-						for (int i = 0; i < contract.getPayHistory().length; i++) {
-							if (!contract.getPayHistory()[i]) {
-								unpaiedCount += 1;
-								contract.getPayHistory()[i] = true;
-							}
-						}
-						if (unpaiedCount == 0) {
-							System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
-							continue;
-						}
-						System.out.println(unpaiedCount*contract.getFee()+"원의 보험료를 납부하셨습니다.");
-					} else if (inputCheck.equals("n")) {
+				break;
+			case 2:
+				while (true) {
+					System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
+					System.out.printf("납부를 원하는 월을 입력해주세요 : ");
+					int inputMonth = 0;
+					try {
+						inputMonth = scn.nextInt();
+					} catch (InputMismatchException e) {
+						System.out.println("error : 숫자를 입력해주세요");
+						System.out.println("-----------------------");
+						scn.nextLine();
+						continue;
+					}
+					if (inputMonth == 0) {
+						continue;
+					}
+					if (inputMonth < 0 || inputMonth > 12) {
+						System.out.println("1~12 사이의 숫자를 입력해주세요.");
+						continue;
+					}
+					if (contract.getPayHistory()[inputMonth - 1]) {
+						System.out.println("이미 보험료가 납부돼있는 월입니다. 다시 입력해주세요.");
 						continue;
 					} else {
-						System.out.println("잘못 입력하셨습니다. 이전 화면으로 돌아갑니다.");
-						continue;
+						contract.payFee(contract, inputMonth - 1);
+						System.out.println(inputMonth + "월의 보험료" + contract.getFee() + "원이 납부되었습니다.");
+						break;
 					}
-					break;
-				case 2:
-					while(true) {
-						System.out.println("\n(이전 화면으로 돌아가려면 0을 입력하세요)");
-						System.out.printf("납부를 원하는 월을 입력해주세요 : ");
-						int inputMonth = 0;
-						try {
-							inputMonth = scn.nextInt();
-						} catch(InputMismatchException e) {
-							System.out.println("error : 숫자를 입력해주세요");
-							System.out.println("-----------------------");
-							scn.nextLine();
-							continue;
-						}
-						if (inputMonth < 0 || inputMonth > 12) {
-							System.out.println("1~12 사이의 숫자를 입력해주세요.");
-							continue;
-						}
-						if (contract.getPayHistory()[inputMonth-1]) {
-							System.out.println("이미 보험료가 납부돼있는 월입니다. 다시 입력해주세요.");
-							continue;
-						} else {
-							contract.getPayHistory()[inputMonth-1] = true;
-							System.out.println(inputMonth+"월의 보험료"+contract.getFee()+"원이 납부되었습니다.");
-							break;
-						}
-					}
-					break;
 				}
 				break;
 			}
+			break;
 		}
 	}
 }

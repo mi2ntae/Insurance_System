@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import main.DBConnector;
 
 public class AccidentDAOImpl extends DBConnector implements AccidentDAO{
+	
 	public boolean insert(Accident accident) {
 		String sql = "INSERT INTO accident(accidentId, contractId, content, compensation, damageCost, handlingStatus) values('"
 					+accident.getAccidentId()+"', '"+accident.getContractId()+"', '"+accident.getContent()+"', "+accident.getCompensation()
@@ -35,10 +36,10 @@ public class AccidentDAOImpl extends DBConnector implements AccidentDAO{
 		return accidentList;
 	}
 	
-	public ArrayList<Accident> selectByContractId(String contractId){
+	public ArrayList<Accident> selectByContractId(String contractId) {
 		ArrayList<Accident> accidentList = new ArrayList<Accident>();
 		
-		String sql = "SELCT * FROM accident WHERE contractId = '"+contractId+"';";
+		String sql = "SELECT * FROM accident WHERE contractId = '"+contractId+"';";
 		this.read(sql);
 		try {
 			while (rs.next()) {
