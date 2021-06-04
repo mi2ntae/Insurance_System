@@ -30,10 +30,12 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		ArrayList<Insurant> arrayList = new ArrayList<Insurant>();
 
 		String sql = "SELECT * FROM insurant";
+		this.read(sql);
 		try {
 			while (rs.next()) {
 				Insurant insurant = new Insurant();
 				insurant.setInsurantId(rs.getString("insurantId"));
+				insurant.setCustomerId(rs.getString("customerId"));
 				insurant.setName(rs.getString("name"));
 				insurant.setAddress(rs.getString("address"));
 				insurant.setPhoneNumber(rs.getString("phoneNumber"));
@@ -83,6 +85,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 						insurant.setRiskOfTripCountry(riskOfTripCountry);
 					}
 				}
+				arrayList.add(insurant);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
