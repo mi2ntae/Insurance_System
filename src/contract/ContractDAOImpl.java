@@ -7,9 +7,9 @@ import main.DBConnector;
 
 public class ContractDAOImpl extends DBConnector implements ContractDAO{
 	public boolean insert(Contract contract) {
-		String str = "INSERT INTO contract(contractId, insurantId, insuranceId, salespersonId, effectiveness, special, lifespan"
+		String str = "INSERT INTO contract(contractId, insurantId, insuranceId, effectiveness, special, lifespan"
 				+ ", fee, unpaidPeriod) values('"+contract.getContractId()+"', '"+contract.getInsurantId()+"', '"+contract.getInsuranceId()
-				+"', '"+contract.getCustomerId()+"', "+contract.getSalespersonId()+", false, "+contract.isSpecial()+", "+contract.getLifespan()
+				+"', false, "+contract.isSpecial()+", "+contract.getLifespan()
 				+", "+contract.getFee()+", "+contract.getUnpaidPeriod()+");";
 		System.out.println(str);
 		return this.execute(str);
@@ -27,7 +27,6 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 				contract.setContractId(rs.getString("contractId"));
 				contract.setInsurantId(rs.getString("insurantId"));
 				contract.setInsuranceId(rs.getString("insuranceId"));
-//				contract.setSalespersonId(rs.getString("salespersonId"));
 				contract.setEffectiveness(rs.getBoolean("effectiveness"));
 				contract.setSpecial(rs.getBoolean("special"));
 				contract.setLifespan(rs.getInt("lifespan"));
@@ -53,7 +52,6 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 				contract.setContractId(rs.getString("contractId"));
 				contract.setInsurantId(rs.getString("insurantId"));
 				contract.setInsuranceId(rs.getString("insuranceId"));
-				contract.setSalespersonId(rs.getString("salespersonId"));
 				contract.setEffectiveness(rs.getBoolean("effectiveness"));
 				contract.setSpecial(rs.getBoolean("special"));
 				contract.setLifespan(rs.getInt("lifespan"));

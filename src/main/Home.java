@@ -271,7 +271,7 @@ public class Home {
 										}
 										break;
 									case insuranceConfirmer:
-										this.insuranceConfirmer = new InsuranceConfirmer();
+										this.insuranceConfirmer = new InsuranceConfirmer(this.insuranceDAO);
 										employee2: while (true) {
 											System.out.println("*******보험상품 확정자 메뉴*******");
 											System.out.println("1.보험상품 확정하기");
@@ -1056,7 +1056,6 @@ public class Home {
 		System.out.println("계약 기간 : " + contract.getLifespan());
 		System.out.println("보험료 : " + contract.getFee());
 		System.out.println("지불된 요금 : " + contract.getPaidFee());
-		System.out.println("영업사원 ID" + contract.getSalespersonId());
 		System.out.println("미납 기간 : " + contract.getUnpaidPeriod());
 		System.out.println("----------------------");
 	}
@@ -1610,6 +1609,7 @@ public class Home {
 			insurance = this.createDetailInsurance(insurance);	// 보험 세부설정하기
 			
 			if (this.insuranceDAO.insert(insurance)) {
+				this.insuranceList.add(insurance);
 				System.out.println("!!!보험 설계가 완료되었습니다!!!!");
 			} else {
 				System.out.println("보험 설계에 실패하였습니다. 다시 시도해주세요.");
@@ -2104,6 +2104,7 @@ public class Home {
 					tmpInsurance = insurance;
 				}
 			}
+			
 			if (isExist && tmpInsurance.isConfirmedStatus()) {
 				System.out.println("이미 확정된 보험입니다. 다시 입력해주세요.");
 				continue;
@@ -2113,9 +2114,7 @@ public class Home {
 					System.out.printf("해당 보험을 확정하시겠습니까?(y/n) : ");
 					String inputDecision = scn.next();
 					if (inputDecision.equals("y")) {
-						Insurance insurance = tmpInsurance;
-						insurance = this.insuranceDAO.selectInsurance(inputDecision);
-						this.insuranceConfirmer.confirmInsurance(insurance);
+						this.insuranceConfirmer.confirmInsurance(tmpInsurance);
 						System.out.println("선택한 보험이 확정되었습니다!!!");
 						return;
 					} else if (inputDecision.equals("n")) {

@@ -49,7 +49,7 @@ public class FireInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public ArrayList<Insurance> select() {return null;}
 
 	@Override
-	public boolean updateConfirmedStatus(String insuranceId) {
+	public boolean updateConfirmedStatus(String insuranceId, boolean confirmedStatus) {
 		// TODO Auto-generated method stub
 		return false;
 	}

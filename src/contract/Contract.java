@@ -9,8 +9,6 @@ public class Contract {
 	private String contractId;
 	private String insurantId;
 	private String insuranceId;
-	private String customerId;
-	private String salespersonId;
 	private boolean effectiveness;
 	private boolean special;
 	private int lifespan;
@@ -22,10 +20,6 @@ public class Contract {
 	// Composition Class
 	public AccidentList accidentList;
 	
-	// Associate
-	private Customer customer;
-	private Insurance insurance;
-	private Insurant insurant;
 
 	// Constructor
 	public Contract(){
@@ -42,12 +36,6 @@ public class Contract {
 	public String getInsuranceId() {return insuranceId;}
 	public void setInsuranceId(String insuranceId) {this.insuranceId = insuranceId;}
 
-	public String getCustomerId() {return customerId;}
-	public void setCustomerId(String customerId) {this.customerId = customerId;}
-
-	public Customer getCustomer() {return customer;}
-	public void setCustomer(Customer customerId) {this.customer = customerId;}
-
 	public boolean isEffectiveness() {return effectiveness;}
 	public void setEffectiveness(boolean effectiveness) {this.effectiveness = effectiveness;}
 	
@@ -63,17 +51,8 @@ public class Contract {
 	public int getPaidFee() {return paidFee;}
 	public void setPaidFee(int paidFee) {this.paidFee = paidFee;}
 
-	public String getSalespersonId() {return salespersonId;}
-	public void setSalespersonId(String salespersonId) {this.salespersonId = salespersonId;}
-
 	public int getUnpaidPeriod() {return unpaidPeriod;}
 	public void setUnpaidPeriod(int unpaidPeriod) {this.unpaidPeriod = unpaidPeriod;}
-
-	public Insurance getInsurance() {return insurance;}
-	public void setInsurance(Insurance insurance) {this.insurance = insurance;}
-
-	public Insurant getInsurant() {return insurant;}
-	public void setInsurant(Insurant insurant) {this.insurant = insurant;}
 		
 	public AccidentList getAccidentList() {return accidentList;}
 	public void setAccidentList(AccidentList accidentList) {this.accidentList = accidentList;}
@@ -83,12 +62,8 @@ public class Contract {
 	
 	// public Method
 	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
-		this.customer = customer;
-		this.insurance = insurance;
-		this.insurant = insurant;
 		this.insuranceId = insurance.getInsuranceId();
 		this.insurantId = insurant.getInsurantId();
-		this.customerId = insurant.getCustomerId();
 	}
 
 	public void addAccident(String accidentId, String content, int damageCost, boolean handlingStatus) {
