@@ -36,9 +36,9 @@ public class DBConnector {
 	
 	public void close() {
 		try {
+    		if(rs != null) rs.close();
     		if(st != null) st.close();
     		if(conn != null) conn.close();
-    		if(rs != null) rs.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

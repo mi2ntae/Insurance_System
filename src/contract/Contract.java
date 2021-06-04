@@ -1,5 +1,7 @@
 package contract;
 
+import java.util.ArrayList;
+
 import customer.Customer;
 import customer.Insurant;
 import insurance.Insurance;
@@ -16,14 +18,14 @@ public class Contract {
 	private int paidFee;
 	private int unpaidPeriod;
 	private boolean[] payHistory = new boolean[12];
+	private ArrayList<Accident> accidentList;
 	
-	// Composition Class
-	public AccidentList accidentList;
+	private ContractDAO contractDAO;
 	
 
 	// Constructor
 	public Contract(){
-		accidentList = new AccidentListImpl();
+		
 	}
 	
 	// Getters&Setters
@@ -54,11 +56,13 @@ public class Contract {
 	public int getUnpaidPeriod() {return unpaidPeriod;}
 	public void setUnpaidPeriod(int unpaidPeriod) {this.unpaidPeriod = unpaidPeriod;}
 		
-	public AccidentList getAccidentList() {return accidentList;}
-	public void setAccidentList(AccidentList accidentList) {this.accidentList = accidentList;}
+	public ArrayList<Accident> getAccidentList() {return accidentList;}
+	public void setAccidentList(ArrayList<Accident> accidentList) {this.accidentList = accidentList;}
 
 	public boolean[] getPayHistory() {return payHistory;}
 	public void setPayHistory(boolean[] payHistory) {this.payHistory = payHistory;}
+	
+	public void connectContractDAO(ContractDAO contractDAO) {this.contractDAO = contractDAO;}
 	
 	// public Method
 	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
@@ -73,14 +77,15 @@ public class Contract {
 		accident.setContent(content);
 		accident.setDamageCost(damageCost);
 		accident.setHandlingStatus(handlingStatus);
-		this.accidentList.insert(accident);
+		this.accidentList.add(accident);
 	}
 
-//
-//	public boolean payFee(enum monthOfPayment){
-//		return false;
-//	}
-//
+	public void payFee(Contract contract, int month) {
+		if (this.contractDAO.updatePayHistory(contract.getContractId(), month)) {
+			contract.getPayHistory()[month] = true;
+		}
+	}
+
 //	public void reportAccident(String content, enum type){
 //
 //	}
