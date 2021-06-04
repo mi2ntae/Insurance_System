@@ -694,32 +694,34 @@ public class Home {
 		for(Contract contract : this.contractList) {
 			if(contract.isEffectiveness() == true) {
 				if(contract.getUnpaidPeriod() > 0) {
+					Insurance insurance = insuranceDAO.selectInsurance(contract.getInsuranceId());
+					Insurant insurant = insurantDAO.selectInsurant(contract.getInsuranceId());
+					Customer customer = customerDAO.selectCustomer(insurant.getCustomerId());
 					System.out.println("계약 ID : " + contract.getContractId());
-					System.out.println("고객 ID : " + contract.getCustomerId());
-					System.out.println("보험 이름 : " + contract.getInsurance().getName());
+					System.out.println("고객 ID : " + customer.getCustomerId());
+					System.out.println("보험 이름 : " + insurance.getName());
 					System.out.println("미납 금액 : " + contract.getFee() * contract.getUnpaidPeriod());
 					System.out.println("미납된 월 수 : " + contract.getUnpaidPeriod());
 				}
 			}
 		}
-		Contract contract = null;
-		while (contract == null) {
-			System.out.println("(이전 화면으로 돌아가려면 0을 입력하세요)");
+		
+		while(true) {
 			System.out.println("관리할 계약 ID를 입력하세요");
+			System.out.println("*종료를 원하실 경우 '0'을 입력해주세요.");
 			String input = scn.next();
-			if (input.equals("0")) {
-				return;
+			if(input.equals("0")) return;
+			Contract contract = this.contractDAO.selectContract(input);
+			if(contract == null || contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0) {
+				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
+				continue;
 			}
-			contract = this.contractDAO.selectContract(input);
-			if (contract == null) {
-				System.out.println("해당 계약이 존재하지 않습니다");
-			} else if (contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0) {
-				System.out.println("해당 계약은 미납계약이 아닙니다");
-				contract = null;
-			}
+			this.showContractData(contract);
+			Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
+			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsurantId());
+			this.showInsurantData(insurant, insurance.getType());
+			break;
 		}
-		this.showContractData(contract);
-		this.showInsurantData(contract.getInsurant(), contract.getInsurance().getType());
 
 		//부활신청한 계약들을 판단할 방법 생각
 	}
@@ -744,8 +746,11 @@ public class Home {
 				System.out.println("해당 계약이 존재하지 않습니다");
 			}
 		}
+
 		this.showContractData(contract);
-		this.showInsurantData(contract.getInsurant(), contract.getInsurance().getType());
+		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
+		Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsurantId());
+		this.showInsurantData(insurant, insurance.getType());
 		
 		System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		String input = scn.next();
@@ -764,8 +769,8 @@ public class Home {
 	
 	// 보험 정보 수정
 	private void changeContractData(Contract contract) {
-		Insurant insurant = contract.getInsurant();
-		Insurance insurance  = contract.getInsurance();
+		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
+		Insurance insurance  = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
 
 		System.out.print("이름 : ");
 		String name = scn.next();
@@ -933,8 +938,8 @@ public class Home {
 			int accidentHistory = scn.nextInt();
 			insurant.setAccidentHistory(accidentHistory);
 		}
-		
-		contract.setLifespan(time + contract.getInsurance().getWarrantyPeriod());
+		Insurance tmptInsurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
+		contract.setLifespan(time + tmptInsurance.getWarrantyPeriod());
 		contract.setFee(0);
 		contract.setPaidFee(0);
 		contract.setUnpaidPeriod(0);
@@ -943,38 +948,38 @@ public class Home {
 	// 가입한 보험 리스트 보기
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
-		for (Contract contract : this.contractList) {
-			if(contract.getCustomerId().equals(customer.getCustomerId())) {
+		
+		for(Insurant insurant : customer.getInsurantList()) {
+			for(Contract contract : contractDAO.selectByInsurant(insurant.getInsurantId())) {
 				if(contract.isEffectiveness()) {
 					count++;
 					this.showSimpleContract(contract, contract.isEffectiveness());
 				}
 			}
 		}
+		
 		if(count == 0) {
 			System.out.println("----------가입한 보험이 없습니다----------");
 			return null;
 		}
+		
 		Contract contract = null;
-		while (contract == null) {
-			System.out.println("이전 화면으로 돌아가려면 0을 입력하세요");
-			System.out.println("상세 정보를 확인할 계약의 ID를 입력하세요 : ");
+		while(true) {
+			System.out.println("관리할 계약 ID를 입력하세요");
+			System.out.println("*종료를 원하실 경우 '0'을 입력해주세요.");
 			String input = scn.next();
-			if(input.equals("0")) {
-				return null;
-			}
+			if(input.equals("0")) break;
 			contract = this.contractDAO.selectContract(input);
-			if(contract != null) {
-				if (contract.getCustomer().getCustomerId() != customer.getCustomerId() && !contract.isEffectiveness()) {
-					contract = null;
-				}
+			System.out.println(contract);
+			if(contract == null || !contract.isEffectiveness()) {
+				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
+				continue;
 			}
-			if (contract == null) {
-				System.out.println("해당 계약을 가입하지 않았습니다");
-			}
+			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
+			this.showInsuranceData(insurance);
+			this.showContractData(contract);
+			break;
 		}
-		this.showInsuranceData(contract.getInsurance());
-		this.showContractData(contract);
 		return contract;
 	}
 
@@ -1979,19 +1984,20 @@ public class Home {
 		}
 	
 		// 보장내역 설정
+		boolean[] tmpt = new boolean[10];
 		System.out.println("보장 내역을 설정합니다.");
-		makeGuaranteePlan(newInsurance, false);
+		makeGuaranteePlan(newInsurance, false, tmpt);
 		
 		// 특약 보장내역 설정
 		if(newInsurance.isSpecialContract()) {
 			System.out.println("특약 보장 내역을 설정합니다.");
-			makeGuaranteePlan(newInsurance, true);
+			makeGuaranteePlan(newInsurance, true, tmpt);
 		}
 		return newInsurance;
 	}
 
 	// 보장내역 설정하기
-	private void makeGuaranteePlan(Insurance newInsurance, boolean special) {
+	private void makeGuaranteePlan(Insurance newInsurance, boolean special, boolean[] tmpt) {
 		if (newInsurance.getType().equals(eInsuranceType.dentalInsurance)
 				|| newInsurance.getType().equals(eInsuranceType.cancerInsurance)) {
 			while (true) {
@@ -2002,13 +2008,14 @@ public class Home {
 					}
 					System.out.println("0.그만하기");
 					int input = scn.nextInt();
-					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length) {
+					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
 						int compensation;
 						while (true) {
 							try {
 								System.out.println("해당 항목의 보상금액을 입력해주세요.");
 								System.out.println(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 보상금액 : ");
 								compensation = scn.nextInt();
+								tmpt[input] = true;
 								break;
 							} catch (InputMismatchException e) {
 								System.out.println("error : 숫자를 입력해주세요");
@@ -2039,13 +2046,14 @@ public class Home {
 					}
 					System.out.println("0.그만하기");
 					int input = scn.nextInt();
-					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length) {
+					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
 						int compensation;
 						while (true) {
 							try {
 								System.out.println("해당 항목의 최대 보상 금액을 입력해주세요.");
 								System.out.println(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 최대 보상금액 : ");
 								compensation = scn.nextInt();
+								tmpt[input] = true;
 								break;
 							} catch (InputMismatchException e) {
 								System.out.println("error : 숫자를 입력해주세요");

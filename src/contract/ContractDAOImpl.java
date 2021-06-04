@@ -64,6 +64,31 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		return contract;
 	}
 	
+	public ArrayList<Contract> selectByInsurant(String insurantId) {
+		ArrayList<Contract> contractList = new ArrayList<Contract>();
+		
+		String sql = "SELECT * FROM contract where insurantId = '"+ insurantId +"';";
+		this.read(sql);
+		
+		Contract contract = new Contract();
+		try {
+			while (rs.next()) {
+				contract.setContractId(rs.getString("contractId"));
+				contract.setInsurantId(rs.getString("insurantId"));
+				contract.setInsuranceId(rs.getString("insuranceId"));
+				contract.setEffectiveness(rs.getBoolean("effectiveness"));
+				contract.setSpecial(rs.getBoolean("special"));
+				contract.setLifespan(rs.getInt("lifespan"));
+				contract.setFee(rs.getInt("fee"));
+				contract.setUnpaidPeriod(rs.getInt("unpaidPeriod"));
+				contractList.add(contract);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contractList;
+	}
+	
 	public boolean[] selectPayHistory(String contractId) {
 		boolean[] payHistory = new boolean[12];
 		int index = 0;
