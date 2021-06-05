@@ -21,11 +21,12 @@ public class Contract {
 	private ArrayList<Accident> accidentList;
 	
 	private ContractDAO contractDAO;
+	private AccidentDAO accidentDAO;
 	
 
 	// Constructor
 	public Contract(){
-		
+		accidentDAO = new AccidentDAOImpl();
 	}
 	
 	// Getters&Setters
@@ -77,13 +78,17 @@ public class Contract {
 		accident.setContent(content);
 		accident.setDamageCost(damageCost);
 		accident.setHandlingStatus(handlingStatus);
-		this.accidentList.add(accident);
+		this.accidentDAO.insert(accident);
 	}
 
 	public void payFee(Contract contract, int month) {
 		if (this.contractDAO.updatePayHistory(contract.getContractId(), month)) {
 			contract.getPayHistory()[month] = true;
 		}
+	}
+
+	public void bringAccident() {
+		this.accidentList = this.accidentDAO.selectByContractId(this.contractId);
 	}
 
 //	public void reportAccident(String content, enum type){

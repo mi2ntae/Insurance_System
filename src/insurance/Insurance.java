@@ -85,12 +85,19 @@ public abstract class Insurance {
 	
 	public ArrayList<GuaranteePlan> getGuaranteePlanList() {return guaranteePlanList;}
 	public void setGuaranteePlanList(ArrayList<GuaranteePlan> guaranteePlanList) {this.guaranteePlanList = guaranteePlanList;}
+	
+	public GuaranteePlanDAO getGuaranteePlanDAO() {return guaranteePlanDAO;}
+	public void setGuaranteePlanDAO(GuaranteePlanDAO guaranteePlanDAO) {this.guaranteePlanDAO = guaranteePlanDAO;}
 
 	// Public Methods
 	abstract public int calculateFee(Insurant Insurnat);
 	abstract public void readFromSelectedFile(Scanner scn);
 	abstract public String writeToSelectedFile();
 	abstract public Insurance newInstance();
+	
+	public void birngGuaranteePlan() {
+		this.guaranteePlanList = this.guaranteePlanDAO.selectById(this.insuranceId);
+	}
 	
 	public void addGuaranteePlan(String content, int compensation, boolean special, double rate) {
 		GuaranteePlan guaranteePlan = new GuaranteePlan();
