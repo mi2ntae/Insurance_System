@@ -3,6 +3,7 @@ package insurance;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import global.Constants;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 import main.DBConnector;
@@ -78,7 +79,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 						insurance.setRateOfJob(rateOfJob);
 						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
 						insurance.setSpecialContract(rs.getBoolean("specialContract"));
-
+						insurance.setDel(rs.getBoolean("del"));
 						arrayList.add(insurance);
 					}
 				}
@@ -126,6 +127,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 						insurance.setRateOfJob(rateOfJob);
 						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
 						insurance.setSpecialContract(rs.getBoolean("specialContract"));
+						insurance.setDel(rs.getBoolean("del"));
 
 						InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
 						insurance = insuranceDao.selectTypeInsurance(insurance);
@@ -159,14 +161,24 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		else return false;
 	}
 	
+	public boolean updateDel(String insuranceId, boolean del) {
+		String sql = "UPDATE insurance SET del = "+del+" WHERE insuranceID = '"+insuranceId+"';";
+		return super.execute(sql);
+	}
+	
 	public boolean delete(String insuranceId) {
 		String str = "DELETE FROM insurance WHERE insuranceId = '" + insuranceId + "'";
 		if (this.execute(str)) return true;
 		else return false;
 	}
 
+	public boolean deleteInsuranceByTime() {
+		String sql = "DELETE i FROM insurance i INNER JOIN contract c ON c.insuranceId = i.insuranceId WHERE i.del = true AND c.lifespan = "+Constants.thisYear*100+Constants.thisMonth;
+		return super.execute(sql);
+	}
 	public Insurance selectTypeInsurance(Insurance insurance) {
 		return null;
 	}
 
+	
 }

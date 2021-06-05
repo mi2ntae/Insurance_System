@@ -259,7 +259,7 @@ public class Home {
 													this.createInsurance();
 													break;
 												case 3:
-													// 보험상품 사후 관리하기
+													this.postManageInsurance();
 													break;
 												case 0:
 													break employee2;
@@ -453,11 +453,20 @@ public class Home {
 						Constants.thisYear += 1;
 						Constants.thisMonth = 1;
 						for (Contract contract: this.contractList) {
-							contract.setPayHistory(new boolean[12]);
+							if (contractDAO.updateAnnualPayHistory()) {
+								contract.setPayHistory(new boolean[12]);
+							} else {
+								System.out.println("해가 지났는데 납부 내역을 일괄 초기화할 수 없음. DB오류");
+							}
+							
 						}
 					} else {
 						Constants.thisMonth += 1;
 					}
+					if (!insuranceDAO.deleteInsuranceByTime()) {
+						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
+					}
+					
 					
 					break;
 				case 0:
@@ -773,7 +782,7 @@ public class Home {
 		}
 	}
 	
-	// 보험 정보 수정
+	// 계약 정보 수정
 	private void changeContractData(Contract contract) {
 		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 		Insurance insurance  = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
@@ -2672,7 +2681,7 @@ public class Home {
 			}
 		}
 		while (true) {
-			System.out.println("1.일괄 납부하기");
+			System.out.println("\n1.일괄 납부하기");
 			System.out.println("2.선택한 월의 보험료 납부하기");
 			System.out.println("0.돌아가기");
 			System.out.printf("원하는 메뉴를 입력해주세요 : ");
@@ -2743,6 +2752,162 @@ public class Home {
 				break;
 			}
 			break;
+		}
+	}
+	
+	private void showDeletedInsurance(boolean del) {
+		System.out.println("------보험 정보------");
+		for (Insurance insurance: this.insuranceList) {
+			if (insurance.isDel() == del){
+				System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
+				System.out.println("  기본보험료 : " + insurance.getBasicFee());
+				System.out.println("-------------------");
+			}
+		}
+	}
+	private void postManageInsurance() {
+		menu:while (true) {
+			System.out.println("\n1.보험 상품 삭제하기");
+			System.out.println("2.보험 상품 복구하기");
+			System.out.println("0.돌아가기");
+			System.out.printf("원하는 메뉴를 입력해주세요 : ");
+			int inputMenu = 0;
+			try {
+				inputMenu = scn.nextInt();
+			} catch (InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+				continue menu;
+			}
+			
+			String inputId = "";
+			boolean isDelExist;
+			switch (inputMenu) {
+			case 0:
+				return;
+			case 1:
+				this.showDeletedInsurance(false);
+				isDelExist = true;
+				for (Insurance insurance: this.insuranceList) {
+					if (!insurance.isDel()) {
+						isDelExist = false;
+					}
+				}
+				if (isDelExist) {
+					System.out.println("삭제를 요청할 보험이 존재하지 않습니다. 이전 화면으로 돌아갑니다.");
+					continue menu;
+				}
+				id: while (true) {
+					System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+					System.out.printf("상세정보를 확인할 보험의 ID를 입력하세요 : ");
+					boolean isExist = false;
+					Insurance tmpInsurance = null;
+					inputId = scn.next();
+					if (inputId.equals("0")) {
+						continue menu;
+					}
+					for (Insurance insurance: this.insuranceList) {
+						if (insurance.getInsuranceId().equals(inputId)) {
+							isExist = true;
+							tmpInsurance = insurance;
+						}
+					}
+					if (tmpInsurance.isDel()) {
+						System.out.println("이미 삭제요청된 보험입니다! 이전 화면으로 돌아갑니다.");
+						continue id;
+					}
+					if (isExist) {
+						this.showInsuranceData(tmpInsurance);
+						while (true) {
+							System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+							System.out.printf("해당 보험을 삭제하시겠습니까?(y/n) : ");
+							String inputDelete = scn.next();
+							if (inputDelete.equals("y")) {
+								if (this.insuranceDeveloper.postManageInsurance(tmpInsurance, true)) {
+									System.out.println("보험 삭제요청이 완료되었습니다.");
+									break id;
+								} else {
+									System.out.println("시스템에 오류가 발생하여 요청이 취소되었습니다.");
+								}
+								continue menu;
+							} else if (inputDelete.equals("n")) {
+								System.out.println("보험 삭제를 취소합니다. 이전 화면으로 돌아갑니다.");
+								continue id;
+							} else {
+								System.out.println("질못 입력하셨습니다. 다시 입력해주세요.");
+								continue;
+							}
+						}
+					} else {
+						System.out.println("존재하지 않는 ID입니다. 다시 입력해주세요.");
+						continue id;
+					}	
+				}
+				break;
+			case 2:
+				this.showDeletedInsurance(true);
+				isDelExist = false;
+				for (Insurance insurance: this.insuranceList) {
+					if (insurance.isDel()) {
+						isDelExist = true;
+					}
+				}
+				if (!isDelExist) {
+					System.out.println("복구를 요청할 보험이 존재하지 않습니다. 이전 화면으로 돌아갑니다.");
+					continue menu;
+				}
+				id: while (true) {
+					System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+					System.out.printf("상세정보를 확인할 보험의 ID를 입력하세요 : ");
+					boolean isExist = false;
+					Insurance tmpInsurance = null;
+					inputId = scn.next();
+					if (inputId.equals("0")) {
+						continue menu;
+					}
+					for (Insurance insurance: this.insuranceList) {
+						if (insurance.getInsuranceId().equals(inputId)) {
+							isExist = true;
+							tmpInsurance = insurance;
+						}
+					}
+					if (!tmpInsurance.isDel()) {
+						System.out.println("삭제요청이 되지 않은 보험입니다! 이전 화면으로 돌아갑니다.");
+						continue id;
+					}
+					if (isExist) {
+						this.showInsuranceData(tmpInsurance);
+						while (true) {
+							System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+							System.out.printf("해당 보험을 복구하시겠습니까?(y/n) : ");
+							String inputDelete = scn.next();
+							if (inputDelete.equals("y")) {	
+								if (this.insuranceDeveloper.postManageInsurance(tmpInsurance, false)) {
+									System.out.println("보험 복구 요청이 완료되었습니다.");
+									break id;
+								} else {
+									System.out.println("시스템에 오류가 발생하여 요청이 취소되었습니다.");
+								}
+								continue menu;
+							} else if (inputDelete.equals("n")) {
+								System.out.println("보험 복구를 취소하셨습니다. 이전 화면으로 돌아갑니다.");
+								continue id;
+							} else {
+								System.out.println("질못 입력하셨습니다. 다시 입력해주세요.");
+								continue;
+							}
+						}
+					} else {
+						System.out.println("존재하지 않는 ID입니다. 다시 입력해주세요.");
+						continue id;
+					}	
+				}
+				break;
+			default:
+				System.out.println("잘못 입력하셨습니다. 다시 입력해주세요");
+				break;
+			}
 		}
 	}
 }
