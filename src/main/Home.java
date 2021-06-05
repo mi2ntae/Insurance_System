@@ -2820,7 +2820,6 @@ public class Home {
 					if (isExist) {
 						this.showInsuranceData(tmpInsurance);
 						while (true) {
-							System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
 							System.out.printf("해당 보험을 삭제하시겠습니까?(y/n) : ");
 							String inputDelete = scn.next();
 							if (inputDelete.equals("y")) {
@@ -2835,7 +2834,7 @@ public class Home {
 								System.out.println("보험 삭제를 취소합니다. 이전 화면으로 돌아갑니다.");
 								continue id;
 							} else {
-								System.out.println("질못 입력하셨습니다. 다시 입력해주세요.");
+								System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
 								continue;
 							}
 						}
@@ -2879,7 +2878,6 @@ public class Home {
 					if (isExist) {
 						this.showInsuranceData(tmpInsurance);
 						while (true) {
-							System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
 							System.out.printf("해당 보험을 복구하시겠습니까?(y/n) : ");
 							String inputDelete = scn.next();
 							if (inputDelete.equals("y")) {	
