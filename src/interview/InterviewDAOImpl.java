@@ -24,6 +24,7 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 	public ArrayList<Interview> select() {
 		ArrayList<Interview> arrayList = new ArrayList<Interview>();
 		String sql = "SELECT * FROM interview";
+		this.read(sql);
 		try {
 			while (rs.next()) {
 				Interview interview = new Interview();
