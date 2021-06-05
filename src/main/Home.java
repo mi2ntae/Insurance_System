@@ -70,7 +70,7 @@ public class Home {
 	
 	private InsuranceDeveloper insuranceDeveloper;
 	private InsuranceConfirmer insuranceConfirmer;
-	//time : 달 (임시)
+
 	private int time = 0;
 	
 	public Home(){
@@ -731,11 +731,9 @@ public class Home {
 				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
 				continue;
 			}
-			this.showContractData(contract);
 			Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
-			
-			//에러
-			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsurantId());
+			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
+			this.showContractData(contract);
 			this.showInsurantData(insurant, insurance.getType());
 			break;
 		}
@@ -751,6 +749,7 @@ public class Home {
 			}
 		}
 		this.contractDAO.delete(contract.getContractId());
+		System.out.println("------보험계약을 종료시켰습니다------");
 	}
 
 	// 만기 계약 관리
@@ -1065,8 +1064,8 @@ public class Home {
 					return;
 				case 1:
 					underwriter.approveContract(contract);
-					contract.setFee(insurance.calculateFee(insurant));
 					contract.connectContractDAO(this.contractDAO);
+					contractDAO.updateFee(contract.getContractId(),insurance.calculateFee(insurant));
 					for (int i = 0; i < Constants.thisMonth; i++) {
 						contract.payFee(contract, i);
 					}
@@ -1262,7 +1261,7 @@ public class Home {
 		if (input.equals("1") && !customer.getInsurantList().isEmpty()) {
 			for (Insurant insurant : customer.getInsurantList()) {
 				if(insurant.getCustomerId().equals(customer.getCustomerId())) {
-					this.showInsurantData(insurant, insurance.getType());
+					this.showInsurantData(insurant, null);
 				}
 			}
 			boolean flag = false;
@@ -1342,6 +1341,8 @@ public class Home {
 				}
 			}
 			insurant.setUsageOfStructure(usageOfStructure);
+		} else {
+			insurant.setUsageOfStructure(eUsageOfStructure.none);
 		}
 		
 		System.out.println("성별\n1.남자\n2.여");
@@ -1393,6 +1394,8 @@ public class Home {
 				}
 			}
 			insurant.setJob(job);
+		} else {
+			insurant.setJob(eJob.none);
 		}
 		
 		if(insurance.getType() == eInsuranceType.driverInsurance) {
@@ -1444,6 +1447,9 @@ public class Home {
 				}
 			}
 			insurant.setTypeOfCar(typeOfCar);
+		} else {
+			insurant.setRankOfCar(eRankOfCar.none);
+			insurant.setTypeOfCar(eTypeOfCar.none);
 		}
 		
 		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
@@ -1475,7 +1481,10 @@ public class Home {
 				}
 			}
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
+		} else {
+			insurant.setRiskOfTripCountry(eRiskOfTripCountry.none);
 		}
+		insurant.setCustomerId(customer.getCustomerId());
 		customer.createInsurant(insurant);
 		return insurant;
 	}
@@ -1858,7 +1867,7 @@ public class Home {
 			double[] tmpRateOfJob = new double[eJob.values().length];
 			System.out.println("직업에 대한 요율을 설정합니다. ex) 직장 : 1.0)");
 			
-			for (int i = 0; i < eJob.values().length; i++) {
+			for (int i = 1; i < eJob.values().length; i++) {
 				try {
 					System.out.printf(eJob.values()[i].getName() + " : ");
 					tmpRateOfJob[i] = scn.nextDouble();
@@ -1980,7 +1989,7 @@ public class Home {
 				}
 				System.out.println("건물용도에 따른 요율을 설정합니다.");
 				double[] tmpRateOfUsageOfStructure = new double[eUsageOfStructure.values().length];
-				for (int i = 0; i < eUsageOfStructure.values().length; i++) {
+				for (int i = 1; i < eUsageOfStructure.values().length; i++) {
 					System.out.printf(eUsageOfStructure.values()[i].getName()+" : ");
 					try {
 						tmpRateOfUsageOfStructure[i] = scn.nextDouble();
@@ -1997,7 +2006,7 @@ public class Home {
 			case tripInsurance:
 				System.out.println("여행국가의 위험정도에 따른 요율을 설정합니다.");
 				double[] tmpRateOfRiskOfTripCountry = new double[eRiskOfTripCountry.values().length];
-				for (int i = 0; i < eRiskOfTripCountry.values().length; i++) {
+				for (int i = 1; i < eRiskOfTripCountry.values().length; i++) {
 					System.out.printf(eRiskOfTripCountry.values()[i].getName()+" : ");
 					try {
 						tmpRateOfRiskOfTripCountry[i] = scn.nextDouble();
@@ -2642,7 +2651,7 @@ public class Home {
 				System.out.println(Constants.postedPrice[i]+" : "+((FireInsurance)insurance).getRateOfPostedPrice()[i]);
 			}
 			System.out.println("\n  <건축물 용도 요율표>");
-			for (int i = 0; i < eUsageOfStructure.values().length; i++) {
+			for (int i = 1; i < eUsageOfStructure.values().length - 1; i++) {
 				System.out.println(eUsageOfStructure.values()[i].getName()+" : "+((FireInsurance)insurance).getRateOfStructureUsage()[i]);
 			}
 			break;
@@ -2658,7 +2667,7 @@ public class Home {
 			break;
 		case tripInsurance:
 			System.out.println("\n  <여행지역 안전도 요율표>");
-			for (int i = 0; i <	eRiskOfTripCountry.values().length; i++) {
+			for (int i = 1; i <	eRiskOfTripCountry.values().length - 1; i++) {
 				System.out.println(eRiskOfTripCountry.values()[i].getName()+" : "+((TripInsurance)insurance).getRateOfCountryRank()[i]);
 			}
 			break;

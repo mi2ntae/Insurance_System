@@ -63,6 +63,7 @@ public class Constants {
 	}
 
 	public static enum eJob {
+		none(0, "null"),
 		officeWorker(1, "사무직"),
 		driver(2, "운송업"),
 		factoryWorker(3, "현장직"),
@@ -125,6 +126,7 @@ public class Constants {
 	public static String[] accidentHistory = {"0회", "1회", "2회~3회", "4회~5회", "6회~7회", "8회 이상"};
 	
 	public static enum eUsageOfStructure {
+		none(0, "null"),
 		house(1,"주택"), 
 		study(2, "교육"), 
 		factory(3, "공장"), 
@@ -145,6 +147,7 @@ public class Constants {
 	}
 
 	public static enum eRiskOfTripCountry {
+		none(0, "null"),
 		safe(1, "안전"), 
 		first(2, "1단계"), 
 		second(3, "2단계"), 

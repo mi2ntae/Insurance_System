@@ -147,7 +147,12 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 	}
 	
 	public boolean delete(String contractId) {
-		String sql = "DELETE contract WHERE contractId = '"+contractId+"';";
+		String sql = "SET foreign_key_checks = 0";
+		this.execute(sql);
+		sql = "DELETE FROM contract WHERE contractId = "+contractId+";";
+		this.execute(sql);
+		sql = "SET foreign_key_checks = 1";
+		
 		return this.execute(sql);
 	}
 	
