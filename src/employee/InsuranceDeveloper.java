@@ -52,8 +52,12 @@ public class InsuranceDeveloper extends Employee {
 		
 	}
 
-	public void postManageInsurance(Insurance insurance){
-		
+	public boolean postManageInsurance(Insurance insurance, boolean del){
+		if (insuranceDAO.updateDel(insurance.getInsuranceId(), del)) {
+			insurance.setDel(del);
+			return true;
+		}
+		return false;
 	}
 
 	public void readSurveyResult(){
