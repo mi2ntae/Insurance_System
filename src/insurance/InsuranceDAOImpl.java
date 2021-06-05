@@ -18,7 +18,8 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 				+ insurance.getGender().getNum() + "," + insurance.getBasicFee() + ","
 				+ insurance.getSpecialContractFee() + "," + insurance.getWarrantyPeriod() + ",";
 		int cnt = 0;
-		for (double rate : insurance.getRateOfAge()) {str += rate + ",";
+		for (double rate : insurance.getRateOfAge()) {
+		str += rate + ",";
 		cnt ++;
 		}
 		System.out.println(cnt);
@@ -30,6 +31,9 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		System.out.println(cnt);
 		cnt = 0;
 		for (double rate : insurance.getRateOfJob()) {
+			if(rate == 0) {
+				continue;
+			}
 			str += rate + ",";
 			cnt++;
 		}

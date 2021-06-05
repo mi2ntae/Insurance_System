@@ -20,6 +20,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				+ insurant.getGender().getNum() + "','" + insurant.getJob().getNum() + "','"
 				+ insurant.getTypeOfCar().getNum() + "','" + insurant.getRankOfCar().getNum()+ "','"
 				+ insurant.getRiskOfTripCountry().getNum() + "')";
+		System.out.println(str);
 		if (this.execute(str))
 			return true;
 		else
@@ -28,7 +29,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 
 	public ArrayList<Insurant> select() {
 		ArrayList<Insurant> arrayList = new ArrayList<Insurant>();
-
+		
 		String sql = "SELECT * FROM insurant";
 		this.read(sql);
 		try {

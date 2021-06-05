@@ -14,10 +14,16 @@ public class FireInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		String str = "INSERT INTO fireInsurance(insuranceId, rateOfPostedPrice0, rateOfPostedPrice1, rateOfPostedPrice2, rateOfPostedPrice3,"
 				+ " rateOfPostedPrice4, rateOfStructureUsage0, rateOfStructureUsage1, rateOfStructureUsage2, rateOfStructureUsage3,"
 				+ " rateOfStructureUsage4, rateOfStructureUsage5) values('" + newInsurance.getInsuranceId() + "'";
-		for (double rate : newInsurance.getRateOfPostedPrice()) str += "," + rate;
-		for (double rate : newInsurance.getRateOfStructureUsage()) str += "," + rate;
+		for (double rate : newInsurance.getRateOfPostedPrice()) {
+			str += "," + rate;
+		}
+		for (double rate : newInsurance.getRateOfStructureUsage()) {
+			if(rate == 0) {
+				continue;
+			}
+			str += "," + rate;
+		}
 		str += ")";
-
 		if (this.execute(str)) return true;
 		else return false;
 	}
