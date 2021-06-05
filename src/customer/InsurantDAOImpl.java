@@ -43,54 +43,50 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				insurant.setAccidentHistory(rs.getInt("accidentHistory"));
 				insurant.setPostedPriceOfStructure(rs.getLong("postedPriceOfStructure"));
 				
-				// 여기다가 enum값을 넣는거 구현
-				int temp = rs.getInt("usageOfStructure");
-				for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) {
-					if(usageOfStructure.getNum() == temp) {
-						insurant.setUsageOfStructure(usageOfStructure);
-					}
-				}
+				for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) if(usageOfStructure.getNum() == rs.getInt("usageOfStructure")) insurant.setUsageOfStructure(usageOfStructure);
+				for(eGender gender : eGender.values()) if(gender.getNum() == rs.getInt("gender")) insurant.setGender(gender);
+				for(eJob job : eJob.values()) if(job.getNum() == rs.getInt("job")) insurant.setJob(job);
+				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) if(typeOfCar.getNum() == rs.getInt("typeOfCar")) insurant.setTypeOfCar(typeOfCar);
+				for(eRankOfCar rankOfCar : eRankOfCar.values()) if(rankOfCar.getNum() == rs.getInt("rankOfCar")) insurant.setRankOfCar(rankOfCar);
+				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) if(riskOfTripCountry.getNum() == rs.getInt("riskOfTripCountry")) insurant.setRiskOfTripCountry(riskOfTripCountry);
 				
-				temp = rs.getInt("gender");
-				for(eGender gender : eGender.values()) {
-					if(gender.getNum() == temp) {
-						insurant.setGender(gender);
-					}
-				}
-				
-				temp = rs.getInt("job");
-				for(eJob job : eJob.values()) {
-					if(job.getNum() == temp) {
-						insurant.setJob(job);
-					}
-				}
-				
-				temp = rs.getInt("typeOfCar");
-				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) {
-					if(typeOfCar.getNum() == temp) {
-						insurant.setTypeOfCar(typeOfCar);
-					}
-				}
-				
-				temp = rs.getInt("rankOfCar");
-				for(eRankOfCar rankOfCar : eRankOfCar.values()) {
-					if(rankOfCar.getNum() == temp) {
-						insurant.setRankOfCar(rankOfCar);
-					}
-				}
-				
-				temp = rs.getInt("riskOfTripCountry");
-				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
-					if(riskOfTripCountry.getNum() == temp) {
-						insurant.setRiskOfTripCountry(riskOfTripCountry);
-					}
-				}
 				arrayList.add(insurant);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return arrayList;
+	}
+	
+	public Insurant selectByCustomerId(String customerId) {
+		
+		String sql = "SELECT * FROM insurant WHERE customerId = '" + customerId + "'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				Insurant insurant = new Insurant();
+				insurant.setInsurantId(rs.getString("insurantId"));
+				insurant.setCustomerId(rs.getString("customerId"));
+				insurant.setName(rs.getString("name"));
+				insurant.setAddress(rs.getString("address"));
+				insurant.setPhoneNumber(rs.getString("phoneNumber"));
+				insurant.setAge(rs.getInt("age"));
+				insurant.setAccidentHistory(rs.getInt("accidentHistory"));
+				insurant.setPostedPriceOfStructure(rs.getLong("postedPriceOfStructure"));
+				
+				for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) if(usageOfStructure.getNum() == rs.getInt("usageOfStructure")) insurant.setUsageOfStructure(usageOfStructure);
+				for(eGender gender : eGender.values()) if(gender.getNum() == rs.getInt("gender")) insurant.setGender(gender);
+				for(eJob job : eJob.values()) if(job.getNum() == rs.getInt("job")) insurant.setJob(job);
+				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) if(typeOfCar.getNum() == rs.getInt("typeOfCar")) insurant.setTypeOfCar(typeOfCar);
+				for(eRankOfCar rankOfCar : eRankOfCar.values()) if(rankOfCar.getNum() == rs.getInt("rankOfCar")) insurant.setRankOfCar(rankOfCar);
+				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) if(riskOfTripCountry.getNum() == rs.getInt("riskOfTripCountry")) insurant.setRiskOfTripCountry(riskOfTripCountry);
+				
+				return insurant;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override

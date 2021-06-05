@@ -6,6 +6,7 @@ public interface InsurantDAO {
 	public boolean insert(Insurant insurant);
 	public ArrayList<Insurant> select();
 	public Insurant selectInsurant(String InsurantId);
+	public Insurant selectByCustomerId(String customerId);
 	
 	public boolean updateName(String insurantId, String name);
 	public boolean updateAddress(String insurantId, String address);

@@ -45,6 +45,58 @@ public class EmployeeDAOImpl extends DBConnector implements EmployeeDAO{
 		}
 		return employeeList;
 	}
+	
+	public Employee selectSlaesPerson(String employeeId) {
+		String sql = "SELECT * FROM employee WHERE role = 3 AND employeeId = '" + employeeId + "'";
+		this.read(sql);
+		Employee employee = new Employee();
+		try {
+			while (rs.next()) {
+				employee.setEmployeeId(rs.getString("employeeId"));
+				employee.setPassword(rs.getString("password"));
+				employee.setName(rs.getString("name"));
+				employee.setPhoneNumber(rs.getString("phoneNumber"));
+				int role = rs.getInt("role");
+				for (eEmployeeRole employeeRole: eEmployeeRole.values()) {
+					if (employeeRole.getNum() == role) {
+						employee.setEmployeeRole(employeeRole);
+					}
+				}
+				employee.setSaleHistory(rs.getInt("saleHistory"));
+				return employee;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public ArrayList<Employee> selectSlaesPersons() {
+		ArrayList<Employee> employeeList = new ArrayList<Employee>();
+
+		String sql = "SELECT * FROM employee WHERE role = 3 ORDER BY saleHistory ASC";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				Employee employee = new Employee();
+				employee.setEmployeeId(rs.getString("employeeId"));
+				employee.setPassword(rs.getString("password"));
+				employee.setName(rs.getString("name"));
+				employee.setPhoneNumber(rs.getString("phoneNumber"));
+				int role = rs.getInt("role");
+				for (eEmployeeRole employeeRole: eEmployeeRole.values()) {
+					if (employeeRole.getNum() == role) {
+						employee.setEmployeeRole(employeeRole);
+					}
+				}
+				employee.setSaleHistory(rs.getInt("saleHistory"));
+				employeeList.add(employee);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return employeeList;
+	}
 
 	@Override
 	public boolean updateSaleHistory(String employeeId, int saleHistory) {
