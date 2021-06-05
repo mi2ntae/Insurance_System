@@ -727,18 +727,30 @@ public class Home {
 			String input = scn.next();
 			if(input.equals("0")) return;
 			Contract contract = this.contractDAO.selectContract(input);
-			if(contract == null || contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0) {
+			if(contract == null || contract.isEffectiveness() != true) {
 				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
 				continue;
 			}
 			this.showContractData(contract);
 			Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
+			
+			//에러
 			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsurantId());
 			this.showInsurantData(insurant, insurance.getType());
 			break;
 		}
-
-		//부활신청한 계약들을 판단할 방법 생각
+		Contract contract = null;
+		while(contract == null) {
+			System.out.println("*종료를 원하실 경우 '0'을 입력해주세요.");
+			System.out.println("종료할 계약을 ID를 입력하세요");
+			String input = scn.next();
+			if(input.equals("0")) return;
+			contract = this.contractDAO.selectContract(input);
+			if(contract == null) {
+				System.out.println("해당 ID의 계약이 없습니다");
+			}
+		}
+		this.contractDAO.delete(contract.getContractId());
 	}
 
 	// 만기 계약 관리
@@ -963,16 +975,6 @@ public class Home {
 	// 가입한 보험 리스트 보기
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
-		
-		for(Insurant insurant : this.insurantList) {
-			for(Contract contract : contractDAO.selectByInsurant(insurant.getInsurantId())) {
-				if(contract.isEffectiveness()) {
-					count++;
-					this.showSimpleContract(contract, contract.isEffectiveness());
-				}
-			}
-		}
-		
 		for(Contract contract : contractDAO.select()) {
 			if (contract.isEffectiveness()) {
 				Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
