@@ -310,14 +310,14 @@ public class Home {
 											try {
 												switch (scn.nextInt()) {
 												case 1:
-													// 실적 확인하기
+													this.showPerformance(employee);
 													break;
 												case 2:
 													// 면담신청 리스트 확인하기
 													this.checkInterviewList();
 													break;
 												case 3:
-													showAllInsurance();// 전체보험리스트 확인하기
+													this.showAllInsurance();
 													break;
 												case 0:
 													break employee2;
@@ -2755,6 +2755,97 @@ public class Home {
 		}
 	}
 	
+	// 실적 확인하기
+	private void showPerformance(Employee employee) {
+		System.out.println("----------<영업사원 리스트>-------------");
+		System.out.println("순위   직원ID   이름     영업실적   전화번호");
+		int cnt = 0;
+		for(Employee salesPerson : this.employeeDAO.selectSlaesPersons()) {
+			cnt++;
+			System.out.printf("%-6d%-8s%-7s%-8d%s\n", cnt, salesPerson.getEmployeeId(), salesPerson.getName(), salesPerson.getSaleHistory(), salesPerson.getPhoneNumber());
+		}
+
+		System.out.println("------------------------------------");
+		if(cnt == 0) {
+			System.out.println("현재 회사에 재직중인 영업사원의 데이터가 없습니다");
+			return;
+		}
+		System.out.println("1.영업사원 실적 보기");
+		System.out.println("2.내 실적 확인하기");
+		System.out.println("0.돌아가기");
+		roop : while(true) {
+			try {
+				int input = scn.nextInt();
+				switch(input) {
+				case 1:
+					while (true) {
+						System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+						System.out.println("찾으시는 영업사원의 ID를 입력해주세요");
+						String input2 = scn.next();
+						Employee salesperson = this.employeeDAO.selectSlaesPerson(input2);
+						if(input2.equals("0")) break;
+						if (salesperson != null) {
+							int cnt2 = 0;
+							System.out.println("-------<면담실적 리스트>--------");
+							for(Interview interview : this.interviewDAO.select()) {
+								if(salesperson.getEmployeeId().equals(interview.getSalespersonId())) {
+									cnt2++;
+									Insurant insurant = this.insurantDAO.selectByCustomerId(interview.getCustomerId());
+									System.out.println("면담일자 : " + interview.getDate());
+									System.out.println("고객 ID : " + insurant.getCustomerId());
+									System.out.println("가입자 이름 : " + insurant.getName());
+									System.out.println("성별 : " + insurant.getGender().getName());
+									System.out.println("나이 : " + insurant.getAge());
+									System.out.println("직업 : " + insurant.getJob().getName());
+									System.out.println("전화번호 : " + insurant.getPhoneNumber());
+									System.out.println("주소 : " + insurant.getAddress());
+									System.out.println("-----------------------------");
+								}
+							}
+							if(cnt2==0) {
+								System.out.println("찾으신 영업사원의 실적이 존재하지 않습니다");
+							}
+							break;
+						} else {
+							System.out.println("찾으시는 ID를 갖는 영업사원이 없습니다.");
+						}
+					}
+					break roop;
+				case 2:
+					int cnt2 = 0;
+					System.out.println("-------<면담실적 리스트>--------");
+					for(Interview interview : this.interviewDAO.select()) {
+						if(employee.getEmployeeId().equals(interview.getSalespersonId())) {
+							cnt2++;
+							Insurant insurant = this.insurantDAO.selectByCustomerId(interview.getCustomerId());
+							System.out.println("면담일자 : " + interview.getDate());
+							System.out.println("고객 ID : " + insurant.getCustomerId());
+							System.out.println("가입자 이름 : " + insurant.getName());
+							System.out.println("성별 : " + insurant.getGender().getName());
+							System.out.println("나이 : " + insurant.getAge());
+							System.out.println("직업 : " + insurant.getJob().getName());
+							System.out.println("전화번호 : " + insurant.getPhoneNumber());
+							System.out.println("주소 : " + insurant.getAddress());
+							System.out.println("-----------------------------");
+						}
+					}
+					if(cnt2==0) {
+						System.out.println("실적이 존재하지 않습니다");
+					}
+					break roop;
+				case 0:
+					break roop;
+				default:
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					System.out.println("------------------------------");
+					break;
+				}
+			} catch (InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
+			}
+		
 	private void showDeletedInsurance(boolean del) {
 		System.out.println("------보험 정보------");
 		for (Insurance insurance: this.insuranceList) {
