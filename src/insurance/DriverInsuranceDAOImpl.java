@@ -71,4 +71,16 @@ public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean updateDel(String insuranceId, boolean del) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteInsuranceByTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

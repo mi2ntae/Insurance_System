@@ -55,4 +55,16 @@ public class ActualCostInsuranceDAOImpl extends DBConnector implements Insurance
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean updateDel(String insuranceId, boolean del) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteInsuranceByTime() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

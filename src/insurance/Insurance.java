@@ -1,11 +1,9 @@
 package insurance;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 import customer.Insurant;
-import global.Constants.eEmployeeRole;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
 
@@ -24,7 +22,9 @@ public abstract class Insurance {
 	private int warrantyPeriod;
 	private boolean confirmedStatus = false;
 	private boolean specialContract;
+	private boolean del;
 	private boolean clone;
+	
 	
 	// Component
 	private GuaranteePlanDAO guaranteePlanDAO;
@@ -88,6 +88,9 @@ public abstract class Insurance {
 	
 	public GuaranteePlanDAO getGuaranteePlanDAO() {return guaranteePlanDAO;}
 	public void setGuaranteePlanDAO(GuaranteePlanDAO guaranteePlanDAO) {this.guaranteePlanDAO = guaranteePlanDAO;}
+	
+	public boolean isDel() {return del;}
+	public void setDel(boolean del) {this.del = del;}
 
 	// Public Methods
 	abstract public int calculateFee(Insurant Insurnat);
