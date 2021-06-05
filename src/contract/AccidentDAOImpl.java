@@ -58,25 +58,25 @@ public class AccidentDAOImpl extends DBConnector implements AccidentDAO{
 		return accidentList;
 	}
 
-//	public Accident selectAccident(String accidentId) {
-//		String sql = "SELECT * FROM accident where accidentId = '"+accidentId+"';";
-//		this.read(sql);
-//		
-//		Accident accident = new Accident();
-//		try {
-//			while (rs.next()) {
-//				accident.setAccidentId(rs.getString("accidentId"));
-//				accident.setContractId(rs.getString("contractId"));
-//				accident.setContent(rs.getString("content"));
-//				accident.setCompensation(rs.getInt("compensation"));
-//				accident.setDamageCost(rs.getInt("damageCost"));
-//				accident.setHandlingStatus(rs.getBoolean("handlingStatus"));
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
-//		return accident;
-//	}
+	public Accident selectAccident(String accidentId) {
+		String sql = "SELECT * FROM accident where accidentId = '"+accidentId+"';";
+		this.read(sql);
+		
+		Accident accident = new Accident();
+		try {
+			while (rs.next()) {
+				accident.setAccidentId(rs.getString("accidentId"));
+				accident.setContractId(rs.getString("contractId"));
+				accident.setContent(rs.getString("content"));
+				accident.setCompensation(rs.getInt("compensation"));
+				accident.setDamageCost(rs.getInt("damageCost"));
+				accident.setHandlingStatus(rs.getBoolean("handlingStatus"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return accident;
+	}
 	
 	public boolean updateCompensation(String accidentId, int compensation) {
 		String sql = "UPDATE accident SET compensation = "+compensation+" WHERE accidentId = '"+accidentId+"';";
