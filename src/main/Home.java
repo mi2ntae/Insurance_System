@@ -71,7 +71,7 @@ public class Home {
 	private InsuranceDeveloper insuranceDeveloper;
 	private InsuranceConfirmer insuranceConfirmer;
 
-	private int time = 0;
+	int time = Constants.thisYear * 100 + Constants.thisMonth;
 	
 	public Home(){
 		this.scn = new Scanner(System.in);
@@ -439,35 +439,32 @@ public class Home {
 					}
 					break;
 				case 3 :
-					this.time++;
-					ArrayList<String> delet = new ArrayList<String>();
-					for(Contract contract : this.contractList) {
+					if (Constants.thisMonth+1 > 12) {
+						Constants.thisYear += 1;
+						Constants.thisMonth = 1;
+						time = Constants.thisYear * 100 + Constants.thisMonth;
+						
+						for (Contract contract: this.contractDAO.select()) {
+							if (contractDAO.updateAnnualPayHistory()) {
+								contract.setPayHistory(new boolean[12]);
+							} else {
+								System.out.println("해가 지났는데 납부 내역을 일괄 초기화할 수 없음. DB오류");
+							}
+						}
+					} else {
+						time++;
+						Constants.thisMonth += 1;
+					}
+					for(Contract contract : this.contractDAO.select()) {
 						if(contract.getLifespan() - time < 0) {
 							contract.setEffectiveness(false);
 						} else {
 							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
 						}
 					}
-					
-					if (Constants.thisMonth+1 > 12) {
-						Constants.thisYear += 1;
-						Constants.thisMonth = 1;
-						for (Contract contract: this.contractList) {
-							if (contractDAO.updateAnnualPayHistory()) {
-								contract.setPayHistory(new boolean[12]);
-							} else {
-								System.out.println("해가 지났는데 납부 내역을 일괄 초기화할 수 없음. DB오류");
-							}
-							
-						}
-					} else {
-						Constants.thisMonth += 1;
-					}
 					if (!insuranceDAO.deleteInsuranceByTime()) {
 						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
 					}
-					
-					
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다");
@@ -489,7 +486,7 @@ public class Home {
 	
 	// 면담 신청하기
 	private void requestInterview(Customer customer) {
-		for(Interview interview : this.interviewList) {
+		for(Interview interview : this.interviewDAO.select()) {
 			if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
 				System.out.println("------이미 신청된 면담이 있습니다------");
 				return;
@@ -548,10 +545,10 @@ public class Home {
 					break;
 				}
 			}
-			if(this.interviewList.isEmpty()) {
+			if(this.interviewDAO.select().isEmpty()) {
 				interview.setInterviewId("1");
 			}else {
-				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewList.get(this.interviewList.size() - 1 ).getInterviewId()) + 1));
+				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewDAO.select().get(this.interviewDAO.select().size() - 1 ).getInterviewId()) + 1));
 			}
 			this.interviewDAO.insert(interview);
 			System.out.println("------면담 신청이 완료되었습니다------");
@@ -561,7 +558,7 @@ public class Home {
 	private void checkInterviewList() {
 		Salesperson salesperson = new Salesperson();
 		int count = 0;
-		for(Interview interview : this.interviewList) {
+		for(Interview interview : this.interviewDAO.select()) {
 			if(!interview.isConfirmedStatus()) {
 				count++;
 				Customer customer = this.customerDAO.selectCustomer(interview.getCustomerId());
@@ -587,7 +584,7 @@ public class Home {
 				System.out.println("------존재하지 않은 고객입니다------");
 			} else {
 				boolean flag = false;
-				for(Interview interview : this.interviewList) {
+				for(Interview interview : this.interviewDAO.select()) {
 					if(interview.getCustomerId().equals(input)&& !interview.isConfirmedStatus()) {
 						flag = true;
 					}
@@ -598,7 +595,7 @@ public class Home {
 					System.out.println("이름 : " + customer.getName());
 					System.out.println("전화번호 : " + customer.getPhoneNumber());
 					System.out.println("------이전 면담 기록------");
-					for(Interview interview : this.interviewList) {
+					for(Interview interview : this.interviewDAO.select()) {
 						if(interview.getCustomerId().equals(input) && interview.isConfirmedStatus()) {
 							this.showInterviewData(interview);
 						}
@@ -613,7 +610,7 @@ public class Home {
 					}
 					if(input.equals("y")) {
 						Interview temp = null;
-						for(Interview interview : this.interviewList) {
+						for(Interview interview : this.interviewDAO.select()) {
 							if(interview.getCustomerId().equals(customer.getCustomerId()) && !interview.isConfirmedStatus()) {
 								temp = interview;
 								
@@ -658,7 +655,7 @@ public class Home {
 	private void showSubscriberList() {
 		int unpaidCount = 0;
 		int lifeCount = 0;
-		for(Contract contract : this.contractList) {
+		for(Contract contract : this.contractDAO.select()) {
 			if(contract.isEffectiveness() == true) {
 				if(contract.getUnpaidPeriod() > 0) {
 					unpaidCount++;
@@ -706,7 +703,7 @@ public class Home {
 	
 	// 미납고객 관리
 	private void manageUnpaidContract() {
-		for(Contract contract : this.contractList) {
+		for(Contract contract : this.contractDAO.select()) {
 			if(contract.isEffectiveness() == true) {
 				if(contract.getUnpaidPeriod() > 0) {
 					Insurance insurance = insuranceDAO.selectInsurance(contract.getInsuranceId());
@@ -754,7 +751,7 @@ public class Home {
 
 	// 만기 계약 관리
 	private void ManageExpiredContract() {
-		for(Contract contract : this.contractList) {
+		for(Contract contract : this.contractDAO.select()) {
 			if(contract.getLifespan() - time < 0) {
 				this.showContractData(contract);
 			}
@@ -775,7 +772,7 @@ public class Home {
 
 		this.showContractData(contract);
 		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
-		Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsurantId());
+		Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
 		this.showInsurantData(insurant, insurance.getType());
 		
 		System.out.println("재계약을 신청하시겠습니까?(y/n)");
@@ -785,9 +782,8 @@ public class Home {
 			System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		}
 		if (input.equals("y")) {
-			
 			this.changeContractData(contract);
-			this.contractDAO.insert(contract);
+			this.contractDAO.updateLifespan(contract.getContractId(), insurance.getWarrantyPeriod());
 		} else {
 			return;
 		}
@@ -1029,7 +1025,7 @@ public class Home {
 	private void judgeContract() {
 		UnderWriter underwriter = new UnderWriter(contractDAO);
 		int count = 0;
-		for(Contract contract : this.contractList) {
+		for(Contract contract : this.contractDAO.select()) {
 			if(contract.isEffectiveness() == false && contract.getLifespan() - time > 0) {
 				this.showSimpleContract(contract, false);
 				count++;
@@ -1086,6 +1082,8 @@ public class Home {
 	private void showContractData(Contract contract) {
 		System.out.println("------계약 상세정보------");
 		System.out.println("계약 ID : " + contract.getContractId());
+		System.out.println("보험 이름: " + this.insuranceDAO.selectInsurance(contract.getInsuranceId()).getName());
+		System.out.println("가입자 ID : " + contract.getInsurantId());
 		System.out.println("특약 여부 : " + contract.isSpecial());
 		System.out.println("계약 기간 : " + contract.getLifespan());
 		System.out.println("보험료 : " + contract.getFee());
@@ -1208,7 +1206,7 @@ public class Home {
 			if (insurance != null) {
 				Insurant insurant = this.selectInsurant(customer, insurance);
 				if (customer != null) {
-					for(Contract temp : this.contractList) {
+					for(Contract temp : this.contractDAO.select()) {
 						if(temp.getInsuranceId().equals(insurance.getInsuranceId()) && this.insurantDAO.selectInsurant(temp.getInsurantId()).getCustomerId().equals(insurant.getCustomerId())) {
 							if(temp.isEffectiveness()) {
 								System.out.println("-----------이미 가입된 보험입니다-----------");
@@ -1219,11 +1217,13 @@ public class Home {
 						}
 					}
 					Contract contract = new Contract();
-					contract.setLifespan(insurance.getWarrantyPeriod() + time);
-					if(this.contractList.isEmpty()) {
+					int warrantyPeriod = insurance.getWarrantyPeriod();
+					
+					contract.setLifespan((warrantyPeriod / 12) * 100 + warrantyPeriod % 12 + time);
+					if(this.contractDAO.select().isEmpty()) {
 						contract.setContractId(Integer.toString(1));
 					} else {
-						contract.setContractId(Integer.toString(Integer.parseInt(this.contractList.get(this.contractList.size() - 1).getContractId()) + 1));
+						contract.setContractId(Integer.toString(Integer.parseInt(this.contractDAO.select().get(this.contractDAO.select().size() - 1).getContractId()) + 1));
 					}
 					input = "";
 					while(!input.equals("y") && !input.equals("n")) {
@@ -1235,10 +1235,7 @@ public class Home {
 					} else {
 						contract.setSpecial(false);
 					}
-					for(Insurance insurance2 : insuranceList) {
-						System.out.println();
-					}
-					contract.joinInsurance(customer, insurance, insurant);
+					contract.joinInsurance(insurance, insurant);
 					this.contractDAO.insert(contract);
 					System.out.println("!!!!보험가입 '신청'이 완료되었습니다!!!!");
 				}
@@ -1298,10 +1295,10 @@ public class Home {
 		insurant.setAddress(address);
 
 		
-		if(this.insurantList.isEmpty()) {
+		if(this.insurantDAO.select().isEmpty()) {
 			insurant.setInsurantId("1");
 		} else {
-			insurant.setInsurantId(Integer.toString(Integer.parseInt(this.insurantList.get(this.insurantList.size() - 1).getInsurantId()) + 1));
+			insurant.setInsurantId(Integer.toString(Integer.parseInt(this.insurantDAO.select().get(this.insurantDAO.select().size() - 1).getInsurantId()) + 1));
 		}
 		
 		System.out.print("전화번호 : ");

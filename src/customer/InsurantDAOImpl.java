@@ -13,8 +13,8 @@ import main.DBConnector;
 
 public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 	public boolean insert(Insurant insurant) {
-		String str = "INSERT INTO insurant(insurantId, name, address, phoneNumber, age, accidentHistory, postedPriceOfStructure, usageOfStructure, gender, job, typeOfCar, rankOfCar, riskOfTripCountry) values('"
-				+ insurant.getInsurantId() + "','" + insurant.getName() + "','" + insurant.getAddress() + "','"
+		String str = "INSERT INTO insurant(insurantId, customerId , name, address, phoneNumber, age, accidentHistory, postedPriceOfStructure, usageOfStructure, gender, job, typeOfCar, rankOfCar, riskOfTripCountry) values('"
+				+ insurant.getInsurantId() + "','" + insurant.getCustomerId() + "','" + insurant.getName() + "','" + insurant.getAddress() + "','"
 				+ insurant.getPhoneNumber() + "','" + insurant.getAge() + "','" + insurant.getAccidentHistory() + "','"
 				+ insurant.getPostedPriceOfStructure() + "','" + insurant.getUsageOfStructure().getNum() + "','"
 				+ insurant.getGender().getNum() + "','" + insurant.getJob().getNum() + "','"

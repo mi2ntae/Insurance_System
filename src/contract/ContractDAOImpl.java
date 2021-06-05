@@ -156,5 +156,8 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		return this.execute(sql);
 	}
 	
-	
+	public boolean updateLifespan(String contractId, int lifespan) {
+		String sql = "UPDATE contract SET lifespan = "+lifespan+" WHERE contractId = '"+contractId+"';";
+		return this.execute(sql);
+	}
 }
