@@ -2845,7 +2845,9 @@ public class Home {
 				System.out.println("-----------------------");
 				scn.nextLine();
 			}
-		
+		}
+	}
+
 	private void showDeletedInsurance(boolean del) {
 		System.out.println("------보험 정보------");
 		for (Insurance insurance: this.insuranceList) {
