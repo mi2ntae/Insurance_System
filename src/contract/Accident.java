@@ -15,10 +15,11 @@ public class Accident {
 	private int compensation;
 	private int damageCost;
 	private boolean handlingStatus;
+	private AccidentDAO accidentDAO;
 	
 	// Constructor
 	public Accident(){
-
+		accidentDAO = new AccidentDAOImpl();
 	}
 
 	// Getters&Setters
@@ -49,18 +50,9 @@ public class Accident {
 		}
 	}
 
-	public String writeToFile() {
-		String output;
-		output = this.contractId + " " + this.accidentId + " " + this.content + " " + this.compensation + " " + this.damageCost + " " + String.valueOf(this.handlingStatus) + "\n"; 
-		return output;
-	}
 
-	public void readFromFile(Scanner scn, String input) {
-		this.contractId = input;
-		this.accidentId = scn.next();
-		this.content = scn.next();
-		this.compensation = scn.nextInt();
-		this.damageCost = scn.nextInt();
-		this.handlingStatus = Boolean.parseBoolean(scn.next());
+	public void confirmCompensation() {
+		this.accidentDAO.updateCompensation(this.accidentId, this.compensation);
+		this.accidentDAO.updateHandlingStatus(this.accidentId, this.handlingStatus);
 	}
 }

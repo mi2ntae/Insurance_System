@@ -1755,28 +1755,42 @@ public class Home {
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
 			newInsurance.setName(scn.next());
-			System.out.printf("기본 보험료를 입력해주세요 : ");
-			try {
-				newInsurance.setBasicFee(scn.nextInt());
-				System.out.printf("특약가입이 가능한 보험입니까?(y/n) : ");
-				String inputSpecial = scn.next();
-				if (inputSpecial.equals("y")) {
-					newInsurance.setSpecialContract(true);
-					System.out.printf("특약 보험료를 입력해주세요 : ");
-					newInsurance.setSpecialContractFee(scn.nextInt());
-				} else if (inputSpecial.equals("n")) {
-					newInsurance.setSpecialContract(false);
-					newInsurance.setSpecialContractFee(0);
-				} else {
-					System.out.println("error : 정해진 문자를 사용해주세요");
+			while(true) {
+				try {
+					System.out.printf("기본 보험료를 입력해주세요 : ");
+					newInsurance.setBasicFee(scn.nextInt());
+					break;
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
+					scn.nextLine();
 					continue;
 				}
-			} catch (InputMismatchException e) {
-				System.out.println("error : 숫자를 입력해주세요");
-				System.out.println("-----------------------");
-				scn.nextLine();
-				continue;
+			}
+			if (newInsurance.getType() != eInsuranceType.actualCostInsurance) {
+					System.out.printf("특약가입이 가능한 보험입니까?(y/n) : ");
+					String inputSpecial = scn.next();
+					if (inputSpecial.equals("y")) {
+						while (true) {
+							try {
+								newInsurance.setSpecialContract(true);
+								System.out.printf("특약 보험료를 입력해주세요 : ");
+								newInsurance.setSpecialContractFee(scn.nextInt());
+							} catch (InputMismatchException e) {
+								System.out.println("error : 숫자를 입력해주세요");
+								System.out.println("-----------------------");
+								scn.nextLine();
+								continue;
+							}
+						}
+					} else if (inputSpecial.equals("n")) {
+						newInsurance.setSpecialContract(false);
+						newInsurance.setSpecialContractFee(0);
+					} else {
+						System.out.println("error : 정해진 문자를 사용해주세요");
+						System.out.println("-----------------------");
+						continue;
+					}
 			}
 	
 			while (true) {
@@ -1986,21 +2000,25 @@ public class Home {
 				((TripInsurance)newInsurance).setRateOfCountryRank(tmpRateOfRiskOfTripCountry);
 				break;
 			case actualCostInsurance:
-				double selfBurden = 0;
+				int rate = 0;
 				while (true) {
-					System.out.printf("자기부담비율을 입력해주세요 ex) 0.3 : ");
 					try {
-						selfBurden = scn.nextDouble();
+						System.out.println("자기부담율을 입력해주세요(1% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+						rate = scn.nextInt();
+						if (rate > 0 && rate < 100) {
+							break;
+						} else {
+							System.out.println("error : 범위내의 숫자를 입력해주세요");
+							System.out.println("-----------------------------");
+						}
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
 						scn.nextLine();
-						continue;
 					}
-					break;
 				}
-				((ActualCostInsurance)newInsurance).setSelfBurdenRate(selfBurden);
-				break;
+				((ActualCostInsurance) newInsurance).setSelfBurdenRate((double)rate/100);
+				return newInsurance;
 			default:
 				break;
 			}
@@ -2022,18 +2040,40 @@ public class Home {
 
 	// 보장내역 설정하기
 	private void makeGuaranteePlan(Insurance newInsurance, boolean special, boolean[] tmpt) {
-		if (newInsurance.getType().equals(eInsuranceType.dentalInsurance)
-				|| newInsurance.getType().equals(eInsuranceType.cancerInsurance)) {
+		if(newInsurance.getType() == eInsuranceType.actualCostInsurance) {
+			int rate = 0;
 			while (true) {
 				try {
-					System.out.println("보장을 원하시는 항목을 선택해주세요.");
-					for (int i = 1; i <= newInsurance.getType().getGuaranteePlan().length; i++) {
-						System.out.println(i + "." + newInsurance.getType().getGuaranteePlan()[i - 1]);
+					System.out.println("자기부담율을 입력해주세요(1% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+					rate = scn.nextInt();
+					if (rate > 0 && rate < 100) {
+						break;
+					} else {
+						System.out.println("error : 범위내의 숫자를 입력해주세요");
+						System.out.println("-----------------------------");
 					}
-					System.out.println("0.그만하기");
-					int input = scn.nextInt();
-					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
-						int compensation;
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("-----------------------");
+					scn.nextLine();
+				}
+			}
+			((ActualCostInsurance) newInsurance).setSelfBurdenRate((1-((double)rate/100)));
+		}
+		while (true) {
+			try {
+				System.out.println("보장을 원하시는 항목을 선택해주세요.");
+				for (int i = 1; i <= newInsurance.getType().getGuaranteePlan().length; i++) {
+					System.out.println(i + "." + newInsurance.getType().getGuaranteePlan()[i - 1]);
+				}
+				System.out.println("0.그만하기");
+				int input = scn.nextInt();
+				
+				if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
+					int compensation;
+					switch(newInsurance.getType()) {
+					case dentalInsurance:
+					case cancerInsurance:
 						while (true) {
 							try {
 								System.out.println("해당 항목의 보상금액을 입력해주세요.");
@@ -2047,31 +2087,10 @@ public class Home {
 							}
 						}
 						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, 1);
-					} else if (input == 0) {
 						break;
-					} else {
-						System.out.println("error : 범위내의 숫자를 입력해주세요");
-						System.out.println("-----------------------------");
-					}
-				}catch(InputMismatchException e) {
-					System.out.println("error : 숫자를 입력해주세요");
-					System.out.println("-----------------------");
-					scn.nextLine();
-				}
-			}
-		} else if (newInsurance.getType().equals(eInsuranceType.fireInsurance)
-					|| newInsurance.getType().equals(eInsuranceType.tripInsurance)
-					|| newInsurance.getType().equals(eInsuranceType.driverInsurance)) {
-			while (true) {
-				try {
-					System.out.println("보장을 원하시는 항목을 선택해주세요.");
-					for (int i = 1; i <= newInsurance.getType().getGuaranteePlan().length; i++) {
-						System.out.println(i + "." + newInsurance.getType().getGuaranteePlan()[i - 1]);
-					}
-					System.out.println("0.그만하기");
-					int input = scn.nextInt();
-					if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
-						int compensation;
+					case fireInsurance:
+					case tripInsurance:
+					case driverInsurance:
 						while (true) {
 							try {
 								System.out.println("해당 항목의 최대 보상 금액을 입력해주세요.");
@@ -2103,17 +2122,20 @@ public class Home {
 							}
 						}
 						newInsurance.addGuaranteePlan(newInsurance.getType().getGuaranteePlan()[input - 1], compensation, special, (1-((double)rate/100)));
-					} else if (input == 0) {
 						break;
-					} else {
-						System.out.println("error : 범위내의 숫자를 입력해주세요");
-						System.out.println("-----------------------------");
+					default:
+						break;
 					}
-				}catch(InputMismatchException e) {
-					System.out.println("error : 숫자를 입력해주세요");
-					System.out.println("-----------------------");
-					scn.nextLine();
+				} else if (input == 0) {
+					break;
+				} else {
+					System.out.println("error : 범위내의 숫자를 입력해주세요");
+					System.out.println("-----------------------------");
 				}
+			}catch(InputMismatchException e) {
+				System.out.println("error : 숫자를 입력해주세요");
+				System.out.println("-----------------------");
+				scn.nextLine();
 			}
 		}
 	}
@@ -2247,8 +2269,7 @@ public class Home {
 								String input3 = scn.next();
 								if (input3.equals("y")) {
 									compensationHandler.confirmCompensation(accident, tmptCompensation);
-									accidentDAO.updateCompensation(accident.getAccidentId(), accident.getCompensation());
-									accidentDAO.updateHandlingStatus(accident.getAccidentId(), true);
+									accident.confirmCompensation();
 									accident.setCause(tmptCause);
 									System.out.println("보상금 " + tmptCompensation + "원을 " + insurant.getName() + "님께 지급하였습니다!");
 									break menu;
@@ -2279,6 +2300,7 @@ public class Home {
 		
 		// 보장내역 단일 출력 : 보상 처리
 		private void showSelectedGuaranteePlan(Insurance insurance, String content) {
+			insurance.birngGuaranteePlan();
 			switch (insurance.getType()) {
 			case dentalInsurance:
 			case cancerInsurance:
@@ -2325,7 +2347,8 @@ public class Home {
 			if(contract.isSpecial()) System.out.println("O");
 			else System.out.println("X");
 			System.out.println("-----<보상처리 리스트>-----");
-			for(Accident accident : this.accidentDAO.selectByContractId(contract.getContractId())) {
+			contract.bringAccident();
+			for(Accident accident : contract.getAccidentList()) {
 				if(accident.isHandlingStatus()) System.out.println(accident.getAccidentId() + "." + accident.getContent() + " " + accident.getCompensation());
 			}
 			System.out.println("-----------------------");
@@ -2420,9 +2443,9 @@ public class Home {
 			System.out.println("-----------------");
 			String accidentId;
 			
-			ArrayList<Accident> accidentList = accidentDAO.selectByContractId(contract.getContractId());
-			accidentId = String.valueOf(Integer.parseInt(accidentList.get(accidentList.size() - 1).getAccidentId()) + 1);
-			if(accidentList.size() == 0) accidentId = contract.getContractId() + "001";
+			contract.bringAccident();
+			accidentId = String.valueOf(Integer.parseInt(contract.getAccidentList().get(contract.getAccidentList().size() - 1).getAccidentId()) + 1);
+			if(contract.getAccidentList().size() == 0) accidentId = contract.getContractId() + "001";
 			switch(insurance.getType()) {
 			case actualCostInsurance:
 				System.out.println("병ㆍ의원 및 약국에서 지출하신 의료비를 입력해주세요");
@@ -2479,13 +2502,7 @@ public class Home {
 								default:
 									break;
 								}
-								accident.setContractId(contract.getContractId());
-								accident.setAccidentId(accidentId);
-								accident.setContent(guaranteePlan.getContent());
-								accident.setCompensation(damageCost);
-								accident.setHandlingStatus(false);
-								this.accidentDAO.insert(accident);
-								contract.addAccident(accidentId, guaranteePlan.getContent(), guaranteePlan.getCompensation(), false);
+								contract.addAccident(accidentId, guaranteePlan.getContent(), damageCost, false);
 								System.out.println("선택하신 항목(" + guaranteePlan.getContent() + ")에 대한 보험금("+ damageCost +"원)이 청구되었습니다!");
 								break roop;
 							}
