@@ -1,8 +1,6 @@
 package contract;
 
 import java.util.ArrayList;
-
-import customer.Customer;
 import customer.Insurant;
 import insurance.Insurance;
 
@@ -66,7 +64,7 @@ public class Contract {
 	public void connectContractDAO(ContractDAO contractDAO) {this.contractDAO = contractDAO;}
 	
 	// public Method
-	public void joinInsurance(Customer customer, Insurance insurance, Insurant insurant){
+	public void joinInsurance(Insurance insurance, Insurant insurant){
 		this.insuranceId = insurance.getInsuranceId();
 		this.insurantId = insurant.getInsurantId();
 	}
