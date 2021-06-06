@@ -1,5 +1,6 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -116,12 +117,11 @@ public class Home {
 										try {
 											switch (scn.nextInt()) {
 											case 1:
-												this.showAllInsurance();
-												while (true) {
-													System.out.println("보험을 가입하시겠습니까?(y/n)");
+												while (this.showAllInsurance()) {
+													System.out.printf("보험을 가입하시겠습니까?(y/n) : ");
 													String input = scn.next();
 													if (input.equals("y")) {
-														this.contractInsurnace(customer);
+														this.contractInsurance(customer);
 														break;
 													} else if (input.equals("n")) {
 														break;
@@ -443,22 +443,14 @@ public class Home {
 						if(contract.getLifespan() - time < 0) {
 							contract.setEffectiveness(false);
 						} else {
-							contract.setUnpaidPeriod(contract.getUnpaidPeriod() + 1);
+							if(contract.isEffectiveness()) {
+								this.contractDAO.updateUnpaidPeriod(contract.getContractId(), contract.getUnpaidPeriod() + 1);
+							}
 						}
 					}
 					if (!insuranceDAO.deleteInsuranceByTime()) {
 						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
 					}
-					System.out.println("시간을 임의로 증가시킵니다.");
-					break;
-				case 0:
-					System.out.println("시스템을 종료합니다");
-					this.dbConnector.close();
-					System.exit(0);
-					break;
-				default:
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					System.out.println("------------------------------");
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -483,11 +475,12 @@ public class Home {
 			int date = Integer.MIN_VALUE;
 			while(date < time) {
 				System.out.println("현재 날짜 : " + this.time);
-				System.out.println("원하는 면담 날짜를 입력하세요");
+				System.out.printf("원하는 달을 입력하세요 : ");
 				try {
 					date = scn.nextInt();
-					if(date < time) {
-						System.out.println("error : 잘못된 입력입니다");
+					if(date < time || (date % 100) > 12) {
+						date = Integer.MIN_VALUE;
+						System.out.println("범위 내의 숫자를 입력해주세요.");
 						System.out.println("----------------------");
 					}
 				} catch (InputMismatchException e) {
@@ -497,6 +490,21 @@ public class Home {
 				}
 			}
 			interview.setDate(Integer.toString(date));
+			
+			int temp = 0;
+			System.out.printf("날짜를 입력해 주세요(1 ~ 30) : ");
+			while(temp < 1 || temp > 30) {
+				try {
+					temp = this.scn.nextInt();
+					if(temp < 1 || temp > 30) {
+						System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					}
+				} catch (InputMismatchException e) {
+					System.out.println("error : 숫자를 입력해주세요");
+					System.out.println("----------------------");
+					scn.nextLine();
+				}
+			}
 			
 			int interviewTime = Integer.MIN_VALUE;
 			while(interviewTime < 0 || interviewTime > 4) {
@@ -517,16 +525,16 @@ public class Home {
 			} else {
 				switch(interviewTime) {
 				case 1:
-					interview.setTime("09시-11시");
+					interview.setTime(temp + "일 09시-11시");
 					break;
 				case 2:
-					interview.setTime("11시-13시");
+					interview.setTime(temp + "일 11시-13시");
 					break;
 				case 3:
-					interview.setTime("13시-15시");
+					interview.setTime(temp + "일 13시-15시");
 					break;
 				case 4:
-					interview.setTime("15시-17시");
+					interview.setTime(temp + "일 15시-17시");
 					break;
 				}
 			}
@@ -659,6 +667,9 @@ public class Home {
 				System.out.println("1.미납계약 관리\n2.만기계약 관리");
 				int input = scn.nextInt();
 				switch (input) {
+				default :
+					System.out.println("범위 내의 숫자를 입력해주세요.");
+					break;
 				case 0:
 					return;
 				case 1:
@@ -702,17 +713,20 @@ public class Home {
 				}
 			}
 		}
+		ArrayList<Contract> tempList = new ArrayList<Contract>();
+		boolean flag = false;
 		
 		while(true) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
-			System.out.println("관리할 계약 ID를 입력하세요");
+			System.out.println(" 계약 ID를 입력하세요");
 			String input = scn.next();
 			if(input.equals("0")) return;
 			Contract contract = this.contractDAO.selectContract(input);
-			if(contract == null || contract.isEffectiveness() != true) {
-				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
+			if(contract == null || contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0) {
+				System.out.println("해당 조건의 계약이 없습니다.");
 				continue;
 			}
+			tempList.add(contract);
 			Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
 			this.showContractData(contract);
@@ -728,6 +742,17 @@ public class Home {
 			contract = this.contractDAO.selectContract(input);
 			if(contract == null) {
 				System.out.println("해당 ID의 계약이 없습니다");
+			} else {
+				for(Contract temp : tempList) {
+					if(contract.getContractId().equals(temp.getContractId())) {
+						flag = true;
+					}
+				}
+				if(!flag) {
+					System.out.println("미납 계약이 아닙니다");
+					contract = null;
+					continue;
+				}
 			}
 		}
 		this.contractDAO.delete(contract.getContractId());
@@ -763,7 +788,8 @@ public class Home {
 		System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		String input = scn.next();
 		while(!input.equals("y") && !input.equals("n")) {
-			System.out.println("잘못된 입력입니다");
+			System.out.println("error : 정해진 문자를 사용해주세요");
+			System.out.println("-----------------------");
 			System.out.println("재계약을 신청하시겠습니까?(y/n)");
 		}
 		if (input.equals("y")) {
@@ -1009,10 +1035,13 @@ public class Home {
 	private void judgeContract() {
 		UnderWriter underwriter = new UnderWriter(contractDAO);
 		int count = 0;
+		ArrayList<Contract> tempList = new ArrayList<Contract>();
+		boolean flag = false;
 		for(Contract contract : this.contractDAO.select()) {
 			if(contract.isEffectiveness() == false && contract.getLifespan() - time > 0) {
 				this.showSimpleContract(contract, false);
 				count++;
+				tempList.add(contract);
 			}
 		}
 		if(count == 0) {
@@ -1023,7 +1052,18 @@ public class Home {
 		while(contract == null) {
 			System.out.println("상세정보를 볼 계약 ID를 입력하세요");
 			contract = this.contractDAO.selectContract(scn.next());
+			
 			if (contract != null) {
+				for(Contract temp : tempList) {
+					if(contract.getContractId().equals(temp.getContractId())) {
+						flag = true;
+					}
+				}
+				if(!flag) {
+					System.out.println("심사할 계약이 없습니다");
+					contract = null;
+					continue;
+				}
 				this.showContractData(contract);
 				Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 				Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
@@ -1036,7 +1076,7 @@ public class Home {
 					System.out.println("1.승인\n2.거부");
 					input = scn.nextInt();
 					if (input != 1 && input != 2 && input != 0) {
-						System.out.println("잘못된 입력");
+						System.out.println("범위 내의 숫자를 입력해주세요");
 					}
 				}
 				switch (input) {
@@ -1059,7 +1099,7 @@ public class Home {
 				}
 					
 			} else {
-				System.out.println("해당 계약이 존재하지 않습니다");
+				System.out.println("심사 대상 계약이 아닙니다");
 			}
 		}
 	}
@@ -1108,17 +1148,16 @@ public class Home {
 	
 
 	// 전체 보험 리스트 확인하기
-	private void showAllInsurance() {
+	private boolean showAllInsurance() {
 		eInsuranceType type = null;
 		while (type == null) {
 			System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기\n0.돌아가기");
 			int input = 0;
 			try {
 				input = scn.nextInt();
-
 				switch (input) {
 				case 0:
-					return;
+					return false;
 				case 1:
 					type = eInsuranceType.driverInsurance;
 					break;
@@ -1151,24 +1190,46 @@ public class Home {
 				scn.nextLine();
 			}
 		}
-		System.out.println("-----보험리스트-----");
-		if(type == null) { //null이면 전체보험
-			for (Insurance insurance: this.insuranceDAO.select()) {
-				this.showInsuranceData(insurance);
-			}
-		} else {
-			for (Insurance insurance: this.insuranceDAO.select()) {
-				if(insurance.getType() == type) {
-					this.showInsuranceData(insurance);
+		boolean flag = false;
+		if(!this.insuranceDAO.select().isEmpty()) {
+			for(Insurance insurance : this.insuranceDAO.select()) {
+				if(!insurance.isDel()) {
+					if(insurance.getType() == type) {
+						flag = true;
+					} else if(type == null) {
+						flag = true;
+					}
 				}
 			}
 		}
-		System.out.println("-----------------\n");
+		if(flag) {
+			System.out.println("-----보험리스트-----");
+			if(type == null) {
+				for (Insurance insurance: this.insuranceDAO.select()) {
+					if(!insurance.isDel()) {
+						this.showInsuranceData(insurance);
+					}
+				}
+			} else {
+				for (Insurance insurance: this.insuranceDAO.select()) {
+					if(insurance.getType() == type) {
+						if(!insurance.isDel()) {
+							this.showInsuranceData(insurance);
+						}
+					}
+				}
+			}
+			System.out.println("-----------------\n");
+			return true;
+		} else {
+			System.out.println("------보험이 존재하지 않습니다------");
+			return false;
+		}
 	}
 	
 
 	// 보험 가입하기
-	private void contractInsurnace(Customer customer) {
+	private void contractInsurance(Customer customer) {
 		Insurance insurance = null;
 		while(insurance == null) {
 			System.out.print("가입할 보험 ID를 입력해주세요 : ");
@@ -1178,7 +1239,7 @@ public class Home {
 				Insurant insurant = this.selectInsurant(customer, insurance);
 				if (customer != null) {
 					for(Contract temp : this.contractDAO.select()) {
-						if(temp.getInsuranceId().equals(insurance.getInsuranceId()) && this.insurantDAO.selectInsurant(temp.getInsurantId()).getCustomerId().equals(insurant.getCustomerId())) {
+						if(temp.getInsuranceId().equals(insurance.getInsuranceId()) && this.insurantDAO.selectInsurant(temp.getInsurantId()).getInsurantId().equals(insurant.getInsurantId())) {
 							if(temp.isEffectiveness()) {
 								System.out.println("-----------이미 가입된 보험입니다-----------");
 							} else {
@@ -1197,12 +1258,16 @@ public class Home {
 						contract.setContractId(Integer.toString(Integer.parseInt(this.contractDAO.select().get(this.contractDAO.select().size() - 1).getContractId()) + 1));
 					}
 					input = "";
-					while(!input.equals("y") && !input.equals("n")) {
-						System.out.println("특약 여부(y/n)");
-						input = scn.next();
-					}
-					if (input.equals("y")) {
-						contract.setSpecial(true);
+					if(insurance.isSpecialContract()) {
+						while(!input.equals("y") && !input.equals("n")) {
+							System.out.println("특약 여부(y/n)");
+							input = scn.next();
+						}
+						if (input.equals("y")) {
+							contract.setSpecial(true);
+						} else {
+							contract.setSpecial(false);
+						}
 					} else {
 						contract.setSpecial(false);
 					}
@@ -1218,11 +1283,12 @@ public class Home {
 	
 	// 보험 가입자 선택하기
 	private Insurant selectInsurant(Customer customer, Insurance insurance) {
+		customer = this.customerDAO.selectCustomer(customer.getCustomerId());
 		Insurant selectedinsurant = null;
 		System.out.println("1.보험가입자 선택\n2.보험가입자 생성");
 		String input = scn.next();
 		while (!input.equals("1") && !input.equals("2") ) {
-			System.out.println("잘못된 입력입니다");
+			System.out.println("범위 내의 숫자를 입력해주세요.");
 			System.out.print("1.보험가입자 선택\n2.보험가입자 생성 : ");
 			input = scn.next();
 		}
@@ -1245,6 +1311,9 @@ public class Home {
 				}
 			}
 		} else {
+			if(input.equals("1") && customer.getInsurantList().isEmpty()) {
+				System.out.println("가입자가 존재하지 않아 가입자를 생성합니다");
+			}
 			selectedinsurant = this.createInsurant(customer, insurance);
 		}
 		return selectedinsurant;

@@ -12,7 +12,6 @@ public class InterviewDAOImpl extends DBConnector implements InterviewDAO{
 				+ "values('" + interview.getInterviewId() + "'," + interview.getSalespersonId() + ",'" + interview.getCustomerId() + "',"
 				+ interview.isConfirmedStatus() + ",'" + interview.getDate() + "','" + interview.getContent() + "','" + interview.getTime() +
 				"');";
-		System.out.println(str);
 		if (this.execute(str)) {
 			return true;
 		} else {

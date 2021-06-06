@@ -45,48 +45,6 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 		}
 		return arrayList;
 	}
-	
-	@Override
-	public Customer selectCustomer(String customerId) {
-		InsurantDAO insurantDAO = new InsurantDAOImpl();
-		Customer customer = new Customer();
-		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"'";
-		this.read(sql);
-		try {
-			while (rs.next()) {
-				customer.setName(rs.getString("name"));
-				customer.setAddress(rs.getString("address"));
-				customer.setPhoneNumber(rs.getString("phoneNumber"));
-				customer.setCustomerId(rs.getString("customerId"));
-				customer.setPassword(rs.getString("password"));
-				// customer.setInsurantList(insurantDAO.select());
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return customer;
-	}
-	
-	public Customer selectCustomerByIdPw(String customerId, String password) {
-		InsurantDAO insurantDAO = new InsurantDAOImpl();
-		Customer customer = new Customer();
-		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"' AND password = '" + password + "'";
-		this.read(sql);
-		try {
-			while (rs.next()) {
-				customer.setName(rs.getString("name"));
-				customer.setAddress(rs.getString("address"));
-				customer.setPhoneNumber(rs.getString("phoneNumber"));
-				customer.setCustomerId(rs.getString("customerId"));
-				customer.setPassword(rs.getString("password"));
-				// customer.setInsurantList(insurantDAO.select());
-				return customer;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 	@Override
 	public boolean updateAddress(String customerId, String address) {
@@ -117,6 +75,59 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 			return false;
 		}
 	}
-	}
 
+	@Override
+	public Customer selectCustomer(String customerId) {
+		InsurantDAO insurantDAO = new InsurantDAOImpl();
+		Customer customer = new Customer();
+		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				customer.setName(rs.getString("name"));
+				customer.setAddress(rs.getString("address"));
+				customer.setPhoneNumber(rs.getString("phoneNumber"));
+				customer.setCustomerId(rs.getString("customerId"));
+				customer.setPassword(rs.getString("password"));
+			}
+			for (Insurant insurant : insurantDAO.select()) {
+				if (customer.getCustomerId().equals(insurant.getCustomerId())) {
+					customer.getInsurantList().add(insurant);
+				}
+			}
+			return customer;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
+	public Customer selectCustomerByIdPw(String customerId, String password) {
+		boolean flag = false;
+		InsurantDAO insurantDAO = new InsurantDAOImpl();
+		Customer customer = new Customer();
+		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"' AND password = '" + password + "'";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				customer.setName(rs.getString("name"));
+				customer.setAddress(rs.getString("address"));
+				customer.setPhoneNumber(rs.getString("phoneNumber"));
+				customer.setCustomerId(rs.getString("customerId"));
+				customer.setPassword(rs.getString("password"));
+				flag = true;
+			}
+			if(flag) {
+				for (Insurant insurant : insurantDAO.select()) {
+					if (customer.getCustomerId().equals(insurant.getCustomerId())) {
+						customer.getInsurantList().add(insurant);
+					}
+				}
+				return customer;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+}
