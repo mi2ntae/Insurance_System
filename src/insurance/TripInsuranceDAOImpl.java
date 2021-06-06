@@ -15,7 +15,6 @@ public class TripInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 				+ ") values('" + newInsurance.getInsuranceId() + "'";
 		for (double rate : newInsurance.getRateOfCountryRank()) str += "," + rate;
 		str += ")";
-
 		if (this.execute(str)) return true;
 		else return false;
 	}

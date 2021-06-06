@@ -111,35 +111,5 @@ public class DriverInsurance extends Insurance {
 	public Insurance newInstance() {
 		return new DriverInsurance();
 	}
-	
-	public String writeToSelectedFile() {
-		String output = this.getInsuranceId() + ' ';
-		for (double rate : rateOfAccidentHistory) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfCarType) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfCarRank) {
-			output += rate;
-			output += ' ';
-		}
-		output += '\n';
-		return output;
-	}
-
-	public void readFromSelectedFile(Scanner scn) {
-		for (int i = 0; i < this.rateOfAccidentHistory.length; i++) {
-			this.rateOfAccidentHistory[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfCarType.length; i++) {
-			this.rateOfCarType[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfCarRank.length; i++) {
-			this.rateOfCarRank[i] = scn.nextDouble();
-		}
-	}
 
 }

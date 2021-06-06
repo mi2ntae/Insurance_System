@@ -11,9 +11,8 @@ public class DentalInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public boolean insert(Insurance insurance) {
 		DentalInsurance newInsurance = (DentalInsurance) insurance;
 
-		String str = "INSERT INTO dentalInsurance(insuranceId, annualLimitCount, useCount) values('"
-				+ newInsurance.getInsuranceId() + "'," + newInsurance.getAnnualLimitCount()
-				+ newInsurance.getUseCount() + ")";
+		String str = "INSERT INTO dentalInsurance(insuranceId, annualLimitCount) values('"
+				+ newInsurance.getInsuranceId() + "'," + newInsurance.getAnnualLimitCount()+")";
 
 		if (this.execute(str))
 			return true;
@@ -31,7 +30,6 @@ public class DentalInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 				String input = rs.getString("insuranceId");
 				if (input.equals(insurance.getInsuranceId())) {
 					newInsurance.setAnnualLimitCount(rs.getInt("annualLimitCount"));
-					newInsurance.setUseCount(rs.getInt("useCount"));
 				}
 			}
 		} catch (SQLException e) {
