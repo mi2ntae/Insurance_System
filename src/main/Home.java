@@ -52,12 +52,7 @@ import interview.InterviewDAOImpl;
 public class Home {
 	private Scanner scn;
 	
-	private ArrayList<Customer> customerList;
-	private ArrayList<Contract> contractList;
 	private ArrayList<Insurance> insuranceList;
-	private ArrayList<Employee> employeeList;
-	private ArrayList<Interview> interviewList;
-	private ArrayList<Insurant> insurantList;
 	
 	private DBConnector dbConnector;
 	private CustomerDAO customerDAO;
@@ -89,11 +84,6 @@ public class Home {
 		this.dbConnector.startDB();
 		this.dbConnector.connect();
 		this.insuranceList = this.insuranceDAO.select();
-		this.contractList = this.contractDAO.select();
-		this.customerList = this.customerDAO.select();
-		this.employeeList = this.employeeDAO.select();
-		this.interviewList = this.interviewDAO.select();
-		this.insurantList = this.insurantDAO.select();
 	}
 
 	public void start() {
@@ -1501,12 +1491,10 @@ public class Home {
 		check : while(true) {
 			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
 			String input = scn.next();
-			for (Customer customer2 : this.customerList) {
-				if (customer2.getCustomerId().equals(input)) {
-					System.out.println("이미 존재하는 ID입니다!(사용불가)");
-					System.out.println("--------------------------");
-					continue check;
-				}
+			if(this.customerDAO.selectCustomer(input) != null) {
+				System.out.println("이미 존재하는 ID입니다!(사용불가)");
+				System.out.println("--------------------------");
+				continue check;
 			}
 			customer.setCustomerId(input);
 			break;
@@ -1521,19 +1509,14 @@ public class Home {
 	}
 	// 고객 로그인하기
 	private Customer loginCustomer(String id, String pw) {
-		for(Customer customer : this.customerList) {
-			if(customer.getCustomerId().equals(id)) {
-				if(customer.getPassword().equals(pw)) {
-					System.out.println("!!!로그인에 성공하였습니다!!!!");
-					return customer;
-				}else {
-					System.out.println("error : 비밀번호가 틀립니다!");
-					return null;
-				}
-			}
+		Customer customer = this.customerDAO.selectCustomerByIdPw(id, pw);
+		if(customer != null) {
+			System.out.println("!!!로그인에 성공하였습니다!!!!");
+			return customer;
+		}else {
+			System.out.println("error : ID 또는 비밀번호가 틀립니다!");
+			return null;
 		}
-		System.out.println("error : 존재하지 않는 ID입니다!");
-		return null;
 	}
 	
 	// 직원 가입하기
@@ -1589,12 +1572,10 @@ public class Home {
 		check : while(true) {
 			System.out.println("사용하실 ID를 입력해주세요.(중복확인)");
 			String input = scn.next();
-			for (Employee employee2 : this.employeeList) {
-				if (employee2.getEmployeeId().equals(input)) {
-					System.out.println("이미 존재하는 ID입니다!(사용불가)");
-					System.out.println("--------------------------");
-					continue check;
-				}
+			if(this.employeeDAO.selectEmployee(input) != null) {
+				System.out.println("이미 존재하는 ID입니다!(사용불가)");
+				System.out.println("--------------------------");
+				continue check;
 			}
 			employee.setEmployeeId(input);
 			break;
@@ -1610,19 +1591,14 @@ public class Home {
 
 	// 직원 로그인하기
 	private Employee loginEmployee(String id, String pw) {
-		for (Employee employee : this.employeeList) {
-			if (employee.getEmployeeId().equals(id)) {
-				if (employee.getPassword().equals(pw)) {
-					System.out.println("!!!로그인에 성공하였습니다!!!!");
-					return employee;
-				} else {
-					System.out.println("error : 비밀번호가 틀립니다!");
-					return null;
-				}
-			}
+		Employee employee = this.employeeDAO.selectEmployeeByIdPw(id, pw);
+		if(employee != null) {
+			System.out.println("!!!로그인에 성공하였습니다!!!!");
+			return employee;
+		}else {
+			System.out.println("error : ID 또는 비밀번호가 틀립니다!");
+			return null;
 		}
-		System.out.println("error : 존재하지 않는 ID입니다!");
-		return null;
 	}
 
 	// 보험 만들기
