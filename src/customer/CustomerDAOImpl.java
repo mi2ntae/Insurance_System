@@ -80,11 +80,12 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 				customer.setCustomerId(rs.getString("customerId"));
 				customer.setPassword(rs.getString("password"));
 				// customer.setInsurantList(insurantDAO.select());
+				return customer;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return customer;
+		return null;
 	}
 
 	@Override
