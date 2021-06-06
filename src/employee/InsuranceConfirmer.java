@@ -11,7 +11,6 @@ public class InsuranceConfirmer extends Employee {
 	}
 
 	public void confirmInsurance(Insurance insurance){
-		insurance.setConfirmedStatus(true);
 		this.insuranceDAO.updateConfirmedStatus(insurance.getInsuranceId(), true);
 	}
 

@@ -20,7 +20,6 @@ public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		for (double rate : newInsurance.getRateOfCarRank()) str += "," + rate;
 		str += ")";
 
-		System.out.println(str);
 		if (this.execute(str)) return true;
 		else return false;
 	}

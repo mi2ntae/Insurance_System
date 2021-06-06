@@ -80,9 +80,7 @@ public class Contract {
 	}
 
 	public void payFee(Contract contract, int month) {
-		if (this.contractDAO.updatePayHistory(contract.getContractId(), month)) {
-			contract.getPayHistory()[month] = true;
-		}
+		this.contractDAO.updatePayHistory(contract.getContractId(), month);
 	}
 
 	public void bringAccident() {

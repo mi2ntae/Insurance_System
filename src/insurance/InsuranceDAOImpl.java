@@ -172,7 +172,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	}
 
 	public boolean deleteInsuranceByTime() {
-		String sql = "DELETE i FROM insurance i INNER JOIN contract c ON c.insuranceId = i.insuranceId WHERE i.del = true AND c.lifespan = "+Constants.thisYear*100+Constants.thisMonth;
+		String sql = "DELETE i FROM insurance i INNER JOIN contract c ON c.insuranceId = i.insuranceId WHERE i.del = true AND c.lifespan = "+Constants.thisYear*100+Constants.thisMonth+";";
 		return super.execute(sql);
 	}
 	public Insurance selectTypeInsurance(Insurance insurance) {
