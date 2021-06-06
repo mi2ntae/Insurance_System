@@ -51,9 +51,7 @@ import interview.InterviewDAOImpl;
 
 public class Home {
 	private Scanner scn;
-	
-	private ArrayList<Insurance> insuranceList;
-	
+		
 	private DBConnector dbConnector;
 	private CustomerDAO customerDAO;
 	private ContractDAO contractDAO;
@@ -83,7 +81,6 @@ public class Home {
 	public void initialize() {
 		this.dbConnector.startDB();
 		this.dbConnector.connect();
-		this.insuranceList = this.insuranceDAO.select();
 	}
 
 	public void start() {
@@ -233,7 +230,7 @@ public class Home {
 									System.out.println("안녕하세요 " + employee.getName() + "님!");
 									switch (employee.getEmployeeRole()) {
 									case insuranceDeveloper:
-										this.insuranceDeveloper = new InsuranceDeveloper(this.insuranceDAO, this.insuranceList);
+										this.insuranceDeveloper = new InsuranceDeveloper(this.insuranceDAO);
 										employee2: while (true) {
 											System.out.println("*******보험개발자 메뉴*******");
 											System.out.println("1.고객 만족 설문조사 결과보기");
@@ -455,6 +452,7 @@ public class Home {
 					if (!insuranceDAO.deleteInsuranceByTime()) {
 						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
 					}
+					System.out.println("시간을 임의로 증가시킵니다.");
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다");
@@ -1073,6 +1071,7 @@ public class Home {
 		System.out.println("계약 ID : " + contract.getContractId());
 		System.out.println("보험 이름: " + this.insuranceDAO.selectInsurance(contract.getInsuranceId()).getName());
 		System.out.println("가입자 ID : " + contract.getInsurantId());
+		System.out.println("가입자 이름 : "+this.insurantDAO.selectInsurant(contract.getInsurantId()).getName());
 		System.out.println("특약 여부 : " + contract.isSpecial());
 		System.out.println("계약 기간 : " + contract.getLifespan());
 		System.out.println("보험료 : " + contract.getFee());
@@ -1171,11 +1170,11 @@ public class Home {
 		}
 		System.out.println("-----보험리스트-----");
 		if(type == null) { //null이면 전체보험
-			for (Insurance insurance: this.insuranceList) {
+			for (Insurance insurance: this.insuranceDAO.select()) {
 				this.showInsuranceData(insurance);
 			}
 		} else {
-			for (Insurance insurance: this.insuranceList) {
+			for (Insurance insurance: this.insuranceDAO.select()) {
 				if(insurance.getType() == type) {
 					this.showInsuranceData(insurance);
 				}
@@ -1628,9 +1627,7 @@ public class Home {
 			if (insurance == null) {
 				continue;
 			}
-			insurance = this.createDetailInsurance(insurance);	// 보험 세부설정하기
-			
-			if (this.insuranceDeveloper.finishInsurance(insurance)) {
+			if (this.createDetailInsurance(insurance)) {
 				System.out.println("!!!보험 설계가 완료되었습니다!!!!");
 			} else {
 				System.out.println("보험 설계에 실패하였습니다. 다시 시도해주세요.");
@@ -1675,7 +1672,7 @@ public class Home {
 				String inputCondition = scn.next();
 				if (inputCondition.equals("y")) {
 					boolean isEmpty = true;
-					for (Insurance insurance: this.insuranceList) {
+					for (Insurance insurance: this.insuranceDAO.select()) {
 						if ((insurance.getType() != newInsurance.getType()) || (insurance.getGender() != newInsurance.getGender())) {
 							continue;
 						}
@@ -1698,7 +1695,7 @@ public class Home {
 							}
 							boolean isExist = false;
 							Insurance tmpInsurance = null;
-							for (Insurance insurance: this.insuranceList) {
+							for (Insurance insurance: this.insuranceDAO.select()) {
 								if (inputIndex.equals(insurance.getInsuranceId())) {
 									isExist = true;
 									tmpInsurance = insurance;
@@ -1706,14 +1703,14 @@ public class Home {
 							}
 							if (isExist) {
 								this.showInsuranceData(tmpInsurance);
-								System.out.printf("해당 보험의 요율정보로 설정하시겠습니까?(y/n) : ");
+								System.out.printf("해당 보험의 기본요율정보(나이,성별,직업)로 설정하시겠습니까?(y/n) : ");
 								String inputDecision = scn.next();
 								if (inputDecision.equals("y")) {
 									newInsurance.setRateOfAge(tmpInsurance.getRateOfAge());
 									newInsurance.setRateOfGender(tmpInsurance.getRateOfGender());
 									newInsurance.setRateOfJob(tmpInsurance.getRateOfJob());
 									newInsurance.setClone(true);
-									System.out.println("선택한 보험의 요율정보로 설정했습니다. 세부설정 단계로 넘어갑니다.");
+									System.out.println("선택한 보험의 기본요율정보로 설정했습니다. 세부설정 단계로 넘어갑니다.");
 									break returnInsurance;
 								} else if (inputDecision.equals("n")) {
 									continue;
@@ -1740,8 +1737,8 @@ public class Home {
 	}
 	
 	// 보험 세부설정하기
-	private Insurance createDetailInsurance(Insurance newInsurance) {
-		String newId = Integer.toString(Integer.parseInt(this.insuranceList.get(this.insuranceList.size()-1).getInsuranceId())+1);
+	private boolean createDetailInsurance(Insurance newInsurance) {
+		String newId = Integer.toString(Integer.parseInt(this.insuranceDAO.select().get(this.insuranceDAO.select().size()-1).getInsuranceId())+1);
 		newInsurance.setInsuranceId(newId);
 		
 		while (true) {
@@ -1774,6 +1771,7 @@ public class Home {
 								scn.nextLine();
 								continue;
 							}
+							break;
 						}
 					} else if (inputSpecial.equals("n")) {
 						newInsurance.setSpecialContract(false);
@@ -2010,13 +2008,14 @@ public class Home {
 					}
 				}
 				((ActualCostInsurance) newInsurance).setSelfBurdenRate((double)rate/100);
-				return newInsurance;
+				return true;
 			default:
 				break;
 			}
 			break;
 		}
-	
+		
+		this.insuranceDeveloper.finishInsurance(newInsurance);
 		// 보장내역 설정
 		boolean[] tmpt = new boolean[10];
 		System.out.println("보장 내역을 설정합니다.");
@@ -2027,7 +2026,7 @@ public class Home {
 			System.out.println("특약 보장 내역을 설정합니다.");
 			makeGuaranteePlan(newInsurance, true, tmpt);
 		}
-		return newInsurance;
+		return true;
 	}
 
 	// 보장내역 설정하기
@@ -2144,7 +2143,7 @@ public class Home {
 			}
 			boolean isExist = false;
 			Insurance tmpInsurance = null;
-			for (Insurance insurance : this.insuranceList) {
+			for (Insurance insurance : this.insuranceDAO.select()) {
 				if (inputIndex.equals(insurance.getInsuranceId())) {
 					isExist = true;
 					tmpInsurance = insurance;
@@ -2570,7 +2569,7 @@ public class Home {
 	// 보험 정보 출력
 	private void showInsurance(boolean confirmStatus) {
 		System.out.println("------보험 정보------");
-		for (Insurance insurance: this.insuranceList) {
+		for (Insurance insurance: this.insuranceDAO.select()) {
 			if (confirmStatus == insurance.isConfirmedStatus()) {
 				System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
 				System.out.println("  기본보험료 : "+insurance.getBasicFee());
@@ -2593,8 +2592,8 @@ public class Home {
 			System.out.println(eGender.values()[i].getName() + " : " + insurance.getRateOfGender()[i]);
 		}
 		System.out.println("\n  <직업 요율표>");
-		for (int i = 0; i < eJob.values().length-1; i++) {
-			System.out.println(eJob.values()[i].getName() + " : " + insurance.getRateOfJob()[i]);
+		for (int i = 1; i < eJob.values().length-1; i++) {
+			System.out.println(eJob.values()[i].getName() + " : " + insurance.getRateOfJob()[i-1]);
 		}
 		switch (insurance.getType()) {
 		case driverInsurance:
@@ -2665,7 +2664,7 @@ public class Home {
 				System.out.println((i + 1) + "월 : X");
 			}
 		}
-		while (true) {
+		menu: while (true) {
 			System.out.println("\n1.일괄 납부하기");
 			System.out.println("2.선택한 월의 보험료 납부하기");
 			System.out.println("0.돌아가기");
@@ -2683,26 +2682,29 @@ public class Home {
 			case 0:
 				return;
 			case 1:
-				System.out.printf(Constants.thisYear + "년의 납부되지 않은 보험료를 일괄납부 하시겠습니까?(y/n) : ");
-				String inputCheck = scn.next();
-				int unpaiedCount = 0;
-				if (inputCheck.equals("y")) {
-					for (int i = 0; i < contract.getPayHistory().length; i++) {
-						if (!contract.getPayHistory()[i]) {
-							unpaiedCount += 1;
-							contract.payFee(contract, i);
+				while (true) {
+					System.out.printf(Constants.thisYear + "년의 납부되지 않은 보험료를 일괄납부 하시겠습니까?(y/n) : ");
+					String inputCheck = scn.next();
+					int unpaiedCount = 0;
+					if (inputCheck.equals("y")) {
+						for (int i = 0; i < contract.getPayHistory().length; i++) {
+							if (!contract.getPayHistory()[i]) {
+								unpaiedCount += 1;
+								contract.payFee(contract, i);
+							}
 						}
-					}
-					if (unpaiedCount == 0) {
-						System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
+						if (unpaiedCount == 0) {
+							System.out.println("납부할 보험료가 없습니다! 이전 화면으로 돌아갑니다.");
+							continue menu;
+						}
+						System.out.println(unpaiedCount * contract.getFee() + "원의 보험료를 납부하셨습니다.");
+						break;
+					} else if (inputCheck.equals("n")) {
+						continue menu;
+					} else {
+						System.out.println("잘못 입력하셨습니다. 다시 입력해주세요.");
 						continue;
 					}
-					System.out.println(unpaiedCount * contract.getFee() + "원의 보험료를 납부하셨습니다.");
-				} else if (inputCheck.equals("n")) {
-					continue;
-				} else {
-					System.out.println("잘못 입력하셨습니다. 이전 화면으로 돌아갑니다.");
-					continue;
 				}
 				break;
 			case 2:
@@ -2719,7 +2721,7 @@ public class Home {
 						continue;
 					}
 					if (inputMonth == 0) {
-						continue;
+						continue menu;
 					}
 					if (inputMonth < 0 || inputMonth > 12) {
 						System.out.println("1~12 사이의 숫자를 입력해주세요.");
@@ -2832,10 +2834,10 @@ public class Home {
 			}
 		}
 	}
-
+	// 삭제된 보험 보기
 	private void showDeletedInsurance(boolean del) {
 		System.out.println("------보험 정보------");
-		for (Insurance insurance: this.insuranceList) {
+		for (Insurance insurance: this.insuranceDAO.select()) {
 			if (insurance.isDel() == del){
 				System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
 				System.out.println("  기본보험료 : " + insurance.getBasicFee());
@@ -2843,6 +2845,7 @@ public class Home {
 			}
 		}
 	}
+	// 보험 사후관리하기
 	private void postManageInsurance() {
 		menu:while (true) {
 			System.out.println("\n1.보험 상품 삭제하기");
@@ -2867,7 +2870,7 @@ public class Home {
 			case 1:
 				this.showDeletedInsurance(false);
 				isDelExist = true;
-				for (Insurance insurance: this.insuranceList) {
+				for (Insurance insurance: this.insuranceDAO.select()) {
 					if (!insurance.isDel()) {
 						isDelExist = false;
 					}
@@ -2885,17 +2888,18 @@ public class Home {
 					if (inputId.equals("0")) {
 						continue menu;
 					}
-					for (Insurance insurance: this.insuranceList) {
+					for (Insurance insurance: this.insuranceDAO.select()) {
 						if (insurance.getInsuranceId().equals(inputId)) {
 							isExist = true;
 							tmpInsurance = insurance;
 						}
 					}
-					if (tmpInsurance.isDel()) {
-						System.out.println("이미 삭제요청된 보험입니다! 이전 화면으로 돌아갑니다.");
-						continue id;
-					}
+					
 					if (isExist) {
+						if (tmpInsurance.isDel()) {
+							System.out.println("이미 삭제요청된 보험입니다! 이전 화면으로 돌아갑니다.");
+							continue id;
+						}
 						this.showInsuranceData(tmpInsurance);
 						while (true) {
 							System.out.printf("해당 보험을 삭제하시겠습니까?(y/n) : ");
@@ -2925,7 +2929,7 @@ public class Home {
 			case 2:
 				this.showDeletedInsurance(true);
 				isDelExist = false;
-				for (Insurance insurance: this.insuranceList) {
+				for (Insurance insurance: this.insuranceDAO.select()) {
 					if (insurance.isDel()) {
 						isDelExist = true;
 					}
@@ -2943,7 +2947,7 @@ public class Home {
 					if (inputId.equals("0")) {
 						continue menu;
 					}
-					for (Insurance insurance: this.insuranceList) {
+					for (Insurance insurance: this.insuranceDAO.select()) {
 						if (insurance.getInsuranceId().equals(inputId)) {
 							isExist = true;
 							tmpInsurance = insurance;

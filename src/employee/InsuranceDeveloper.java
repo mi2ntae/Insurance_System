@@ -13,11 +13,9 @@ import insurance.InsuranceDAO;
 import insurance.TripInsurance;
 
 public class InsuranceDeveloper extends Employee {
-	private ArrayList<Insurance> insuranceList;
 	private InsuranceDAO insuranceDAO;
 	
-	public InsuranceDeveloper(InsuranceDAO insuranceDAO, ArrayList<Insurance> insuranceList){
-		this.insuranceList = insuranceList;
+	public InsuranceDeveloper(InsuranceDAO insuranceDAO){
 		this.insuranceDAO = insuranceDAO;
 	}
 
@@ -53,11 +51,7 @@ public class InsuranceDeveloper extends Employee {
 	}
 
 	public boolean postManageInsurance(Insurance insurance, boolean del){
-		if (insuranceDAO.updateDel(insurance.getInsuranceId(), del)) {
-			insurance.setDel(del);
-			return true;
-		}
-		return false;
+		return insuranceDAO.updateDel(insurance.getInsuranceId(), del);
 	}
 
 	public void readSurveyResult(){
@@ -80,11 +74,6 @@ public class InsuranceDeveloper extends Employee {
 	}
 	
 	public boolean finishInsurance(Insurance insurance) {
-		boolean isOkay = false;
-		if (this.insuranceDAO.insert(insurance)) {
-			this.insuranceList.add(insurance);
-			isOkay = true;
-		}
-		return isOkay;
+		return this.insuranceDAO.insert(insurance);
 	}
 }
