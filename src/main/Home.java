@@ -982,7 +982,6 @@ public class Home {
 			String input = scn.next();
 			if(input.equals("0")) break;
 			contract = this.contractDAO.selectContract(input);
-			System.out.println(contract);
 			if(contract == null || !contract.isEffectiveness()) {
 				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
 				continue;
@@ -2437,8 +2436,8 @@ public class Home {
 			String accidentId;
 			
 			contract.bringAccident();
-			accidentId = String.valueOf(Integer.parseInt(contract.getAccidentList().get(contract.getAccidentList().size() - 1).getAccidentId()) + 1);
 			if(contract.getAccidentList().size() == 0) accidentId = contract.getContractId() + "001";
+			else accidentId = String.valueOf(Integer.parseInt(contract.getAccidentList().get(contract.getAccidentList().size() - 1).getAccidentId()) + 1);
 			switch(insurance.getType()) {
 			case actualCostInsurance:
 				System.out.println("병ㆍ의원 및 약국에서 지출하신 의료비를 입력해주세요");
@@ -2458,9 +2457,11 @@ public class Home {
 				default:
 				roop : while (true) {
 					System.out.println("보험금을 청구하실 보장내역의 항목 번호를 입력해주세요.");
+					System.out.println("(이전 화면으로 돌아가려면 0을 입력하세요)");
 					try {
 						int input = scn.nextInt();
 						int index = 0;
+						if(input == 0) break roop;
 						for (GuaranteePlan guaranteePlan : insurance.getGuaranteePlanList()) {
 							if(index == input - 1 && (contract.isSpecial() == guaranteePlan.isSpecial() || guaranteePlan.isSpecial() == false)) {
 								Accident accident = new Accident();
