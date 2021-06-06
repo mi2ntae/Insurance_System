@@ -6,9 +6,6 @@ import contract.Contract;
 
 public class ContractManager extends Employee {
 
-	public Contract contract;
-	public ArrayList<Contract> contractList;
-
 	public ContractManager(){
 
 	}

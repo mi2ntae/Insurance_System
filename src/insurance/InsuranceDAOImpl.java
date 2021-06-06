@@ -3,6 +3,9 @@ package insurance;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import contract.Contract;
+import contract.ContractDAO;
+import contract.ContractDAOImpl;
 import global.Constants;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -172,8 +175,37 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	}
 
 	public boolean deleteInsuranceByTime() {
-		String sql = "DELETE i FROM insurance i INNER JOIN contract c ON c.insuranceId = i.insuranceId WHERE i.del = true AND c.lifespan = "+Constants.thisYear*100+Constants.thisMonth+";";
-		return super.execute(sql);
+		String sql = "";
+		ContractDAO contractDAO = new ContractDAOImpl();
+		InsuranceDAO insuranceDAO = new InsuranceDAOImpl();
+		for (Insurance insurance: insuranceDAO.select()) {
+			boolean isOver = true;
+			boolean isContract = false;
+			ArrayList<Contract> tmpContract = new ArrayList<Contract>();
+			for (Contract contract: contractDAO.select()) {
+				if (insurance.getInsuranceId().equals(contract.getInsuranceId())) {
+					isContract = true;
+					tmpContract.add(contract);
+					break;
+				}
+			}
+			if (!isContract) {
+				sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insurance.getInsuranceId()+";";
+				super.execute(sql);
+			} else {
+				for (Contract contract: tmpContract) {
+					if (contract.getLifespan() > Constants.thisYear*100+Constants.thisMonth) {
+						isOver = false;
+					}
+				}
+				if (isOver) {
+					sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insurance.getInsuranceId()+";";
+					super.execute(sql);
+				} 
+			}
+		}
+	
+		return true;
 	}
 	public Insurance selectTypeInsurance(Insurance insurance) {
 		return null;

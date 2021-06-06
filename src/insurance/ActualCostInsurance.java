@@ -80,13 +80,4 @@ public class ActualCostInsurance extends Insurance {
 	public Insurance newInstance() {
 		return new ActualCostInsurance();
 	}
-	
-	public String writeToSelectedFile() {
-		String output = this.getInsuranceId() + ' ' + this.selfBurdenRate + '\n';
-		return output;
-	}
-
-	public void readFromSelectedFile(Scanner scn) {
-		this.selfBurdenRate = scn.nextDouble();
-	}
 }

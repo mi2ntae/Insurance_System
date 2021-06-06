@@ -117,28 +117,5 @@ public class CancerInsurance extends Insurance {
 	public Insurance newInstance() {
 		return new CancerInsurance();
 	}
-	
-	public String writeToSelectedFile() {
-		String output = this.getInsuranceId() + ' ';
-		for (double rate : rateOfFamilyMedicalDisease) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfFamilyMedicalRelationship) {
-			output += rate;
-			output += ' ';
-		}
-		output += '\n';
-		return output;
-	}
-
-	public void readFromSelectedFile(Scanner scn) {
-		for (int i = 0; i < this.rateOfFamilyMedicalDisease.length; i++) {
-			this.rateOfFamilyMedicalDisease[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfFamilyMedicalRelationship.length; i++) {
-			this.rateOfFamilyMedicalRelationship[i] = scn.nextDouble();
-		}
-	}
 
 }

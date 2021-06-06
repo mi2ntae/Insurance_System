@@ -21,8 +21,6 @@ public class UnderWriter extends Employee{
 	// 계약 승인
 	public void approveContract(Contract contract) {
 		contractDAO.updateEffectiveness(contract.getContractId(), true);
-		contract.setEffectiveness(true);
-		contract.setUnpaidPeriod(1);
 		// DB에서 effectiveness = true;
 	}
 	

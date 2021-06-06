@@ -9,10 +9,6 @@ public class CompensationHandler extends Employee {
 
 	}
 
-	public void finalize() throws Throwable {
-
-	}
-
 	public void calculateCompensation(){
 
 	}

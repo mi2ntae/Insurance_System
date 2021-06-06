@@ -94,8 +94,6 @@ public abstract class Insurance {
 
 	// Public Methods
 	abstract public int calculateFee(Insurant Insurnat);
-	abstract public void readFromSelectedFile(Scanner scn);
-	abstract public String writeToSelectedFile();
 	abstract public Insurance newInstance();
 	
 	public void birngGuaranteePlan() {

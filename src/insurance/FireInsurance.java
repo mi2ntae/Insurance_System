@@ -24,7 +24,6 @@ public class FireInsurance extends Insurance {
 	// Methods
 	public int calculateFee(Insurant insurant){
 		double fee = this.getBasicFee();
-
 		// 재산 규모에 따른 요율 계산
 		if (insurant.getPostedPriceOfStructure() > 0 && insurant.getPostedPriceOfStructure() <= 50000000) {
 			fee *= this.getRateOfPostedPrice()[0];
@@ -36,8 +35,6 @@ public class FireInsurance extends Insurance {
 			fee *= this.getRateOfPostedPrice()[3];
 		} else if (insurant.getPostedPriceOfStructure() > 2000000000) {
 			fee *= this.getRateOfPostedPrice()[4];
-		} else {
-			System.out.println("error : input이 숫자가 아님");
 		}
 		
 		// 재산의 사용 용도에 따른 요율 계산
@@ -69,29 +66,6 @@ public class FireInsurance extends Insurance {
 
 	public Insurance newInstance() {
 		return new FireInsurance();
-	}
-	
-	public String writeToSelectedFile() {
-		String output = this.getInsuranceId() + ' ';
-		for (double rate : rateOfPostedPrice) {
-			output += rate;
-			output += ' ';
-		}
-		for (double rate : rateOfStructureUsage) {
-			output += rate;
-			output += ' ';
-		}
-		output += '\n';
-		return output;
-	}
-
-	public void readFromSelectedFile(Scanner scn) {
-		for (int i = 0; i < this.rateOfPostedPrice.length; i++) {
-			this.rateOfPostedPrice[i] = scn.nextDouble();
-		}
-		for (int i = 0; i < this.rateOfStructureUsage.length; i++) {
-			this.rateOfStructureUsage[i] = scn.nextDouble();
-		}
 	}
 
 }

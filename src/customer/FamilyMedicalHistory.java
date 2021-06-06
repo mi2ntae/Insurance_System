@@ -13,7 +13,7 @@ public class FamilyMedicalHistory {
 
 	}
 
-	// getters % setters
+	// getters & setters
 	public eFamilyMedicalDisease getDisease() {return disease;}
 	public void setDisease(eFamilyMedicalDisease disease) {this.disease = disease;}
 
