@@ -1867,7 +1867,7 @@ public class Home {
 			for (int i = 1; i < eJob.values().length; i++) {
 				try {
 					System.out.printf(eJob.values()[i].getName() + " : ");
-					tmpRateOfJob[i] = scn.nextDouble();
+					tmpRateOfJob[i - 1] = scn.nextDouble();
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
@@ -1989,7 +1989,7 @@ public class Home {
 				for (int i = 1; i < eUsageOfStructure.values().length; i++) {
 					System.out.printf(eUsageOfStructure.values()[i].getName()+" : ");
 					try {
-						tmpRateOfUsageOfStructure[i] = scn.nextDouble();
+						tmpRateOfUsageOfStructure[i - 1] = scn.nextDouble();
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -2006,7 +2006,7 @@ public class Home {
 				for (int i = 1; i < eRiskOfTripCountry.values().length; i++) {
 					System.out.printf(eRiskOfTripCountry.values()[i].getName()+" : ");
 					try {
-						tmpRateOfRiskOfTripCountry[i] = scn.nextDouble();
+						tmpRateOfRiskOfTripCountry[i - 1] = scn.nextDouble();
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");

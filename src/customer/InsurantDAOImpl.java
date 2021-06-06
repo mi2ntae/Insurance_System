@@ -20,7 +20,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				+ insurant.getGender().getNum() + "','" + insurant.getJob().getNum() + "','"
 				+ insurant.getTypeOfCar().getNum() + "','" + insurant.getRankOfCar().getNum()+ "','"
 				+ insurant.getRiskOfTripCountry().getNum() + "')";
-		System.out.println(str);
 		if (this.execute(str))
 			return true;
 		else

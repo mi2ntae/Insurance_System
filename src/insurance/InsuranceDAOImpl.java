@@ -22,13 +22,11 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		str += rate + ",";
 		cnt ++;
 		}
-		System.out.println(cnt);
 		cnt = 0;
 		for (double rate : insurance.getRateOfGender()) {
 			str += rate + ",";
 			cnt++;
 		}
-		System.out.println(cnt);
 		cnt = 0;
 		for (double rate : insurance.getRateOfJob()) {
 			if(rate == 0) {
@@ -37,12 +35,10 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 			str += rate + ",";
 			cnt++;
 		}
-		System.out.println(cnt);
 		str += insurance.isConfirmedStatus() + "," + insurance.isSpecialContract() + ")";
 		
 		InsuranceDAO insuranceDao = insurance.getType().getInsuranceDAO();
 
-		System.out.println(str);
 		if(this.execute(str)) {
 			if(insuranceDao.insert(insurance))return true;
 			else return false;
@@ -106,7 +102,6 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		GuaranteePlanDAO guaranteePlanDAO = new GuaranteePlanDAOImpl();
 		
 		this.read(sql);
-		System.out.println(sql);
 		try {
 			if (rs.next()) {
 				int input = rs.getInt("type");
