@@ -14,4 +14,6 @@ public interface ContractDAO {
 	public boolean updateAnnualPayHistory();
 	public boolean delete(String contractId);
 	public boolean updateLifespan(String contractId, int lifespan);
+	public boolean updateUnpaidPeriod(String contractId, int unpaidPeriod);
+
 }
