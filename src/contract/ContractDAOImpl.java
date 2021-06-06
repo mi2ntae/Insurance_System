@@ -12,7 +12,6 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 				+ ", fee, unpaidPeriod) values('"+contract.getContractId()+"', '"+contract.getInsurantId()+"', '"+contract.getInsuranceId()
 				+"', false, "+contract.isSpecial()+", "+contract.getLifespan()
 				+", "+contract.getFee()+", "+contract.getUnpaidPeriod()+");";
-		System.out.println(str);
 		isOkay = super.execute(str);
 		
 		str = "INSERT INTO payHistory values('"+contract.getContractId()+"', false, false, false, false, false, false, false, false, false, false, false, false);";
