@@ -2,9 +2,6 @@ package insurance;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-import global.Constants.eGender;
-import global.Constants.eInsuranceType;
 import main.DBConnector;
 
 public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
@@ -52,34 +49,9 @@ public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	}
 
 	public ArrayList<Insurance> select() {return null;}
-
-	@Override
-	public boolean updateConfirmedStatus(String insuranceId, boolean confirmedStatus) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean delete(String insuranceId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Insurance selectInsurance(String insuranceId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean updateDel(String insuranceId, boolean del) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteInsuranceByTime() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean updateConfirmedStatus(String insuranceId, boolean confirmedStatus) {return false;}
+	public boolean delete(String insuranceId) {return false;}
+	public Insurance selectInsurance(String insuranceId) {return null;}
+	public boolean updateDel(String insuranceId, boolean del) {return false;}
+	public boolean deleteInsuranceByTime() {return false;}
 }

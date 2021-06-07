@@ -1,7 +1,5 @@
 package employee;
 
-import java.util.ArrayList;
-
 import contract.Contract;
 
 public class ContractManager extends Employee {

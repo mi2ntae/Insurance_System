@@ -2,8 +2,6 @@ package insurance;
 
 import java.util.Scanner;
 
-import global.Constants.eEmployeeRole;
-
 public class GuaranteePlan {
 	// Attributes
 	private String insuranceId;

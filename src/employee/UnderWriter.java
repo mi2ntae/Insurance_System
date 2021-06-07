@@ -1,13 +1,10 @@
 package employee;
 
-import java.util.ArrayList;
-
 import contract.Contract;
 import contract.ContractDAO;
 
 public class UnderWriter extends Employee{
 
-	private ArrayList<Contract> contractList;
 	private ContractDAO contractDAO;
 
 	public UnderWriter(ContractDAO contractDAO){

@@ -1,7 +1,6 @@
 package employee;
 
 import contract.Accident;
-import contract.Contract;
 
 public class CompensationHandler extends Employee {
 

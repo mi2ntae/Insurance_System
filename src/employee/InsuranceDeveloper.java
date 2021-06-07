@@ -1,7 +1,5 @@
 package employee;
 
-import java.util.ArrayList;
-
 import global.Constants.eInsuranceType;
 import insurance.ActualCostInsurance;
 import insurance.CancerInsurance;
