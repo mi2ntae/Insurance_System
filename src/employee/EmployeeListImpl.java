@@ -21,7 +21,6 @@ public class EmployeeListImpl implements EmployeeList {
 	// Constructor
 	public EmployeeListImpl() throws FileNotFoundException{
 		this.employeeList = new ArrayList<Employee>();
-		this.readFromFile();
 	}
 	
 	// getters & setters
@@ -31,7 +30,6 @@ public class EmployeeListImpl implements EmployeeList {
 	// Public Methods
 	public boolean insert(Employee employee) {
 		if (this.employeeList.add(employee)) {
-			this.writeToFile(employee);
 			return true;
 		} else {
 			return false;
@@ -83,25 +81,4 @@ public class EmployeeListImpl implements EmployeeList {
 		}
 		return -1;
 	}
-	
-	private void writeToFile(Employee employee) {
-		File file = new File("data/employee");
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-		    writer.append(employee.writeToFile());
-		} catch (IOException e) {
-		    e.printStackTrace();
-		}
-	}
-	
-	private void readFromFile() throws FileNotFoundException {
-		File file = new File("data/employee");
-		Scanner sc = new Scanner(file);
-		while (sc.hasNext()) {
-			Employee employee = new Employee();
-			employee.readFromFile(sc);
-			this.employeeList.add(employee);
-		}	
-		
-	}
-	
 }

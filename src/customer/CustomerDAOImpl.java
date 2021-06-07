@@ -78,6 +78,7 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 
 	@Override
 	public Customer selectCustomer(String customerId) {
+		boolean flag = false;
 		InsurantDAO insurantDAO = new InsurantDAOImpl();
 		Customer customer = new Customer();
 		String sql = "SELECT * FROM customer WHERE CustomerId = '" + customerId +"'";
@@ -89,13 +90,16 @@ public class CustomerDAOImpl extends DBConnector implements CustomerDAO{
 				customer.setPhoneNumber(rs.getString("phoneNumber"));
 				customer.setCustomerId(rs.getString("customerId"));
 				customer.setPassword(rs.getString("password"));
+				flag = true;
 			}
-			for (Insurant insurant : insurantDAO.select()) {
-				if (customer.getCustomerId().equals(insurant.getCustomerId())) {
-					customer.getInsurantList().add(insurant);
+			if(flag) {
+				for (Insurant insurant : insurantDAO.select()) {
+					if (customer.getCustomerId().equals(insurant.getCustomerId())) {
+						customer.getInsurantList().add(insurant);
+					}
 				}
+				return customer;
 			}
-			return customer;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
