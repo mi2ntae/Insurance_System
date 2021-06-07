@@ -1,7 +1,5 @@
 package insurance;
 
-import java.util.Scanner;
-
 import customer.Insurant;
 
 public class FireInsurance extends Insurance {

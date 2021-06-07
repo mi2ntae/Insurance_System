@@ -1,8 +1,6 @@
 package insurance;
 
 import java.util.ArrayList;
-import java.util.Scanner;
-
 import customer.Insurant;
 import global.Constants.eGender;
 import global.Constants.eInsuranceType;
@@ -30,13 +28,11 @@ public abstract class Insurance {
 	private GuaranteePlanDAO guaranteePlanDAO;
 	
 	// Composition Class
-	private MembershipCondition membershipCondition;
 	private ArrayList<GuaranteePlan> guaranteePlanList;
 
 	// Constructor
 	public Insurance() {
 		this.guaranteePlanDAO = new GuaranteePlanDAOImpl();
-		this.membershipCondition = new MembershipCondition();
 		this.guaranteePlanList = new ArrayList<GuaranteePlan>();
 	}
 	
@@ -71,9 +67,6 @@ public abstract class Insurance {
 	public int getWarrantyPeriod() {return warrantyPeriod;}
 	public void setWarrantyPeriod(int warrantyPeriod) {this.warrantyPeriod = warrantyPeriod;}
 
-	public MembershipCondition getM_membershipCondition() {return membershipCondition;}
-	public void setM_membershipCondition(MembershipCondition m_membershipCondition) {this.membershipCondition = m_membershipCondition;}
-	
 	public eGender getGender() {return gender;}
 	public void setGender(eGender gender) {this.gender = gender;}
 	

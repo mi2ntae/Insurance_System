@@ -20,23 +20,17 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 				+ insurance.getInsuranceId() + "','" + insurance.getName() + "'," + insurance.getType().getNum() + ","
 				+ insurance.getGender().getNum() + "," + insurance.getBasicFee() + ","
 				+ insurance.getSpecialContractFee() + "," + insurance.getWarrantyPeriod() + ",";
-		int cnt = 0;
 		for (double rate : insurance.getRateOfAge()) {
-		str += rate + ",";
-		cnt ++;
+			str += rate + ",";
 		}
-		cnt = 0;
 		for (double rate : insurance.getRateOfGender()) {
 			str += rate + ",";
-			cnt++;
 		}
-		cnt = 0;
 		for (double rate : insurance.getRateOfJob()) {
-			if(rate == 0) {
+			if (rate == 0) {
 				continue;
 			}
 			str += rate + ",";
-			cnt++;
 		}
 		str += insurance.isConfirmedStatus() + "," + insurance.isSpecialContract() + ")";
 		

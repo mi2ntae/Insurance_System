@@ -3,7 +3,6 @@ package employee;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import contract.Accident;
 import global.Constants.eEmployeeRole;
 import main.DBConnector;
 
