@@ -1221,7 +1221,7 @@ public class Home {
 			String input = scn.next();
 			insurance = this.insuranceDAO.selectInsurance(input);
 			if (insurance != null) {
-				Insurant insurant = this.createInsurant(customer, insurance);
+				Insurant insurant = this.selectInsurant(customer, insurance);
 				if (customer != null) {
 					for(Contract temp : this.contractDAO.select()) {
 						if(temp.getInsuranceId().equals(insurance.getInsuranceId()) && this.insurantDAO.selectInsurant(temp.getInsurantId()).getInsurantId().equals(insurant.getInsurantId())) {
