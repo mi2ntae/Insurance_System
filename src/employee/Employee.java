@@ -35,25 +35,4 @@ public class Employee {
 	
 	public int getSaleHistory() {return saleHistory;}
 	public void setSaleHistory(int saleHistory) {this.saleHistory = saleHistory;}
-	
-	// Public Methods
-	public String writeToFile() {
-		String output = null;
-		output = this.name + ' ' + this.phoneNumber + ' ' + this.role.getNum() + ' ' + this.employeeId + ' ' + this.password + '\n';
-		return output;
-		
-	}
-	
-	public void readFromFile(Scanner scn) {
-		this.name = scn.next();
-		this.phoneNumber = scn.next();
-		int input = scn.nextInt();
-		for(eEmployeeRole role : eEmployeeRole.values()) {
-			if(role.getNum() == input) this.role = role;
-		}
-		this.employeeId = scn.next();
-		this.password = scn.next();
-	}
-	
-	// Private Methods
 }

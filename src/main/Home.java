@@ -63,6 +63,7 @@ public class Home {
 	
 	private InsuranceDeveloper insuranceDeveloper;
 	private InsuranceConfirmer insuranceConfirmer;
+	private Salesperson salesperson;
 
 	int time = Constants.thisYear * 100 + Constants.thisMonth;
 	
@@ -298,7 +299,7 @@ public class Home {
 													break;
 												case 2:
 													// 면담신청 리스트 확인하기
-													this.checkInterviewList();
+													this.checkInterviewList(employee);
 													break;
 												case 3:
 													this.showAllInsurance();
@@ -441,7 +442,7 @@ public class Home {
 					}
 					for(Contract contract : this.contractDAO.select()) {
 						if(contract.getLifespan() - time < 0) {
-							contract.setEffectiveness(false);
+							this.contractDAO.updateEffectiveness(contract.getContractId(), false);
 						} else {
 							if(contract.isEffectiveness()) {
 								this.contractDAO.updateUnpaidPeriod(contract.getContractId(), contract.getUnpaidPeriod() + 1);
@@ -548,8 +549,9 @@ public class Home {
 	}
 	
 	// 면담 신청 리스트 확인하기
-	private void checkInterviewList() {
-		Salesperson salesperson = new Salesperson();
+	private void checkInterviewList(Employee employee) {
+		Salesperson salesperson = new Salesperson(this.interviewDAO);
+		salesperson.setEmployeeId(employee.getEmployeeId());
 		int count = 0;
 		for(Interview interview : this.interviewDAO.select()) {
 			if(!interview.isConfirmedStatus()) {
@@ -622,17 +624,13 @@ public class Home {
 	}
 	
 	private void writeReport(Interview interview, Salesperson salesperson) {
-		System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
 		System.out.println("면담 내용을 입력하세요");
-		String input = scn.next();
-		if(input.equals("0")) {
-			return;
-		} else {
-			interview.setSalespersonId(salesperson.getEmployeeId());
-			salesperson.writeReport(interview, input);
-			interview.setConfirmedStatus(true);
-			System.out.println("------완료되었습니다------");
-		}
+		String input = scn.nextLine() + "\n";
+		System.out.print("내용 : ");
+		input = scn.nextLine() + "\n";
+		this.interviewDAO.updateSalespersonId(interview.getInterviewId(), salesperson.getEmployeeId());
+		salesperson.writeReport(interview, input);
+		System.out.println("------완료되었습니다------");
 	}
 
 	private void showInterviewData(Interview interview) {
@@ -707,6 +705,7 @@ public class Home {
 					Customer customer = customerDAO.selectCustomer(insurant.getCustomerId());
 					System.out.println("계약 ID : " + contract.getContractId());
 					System.out.println("고객 ID : " + customer.getCustomerId());
+					System.out.println("고객 이름 : " + customer.getName());
 					System.out.println("보험 이름 : " + insurance.getName());
 					System.out.println("미납 금액 : " + contract.getFee() * contract.getUnpaidPeriod());
 					System.out.println("미납된 월 수 : " + contract.getUnpaidPeriod());
@@ -785,19 +784,7 @@ public class Home {
 		Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
 		this.showInsurantData(insurant, insurance.getType());
 		
-		System.out.println("재계약을 신청하시겠습니까?(y/n)");
-		String input = scn.next();
-		while(!input.equals("y") && !input.equals("n")) {
-			System.out.println("error : 정해진 문자를 사용해주세요");
-			System.out.println("-----------------------");
-			System.out.println("재계약을 신청하시겠습니까?(y/n)");
-		}
-		if (input.equals("y")) {
-			this.changeContractData(contract);
-			this.contractDAO.updateLifespan(contract.getContractId(), insurance.getWarrantyPeriod());
-		} else {
-			return;
-		}
+		// 우편보내기
 	}
 	
 	// 계약 정보 수정
@@ -966,16 +953,15 @@ public class Home {
 			insurant.setRiskOfTripCountry(riskOfTripCountry);
 		}
 		
-		if(insurance.getType() == eInsuranceType.driverInsurance || insurance.getType() == eInsuranceType.dentalInsurance) {
+		if(insurance.getType() == eInsuranceType.driverInsurance) {
 			System.out.print("사고횟수 : ");
 			int accidentHistory = scn.nextInt();
 			insurant.setAccidentHistory(accidentHistory);
 		}
 		Insurance tmptInsurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
-		contract.setLifespan(time + tmptInsurance.getWarrantyPeriod());
-		contract.setFee(0);
-		contract.setPaidFee(0);
-		contract.setUnpaidPeriod(0);
+		this.contractDAO.updateLifespan(contract.getContractId(), time + tmptInsurance.getWarrantyPeriod());
+		this.contractDAO.updateFee(contract.getContractId(), 0);
+		this.contractDAO.updateUnpaidPeriod(contract.getContractId(), 0);
 	}
 
 	// 가입한 보험 리스트 보기
@@ -1203,7 +1189,7 @@ public class Home {
 			}
 		}
 		if(flag) {
-			System.out.println("-----보험리스트-----");
+			System.out.println("-----------보험리스트-----------");
 			if(type == null) {
 				for (Insurance insurance: this.insuranceDAO.select()) {
 					if(!insurance.isDel()) {
@@ -1219,7 +1205,6 @@ public class Home {
 					}
 				}
 			}
-			System.out.println("-----------------\n");
 			return true;
 		} else {
 			System.out.println("------보험이 존재하지 않습니다------");
@@ -1236,7 +1221,7 @@ public class Home {
 			String input = scn.next();
 			insurance = this.insuranceDAO.selectInsurance(input);
 			if (insurance != null) {
-				Insurant insurant = this.selectInsurant(customer, insurance);
+				Insurant insurant = this.createInsurant(customer, insurance);
 				if (customer != null) {
 					for(Contract temp : this.contractDAO.select()) {
 						if(temp.getInsuranceId().equals(insurance.getInsuranceId()) && this.insurantDAO.selectInsurant(temp.getInsurantId()).getInsurantId().equals(insurant.getInsurantId())) {
@@ -1260,7 +1245,7 @@ public class Home {
 					input = "";
 					if(insurance.isSpecialContract()) {
 						while(!input.equals("y") && !input.equals("n")) {
-							System.out.println("특약 여부(y/n)");
+							System.out.println("특약을 가입하시겠습니까?(y/n) : ");
 							input = scn.next();
 						}
 						if (input.equals("y")) {
@@ -1345,6 +1330,25 @@ public class Home {
 		String phoneNum = scn.next();
 		insurant.setPhoneNumber(phoneNum);
 		
+		System.out.println("성별\n1.남자\n2.여자");
+		eGender gender = null;
+		while(gender == null) {
+			System.out.printf("성별을 입력해주세요 : ");
+			switch(scn.nextInt()) {
+				default :
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
+					System.out.println("------------------------------");
+					break;
+				case 1 :
+					gender = eGender.male;
+					break;
+				case 2 :
+					gender = eGender.female;
+					break;
+			}
+		}
+		insurant.setGender(gender);
+		
 		if(insurance.getType() == eInsuranceType.fireInsurance) {
 			System.out.print("건물가격 : ");
 			long postedPriceOfStructure = scn.nextLong();
@@ -1384,25 +1388,6 @@ public class Home {
 			insurant.setUsageOfStructure(eUsageOfStructure.none);
 		}
 		
-		System.out.println("성별\n1.남자\n2.여자");
-		eGender gender = null;
-		while(gender == null) {
-			System.out.printf("성별을 입력해주세요 : ");
-			switch(scn.nextInt()) {
-				default :
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					System.out.println("------------------------------");
-					break;
-				case 1 :
-					gender = eGender.male;
-					break;
-				case 2 :
-					gender = eGender.female;
-					break;
-			}
-		}
-		insurant.setGender(gender);
-		
 		if(insurance.getType() != eInsuranceType.fireInsurance) {
 			System.out.println("직업\n1.사무직\n2.운전자\n3.현장직\n4.학생\n5.교사\n6.군인\n7.기타");
 			eJob job = null;
@@ -1437,6 +1422,10 @@ public class Home {
 			insurant.setJob(job);
 		} else {
 			insurant.setJob(eJob.none);
+		}
+		
+		if(insurance.getType() == eInsuranceType.cancerInsurance) {
+			
 		}
 		
 		if(insurance.getType() == eInsuranceType.driverInsurance) {
@@ -2643,8 +2632,7 @@ public class Home {
 		
 	// 보험 상세정보 출력하기
 	private void showInsuranceData(Insurance insurance) {
-		System.out.println("------보험 상세정보------");
-		System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
+		System.out.println("ID : " + insurance.getInsuranceId()+"     이름 :"+insurance.getName());
 		System.out.println("  기본보험료 : "+insurance.getBasicFee());
 		System.out.println("  <나이 요율표>");
 		for (int i = 0; i < eAge.values().length; i++) {
@@ -2713,7 +2701,7 @@ public class Home {
 		// 보장 내역 조회하기 코딩해야함
 		System.out.println();
 		showGuaranteePlan(insurance, true);
-		System.out.println("-------------------");		
+		System.out.println("----------------------");		
 	}
 	
 	// 납부내역 확인하기

@@ -1,11 +1,14 @@
 package employee;
 
 import interview.Interview;
+import interview.InterviewDAO;
 
 public class Salesperson extends Employee{
+	
+	private InterviewDAO interviewDAO;
 
-	public Salesperson(){
-		
+	public Salesperson(InterviewDAO interviewDAO){
+		this.interviewDAO = interviewDAO;
 	}
 
 	public void checkInterviewList(){
@@ -21,7 +24,8 @@ public class Salesperson extends Employee{
 	}
 
 	public void writeReport(Interview interview,String input){
-		interview.setContent(input);
+		this.interviewDAO.updateContent(interview.getInterviewId(), input);
+		this.interviewDAO.updateConfirmedStatus(interview.getInterviewId(), true);
 	}
 
 }
