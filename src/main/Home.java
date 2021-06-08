@@ -392,13 +392,7 @@ public class Home {
 						Constants.thisMonth = 1;
 						time = Constants.thisYear * 100 + Constants.thisMonth;
 						
-						for (Contract contract: this.contractDAO.select()) {
-							if (contractDAO.updateAnnualPayHistory()) {
-								contract.setPayHistory(new boolean[12]);
-							} else {
-								System.out.println("해가 지났는데 납부 내역을 일괄 초기화할 수 없음. DB오류");
-							}
-						}
+						contractDAO.updateAnnualPayHistory();
 					} else {
 						time++;
 						Constants.thisMonth += 1;
@@ -415,6 +409,15 @@ public class Home {
 					if (!insuranceDAO.deleteInsuranceByTime()) {
 						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
 					}
+					break;
+				case 0:
+					System.out.println("시스템을 종료합니다.");
+					this.scn.close();
+					this.dbConnector.close();
+					System.exit(0);
+					break;
+				default:
+					System.out.println("error : 범위 내의 숫자를 입력해주세요");
 					break;
 				}
 			} catch (InputMismatchException e) {
@@ -1142,7 +1145,7 @@ public class Home {
 		boolean flag = false;
 		if(!this.insuranceDAO.select().isEmpty()) {
 			for(Insurance insurance : this.insuranceDAO.select()) {
-				if(!insurance.isDel()) {
+				if(!insurance.isDel() && insurance.isConfirmedStatus()) {
 					if(insurance.getType() == type) {
 						flag = true;
 					} else if(type == null) {
@@ -1155,14 +1158,14 @@ public class Home {
 			System.out.println("-----------보험리스트-----------");
 			if(type == null) {
 				for (Insurance insurance: this.insuranceDAO.select()) {
-					if(!insurance.isDel()) {
+					if(!insurance.isDel() && insurance.isConfirmedStatus()) {
 						this.showInsuranceData(insurance);
 					}
 				}
 			} else {
 				for (Insurance insurance: this.insuranceDAO.select()) {
 					if(insurance.getType() == type) {
-						if(!insurance.isDel()) {
+						if(!insurance.isDel() && insurance.isConfirmedStatus()) {
 							this.showInsuranceData(insurance);
 						}
 					}
@@ -1612,7 +1615,7 @@ public class Home {
 		Insurance insurance = null;
 		while (true) {
 			System.out.println("\n1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n0.돌아가기");
-			System.out.printf("어떤 보험을 기획하시겠습니까? : ");
+			System.out.println("어떤 보험을 기획하시겠습니까?");
 			int inputMenu = 0;
 			try {
 				inputMenu = scn.nextInt();
@@ -1648,7 +1651,7 @@ public class Home {
 	private Insurance createPlanInsurance(Insurance newInsurance) {
 		while (true) {
 			System.out.println("1.남자\n2.여자\n3.남자,여자\n0.돌아가기");
-			System.out.printf("가입 가능 성별을 입력하세요 : ");
+			System.out.println("가입 가능 성별을 입력하세요.");
 			try {
 				switch(scn.nextInt()) {
 				case 1:
@@ -1683,7 +1686,10 @@ public class Home {
 					for (Insurance insurance: this.insuranceDAO.select()) {
 						if ((insurance.getType() != newInsurance.getType()) || (insurance.getGender() != newInsurance.getGender())) {
 							continue;
+						} else if ((!insurance.isConfirmedStatus()) || (insurance.isDel())) {
+							continue;
 						}
+						
 						System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
 						System.out.println("  기본보험료 : "+insurance.getBasicFee());
 						System.out.println("-------------------");
@@ -1704,9 +1710,11 @@ public class Home {
 							boolean isExist = false;
 							Insurance tmpInsurance = null;
 							for (Insurance insurance: this.insuranceDAO.select()) {
-								if (inputIndex.equals(insurance.getInsuranceId())) {
-									isExist = true;
-									tmpInsurance = insurance;
+								if (inputIndex.equals(insurance.getInsuranceId()) && !insurance.isDel()) {
+									if (insurance.isConfirmedStatus() && insurance.getType() == newInsurance.getType()) {
+										isExist = true;
+										tmpInsurance = insurance;
+									}
 								}
 							}
 							if (isExist) {
@@ -1760,8 +1768,14 @@ public class Home {
 			newInsurance.setName(scn.next());
 			while(true) {
 				try {
+					int inputFee = 0;
 					System.out.printf("기본 보험료를 입력해주세요 : ");
-					newInsurance.setBasicFee(scn.nextInt());
+					inputFee = scn.nextInt();
+					if (inputFee < 0) {
+						System.out.println("0이상의 숫자를 입력해주세요.");
+						continue;
+					}
+					newInsurance.setBasicFee(inputFee);
 					break;
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
@@ -1771,14 +1785,21 @@ public class Home {
 				}
 			}
 			if (newInsurance.getType() != eInsuranceType.actualCostInsurance) {
+				special: while (true) {
 					System.out.printf("특약가입이 가능한 보험입니까?(y/n) : ");
 					String inputSpecial = scn.next();
 					if (inputSpecial.equals("y")) {
+						newInsurance.setSpecialContract(true);
 						while (true) {
 							try {
-								newInsurance.setSpecialContract(true);
+								int inputFee = 0;
 								System.out.printf("특약 보험료를 입력해주세요 : ");
-								newInsurance.setSpecialContractFee(scn.nextInt());
+								inputFee = scn.nextInt();
+								if (inputFee < 0) {
+									System.out.println("0이상의 숫자를 입력해주세요.");
+									continue;
+								}
+								newInsurance.setSpecialContractFee(inputFee);
 							} catch (InputMismatchException e) {
 								System.out.println("error : 숫자를 입력해주세요");
 								System.out.println("-----------------------");
@@ -1793,8 +1814,10 @@ public class Home {
 					} else {
 						System.out.println("error : 정해진 문자를 사용해주세요");
 						System.out.println("-----------------------");
-						continue;
+						continue special;
 					}
+					break;
+				}
 			}
 	
 			while (true) {
@@ -1819,11 +1842,18 @@ public class Home {
 		if (!newInsurance.isClone()) {
 			double[] tmpRateOfAge = new double[eAge.values().length];
 			System.out.println("나이에 대한 요율을 설정합니다. ex) 20대 : 1.0)");
-			
+			double inputDouble = 0;
 			for (int i = 0; i < eAge.values().length; i++) {
 				try {
 					System.out.printf(eAge.values()[i].getName() + " : ");
-					tmpRateOfAge[i] = scn.nextDouble();
+					inputDouble = scn.nextDouble();
+					if (inputDouble < 0) {
+						System.out.println("0이상의 숫자를 입력해주세요.");
+						scn.nextLine();
+						i--;
+						continue;
+					}
+					tmpRateOfAge[i] = inputDouble;
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
@@ -1838,7 +1868,14 @@ public class Home {
 			for (int i = 0; i < eGender.values().length - 1; i++) {
 				try {
 					System.out.printf(eGender.values()[i].getName() + " : ");
-					tmpRateOfGender[i] = scn.nextDouble();
+					inputDouble = scn.nextDouble();
+					if (inputDouble < 0) {
+						System.out.println("0이상의 숫자를 입력해주세요.");
+						scn.nextLine();
+						i--;
+						continue;
+					}
+					tmpRateOfGender[i] = inputDouble;
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
@@ -1854,7 +1891,14 @@ public class Home {
 			for (int i = 1; i < eJob.values().length; i++) {
 				try {
 					System.out.printf(eJob.values()[i].getName() + " : ");
-					tmpRateOfJob[i - 1] = scn.nextDouble();
+					inputDouble = scn.nextDouble();
+					if (inputDouble < 0) {
+						System.out.println("0이상의 숫자를 입력해주세요.");
+						scn.nextLine();
+						i--;
+						continue;
+					}
+					tmpRateOfJob[i - 1] = inputDouble;
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
 					System.out.println("-----------------------");
@@ -1866,6 +1910,7 @@ public class Home {
 		} 
 		
 		while (true) {
+			double inputDouble = 0;
 			switch (newInsurance.getType()) {
 			case cancerInsurance:
 				System.out.println("가족 병력에 따른 요율을 설정합니다.");
@@ -1873,7 +1918,14 @@ public class Home {
 				for (int i = 0; i < eFamilyMedicalDisease.values().length; i++) {
 					System.out.printf(eFamilyMedicalDisease.values()[i].getName()+" : ");
 					try {
-						tmpRateOfFamilyDisease[i] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfFamilyDisease[i] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1886,7 +1938,14 @@ public class Home {
 				for (int i = 0; i < Constants.familyMedicalRelationship.length; i++) {
 					System.out.printf(Constants.familyMedicalRelationship[i]+" : ");
 					try {
-						tmpRateOfFamilyRelationship[i] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfFamilyRelationship[i] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1903,6 +1962,10 @@ public class Home {
 					System.out.printf("연간 한도 횟수를 입력해주세요 : ");
 					try {
 						annuallimit = scn.nextInt();
+						if (annuallimit < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							continue;
+						}
 					} catch (InputMismatchException e) {
 						System.out.println("error : 정수를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1919,7 +1982,14 @@ public class Home {
 				for (int i = 1; i < eTypeOfCar.values().length-1; i++) {
 					System.out.printf(eTypeOfCar.values()[i+1].getName()+" : ");
 					try {
-						tmpRateOfCarType[i-1] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfCarType[i-1] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1932,7 +2002,14 @@ public class Home {
 				for (int i = 1; i < eRankOfCar.values().length; i++) {
 					System.out.printf(eRankOfCar.values()[i].getName()+" : ");
 					try {
-						tmpRateOfRankOfCar[i-1] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfRankOfCar[i-1] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1945,7 +2022,14 @@ public class Home {
 				for (int i = 0; i < Constants.accidentHistory.length; i++) {
 					System.out.printf(Constants.accidentHistory[i]+" : ");
 					try {
-						tmpRateOfAccidentHistory[i] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfAccidentHistory[i] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1963,7 +2047,14 @@ public class Home {
 				for (int i = 0; i < Constants.postedPrice.length; i++) {
 					System.out.printf(Constants.postedPrice[i]+" : ");
 					try {
-						tmpRateOfPostedPrice[i] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfPostedPrice[i] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1976,7 +2067,14 @@ public class Home {
 				for (int i = 1; i < eUsageOfStructure.values().length; i++) {
 					System.out.printf(eUsageOfStructure.values()[i].getName()+" : ");
 					try {
-						tmpRateOfUsageOfStructure[i - 1] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfUsageOfStructure[i - 1] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -1993,7 +2091,14 @@ public class Home {
 				for (int i = 1; i < eRiskOfTripCountry.values().length; i++) {
 					System.out.printf(eRiskOfTripCountry.values()[i].getName()+" : ");
 					try {
-						tmpRateOfRiskOfTripCountry[i - 1] = scn.nextDouble();
+						inputDouble = scn.nextDouble();
+						if (inputDouble < 0) {
+							System.out.println("0이상의 숫자를 입력해주세요.");
+							scn.nextLine();
+							i--;
+							continue;
+						}
+						tmpRateOfRiskOfTripCountry[i - 1] = inputDouble;
 					} catch (InputMismatchException e) {
 						System.out.println("error : 숫자를 입력해주세요");
 						System.out.println("-----------------------");
@@ -2683,7 +2788,7 @@ public class Home {
 			System.out.println("\n1.일괄 납부하기");
 			System.out.println("2.선택한 월의 보험료 납부하기");
 			System.out.println("0.돌아가기");
-			System.out.printf("원하는 메뉴를 입력해주세요 : ");
+			System.out.println("원하는 메뉴를 입력해주세요");
 			int inputMenu = 0;
 			try {
 				inputMenu = scn.nextInt();
@@ -2850,15 +2955,18 @@ public class Home {
 		}
 	}
 	// 삭제된 보험 보기
-	private void showDeletedInsurance(boolean del) {
-		System.out.println("------보험 정보------");
+	private boolean showDeletedInsurance(boolean del) {
+		System.out.println("------보험 정보------");	
+		boolean isExist = false;
 		for (Insurance insurance: this.insuranceDAO.select()) {
 			if (insurance.isDel() == del){
 				System.out.println(insurance.getInsuranceId() + ". " + insurance.getName());
 				System.out.println("  기본보험료 : " + insurance.getBasicFee());
 				System.out.println("-------------------");
+				isExist = true;
 			}
 		}
+		return isExist;
 	}
 	// 보험 사후관리하기
 	private void postManageInsurance() {
@@ -2866,7 +2974,7 @@ public class Home {
 			System.out.println("\n1.보험 상품 삭제하기");
 			System.out.println("2.보험 상품 복구하기");
 			System.out.println("0.돌아가기");
-			System.out.printf("원하는 메뉴를 입력해주세요 : ");
+			System.out.println("원하는 메뉴를 입력해주세요");
 			int inputMenu = 0;
 			try {
 				inputMenu = scn.nextInt();
@@ -2905,8 +3013,10 @@ public class Home {
 					}
 					for (Insurance insurance: this.insuranceDAO.select()) {
 						if (insurance.getInsuranceId().equals(inputId)) {
-							isExist = true;
-							tmpInsurance = insurance;
+							if (!insurance.isDel()) {
+								isExist = true;
+								tmpInsurance = insurance;
+							}
 						}
 					}
 					
@@ -2968,11 +3078,12 @@ public class Home {
 							tmpInsurance = insurance;
 						}
 					}
-					if (!tmpInsurance.isDel()) {
-						System.out.println("삭제요청이 되지 않은 보험입니다! 이전으로 돌아갑니다.");
-						continue id;
-					}
+					
 					if (isExist) {
+						if (!tmpInsurance.isDel()) {
+							System.out.println("삭제요청이 되지 않은 보험입니다! 이전으로 돌아갑니다.");
+							continue id;
+						}
 						this.showInsuranceData(tmpInsurance);
 						while (true) {
 							System.out.printf("해당 보험을 복구하시겠습니까?(y/n) : ");
