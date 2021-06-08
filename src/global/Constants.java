@@ -1,6 +1,13 @@
 package global;
 
-import insurance.*;
+import business.insurance.*;
+import db.dao.ActualCostInsuranceDAOImpl;
+import db.dao.CancerInsuranceDAOImpl;
+import db.dao.DentalInsuranceDAOImpl;
+import db.dao.DriverInsuranceDAOImpl;
+import db.dao.FireInsuranceDAOImpl;
+import db.dao.InsuranceDAO;
+import db.dao.TripInsuranceDAOImpl;
 
 public class Constants {
 	
