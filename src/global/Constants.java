@@ -212,22 +212,44 @@ public class Constants {
 	}
 
 	public static enum eFamilyMedicalDisease {
-		thyroid("갑상선암"), 
-		testicular("고환암"), 
-		ovarian("난소암"), 
-		esophageal("식도암"), 
-		lung("폐암");
+		none(0, "null"),
+		thyroid(1, "갑상선암"), 
+		testicular(2, "고환암"), 
+		ovarian(3, "난소암"), 
+		esophageal(4, "식도암"), 
+		lung(5, "폐암");
 		
+		final private int num;
 		final private String name;
 		
-		private eFamilyMedicalDisease(String name) {
+		private eFamilyMedicalDisease(int num, String name) {
 			this.name = name;
+			this.num = num;
 		}
-
+		
+		public int getNum() {return num;}
 		public String getName() {return this.name;}
 	}
 	
-	public static String[] familyMedicalRelationship = {"1촌","2촌","3촌","4촌"};
+	public static enum eFamilyMedicalRelationship {
+		none(0, "null"),
+		one(0, "1촌"),
+		two(0, "2촌"),
+		three(0, "3촌"),
+		four(0, "4촌");
+		
+		
+		final private int num;
+		final private String name;
+		
+		private eFamilyMedicalRelationship(int num, String name) {
+			this.name = name;
+			this.num = num;
+		}
+		
+		public int getNum() {return num;}
+		public String getName() {return this.name;}
+	}
 	
 	public static String[] postedPrice = {"(공시가)<=5천만원", "5천만원<(공시가)<=5억", "5억<(공시가)<=10억", "10억<(공시가)<=20억", "20억<(공시가)"};
 	
