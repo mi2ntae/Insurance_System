@@ -305,6 +305,7 @@ public class Home {
 												switch (scn.nextInt()) {
 												case 1:
 													// 우편물 발송하기
+													this.sendPost();
 													break;
 												case 2:
 													// 가입자 리스트 확인하기
@@ -440,6 +441,46 @@ public class Home {
 				scn.nextLine();
 			}
 		}
+	}
+	
+	//우편물발송하기
+	private void sendPost() {
+		for(Customer customer : this.customerDAO.select()) {
+			System.out.println("고객 ID : " + customer.getCustomerId());
+			System.out.println("고객 이름 : " + customer.getName());
+			System.out.println("고객 주소 : " + customer.getAddress());
+			System.out.println("고객 전화번호 : " + customer.getPhoneNumber());
+			System.out.println("가입자 명단");
+			for(Insurant insurant : customer.getInsurantList()) {
+				System.out.println("가입자 이름" + insurant.getName());
+				System.out.println("가입자 성별" + insurant.getGender().getName());
+				System.out.println("가입자 나이" + insurant.getAge());
+				System.out.println("가입자 직업" + insurant.getJob().getName());
+				System.out.println();
+			}
+			System.out.println("----------------------------");
+		}
+		Customer customer = null;
+		while(customer==null) {
+			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+			System.out.printf("우편물을 보낼 고객의 ID를 입력하세요 : ");
+			String input = this.scn.next();
+			if(input.equals("0")) {
+				return;
+			}
+			customer = this.customerDAO.selectCustomer(input);
+			if(customer == null) {
+				System.out.println("해당 ID의 고객이 존재하지 않습니다");
+			}
+		}
+		String input = this.scn.nextLine();
+		System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+		System.out.printf("발신할 내용을 입력해 주세요 : ");
+		input = this.scn.nextLine();
+		if(input.equals("0")) {
+			return;
+		}
+		System.out.println(customer.getAddress() + "로 '" + input + "'의 내용의 우편이 발송되었습니다");
 	}
 	
 	// 면담 신청하기
@@ -681,7 +722,7 @@ public class Home {
 			if(contract.isEffectiveness() == true && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				if(contract.getUnpaidPeriod() > 0) {
 					Insurance insurance = insuranceDAO.selectInsurance(contract.getInsuranceId());
-					Insurant insurant = insurantDAO.selectInsurant(contract.getInsuranceId());
+					Insurant insurant = insurantDAO.selectInsurant(contract.getInsurantId());
 					Customer customer = customerDAO.selectCustomer(insurant.getCustomerId());
 					System.out.println("계약 ID : " + contract.getContractId());
 					System.out.println("고객 ID : " + customer.getCustomerId());
@@ -697,7 +738,7 @@ public class Home {
 		
 		while(true) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
-			System.out.printf("계약 ID를 입력하세요 : ");
+			System.out.printf("상세정보를 볼 계약 ID를 입력하세요 : ");
 			String input = scn.next();
 			if(input.equals("0")) return;
 			Contract contract = this.contractDAO.selectContract(input);
@@ -767,6 +808,7 @@ public class Home {
 		this.showInsurantData(insurant, insurance.getType());
 		
 		// 우편보내기
+		this.sendPost();
 	}
 	
 	// 계약 정보 수정
@@ -1037,7 +1079,7 @@ public class Home {
 					}
 				}
 				if(!flag) {
-					System.out.println("심사할 계약이 없습니다");
+					System.out.println("심사할 계약이 아닙니다");
 					contract = null;
 					continue;
 				}
@@ -1545,7 +1587,7 @@ public class Home {
 					}
 					insurant.setFamilyMedicalRelationship(familyMedicalRelationship);
 					break;
-				} else if(input.equals("x")) {
+				} else if(input.equals("n")) {
 					insurant.setFamilyMedicalDisease(eFamilyMedicalDisease.none);
 					insurant.setFamilyMedicalRelationship(eFamilyMedicalRelationship.none);
 					break;
