@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import business.customer.Insurant;
 import db.DBConnector;
+import global.Constants.eFamilyMedicalDisease;
+import global.Constants.eFamilyMedicalRelationship;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
@@ -14,13 +16,13 @@ import global.Constants.eUsageOfStructure;
 
 public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 	public boolean insert(Insurant insurant) {
-		String str = "INSERT INTO insurant(insurantId, customerId , name, address, phoneNumber, age, accidentHistory, postedPriceOfStructure, usageOfStructure, gender, job, typeOfCar, rankOfCar, riskOfTripCountry) values('"
+		String str = "INSERT INTO insurant(insurantId, customerId , name, address, phoneNumber, age, accidentHistory, postedPriceOfStructure, usageOfStructure, gender, job, typeOfCar, rankOfCar, riskOfTripCountry, familyMedicalDisease, familyMedicalRelationship) values('"
 				+ insurant.getInsurantId() + "','" + insurant.getCustomerId() + "','" + insurant.getName() + "','" + insurant.getAddress() + "','"
 				+ insurant.getPhoneNumber() + "','" + insurant.getAge() + "','" + insurant.getAccidentHistory() + "','"
 				+ insurant.getPostedPriceOfStructure() + "','" + insurant.getUsageOfStructure().getNum() + "','"
 				+ insurant.getGender().getNum() + "','" + insurant.getJob().getNum() + "','"
 				+ insurant.getTypeOfCar().getNum() + "','" + insurant.getRankOfCar().getNum()+ "','"
-				+ insurant.getRiskOfTripCountry().getNum() + "')";
+				+ insurant.getRiskOfTripCountry().getNum() + "','" + insurant.getFamilyMedicalDisease().getNum() + "','" + insurant.getFamilyMedicalRelationship().getNum() + "')";
 		if (this.execute(str))
 			return true;
 		else
@@ -50,7 +52,9 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) if(typeOfCar.getNum() == rs.getInt("typeOfCar")) insurant.setTypeOfCar(typeOfCar);
 				for(eRankOfCar rankOfCar : eRankOfCar.values()) if(rankOfCar.getNum() == rs.getInt("rankOfCar")) insurant.setRankOfCar(rankOfCar);
 				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) if(riskOfTripCountry.getNum() == rs.getInt("riskOfTripCountry")) insurant.setRiskOfTripCountry(riskOfTripCountry);
-				
+				for(eFamilyMedicalDisease familyMedicalDisease : eFamilyMedicalDisease.values()) if(familyMedicalDisease.getNum() == rs.getInt("familyMedicalDisease")) insurant.setFamilyMedicalDisease(familyMedicalDisease);
+				for(eFamilyMedicalRelationship familyMedicalRelationship : eFamilyMedicalRelationship.values()) if(familyMedicalRelationship.getNum() == rs.getInt("familyMedicalRelationship")) insurant.setFamilyMedicalRelationship(familyMedicalRelationship);
+
 				arrayList.add(insurant);
 			}
 		} catch (SQLException e) {
@@ -81,7 +85,9 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				for(eTypeOfCar typeOfCar : eTypeOfCar.values()) if(typeOfCar.getNum() == rs.getInt("typeOfCar")) insurant.setTypeOfCar(typeOfCar);
 				for(eRankOfCar rankOfCar : eRankOfCar.values()) if(rankOfCar.getNum() == rs.getInt("rankOfCar")) insurant.setRankOfCar(rankOfCar);
 				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) if(riskOfTripCountry.getNum() == rs.getInt("riskOfTripCountry")) insurant.setRiskOfTripCountry(riskOfTripCountry);
-				
+				for(eFamilyMedicalDisease familyMedicalDisease : eFamilyMedicalDisease.values()) if(familyMedicalDisease.getNum() == rs.getInt("familyMedicalDisease")) insurant.setFamilyMedicalDisease(familyMedicalDisease);
+				for(eFamilyMedicalRelationship familyMedicalRelationship : eFamilyMedicalRelationship.values()) if(familyMedicalRelationship.getNum() == rs.getInt("familyMedicalRelationship")) insurant.setFamilyMedicalRelationship(familyMedicalRelationship);
+
 				return insurant;
 			}
 		} catch (SQLException e) {
@@ -274,6 +280,20 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 				for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
 					if(riskOfTripCountry.getNum() == num) {
 						insurant.setRiskOfTripCountry(riskOfTripCountry);
+					}
+				}
+				
+				num = (rs.getInt("familyMedicalDisease"));
+				for(eFamilyMedicalDisease familyMedicalDisease : eFamilyMedicalDisease.values()) {
+					if(familyMedicalDisease.getNum() == num) {
+						insurant.setFamilyMedicalDisease(familyMedicalDisease);
+					}
+				}
+				
+				num = (rs.getInt("familyMedicalRelationship"));
+				for(eFamilyMedicalRelationship familyMedicalRelationship : eFamilyMedicalRelationship.values()) {
+					if(familyMedicalRelationship.getNum() == num) {
+						insurant.setFamilyMedicalRelationship(familyMedicalRelationship);
 					}
 				}
 			}

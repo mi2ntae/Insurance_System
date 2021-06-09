@@ -76,22 +76,24 @@ public class CancerInsurance extends Insurance {
 		}
 		
 		// 가족병력에 따른 요율 계산
-		switch (insurant.getFamilyMedicalHistory().getRelationship()) {
-		case 1:
+		switch (insurant.getFamilyMedicalRelationship()) {
+		case one:
 			fee *= rateOfFamilyMedicalRelationship[0];
 			break;
-		case 2:
+		case two:
 			fee *= rateOfFamilyMedicalRelationship[1];
 			break;
-		case 3:
+		case three:
 			fee *= rateOfFamilyMedicalRelationship[2];
 			break;
-		case 4:
+		case four:
 			fee *= rateOfFamilyMedicalRelationship[3];
+			break;
+		default:
 			break;
 		}
 		
-		switch (insurant.getFamilyMedicalHistory().getDisease()) {
+		switch (insurant.getFamilyMedicalDisease()) {
 		case thyroid:
 			fee *= rateOfFamilyMedicalDisease[0];
 			break;
@@ -106,6 +108,8 @@ public class CancerInsurance extends Insurance {
 			break;
 		case testicular:
 			fee *= rateOfFamilyMedicalDisease[4];
+			break;
+		default:
 			break;
 		}
 		

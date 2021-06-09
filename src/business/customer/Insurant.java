@@ -2,6 +2,8 @@ package business.customer;
 
 import java.util.Scanner;
 
+import global.Constants.eFamilyMedicalDisease;
+import global.Constants.eFamilyMedicalRelationship;
 import global.Constants.eGender;
 import global.Constants.eJob;
 import global.Constants.eRankOfCar;
@@ -26,9 +28,8 @@ public class Insurant {
 	private eTypeOfCar typeOfCar;
 	private eRankOfCar rankOfCar;
 	private eRiskOfTripCountry riskOfTripCountry;
-	
-	// Composition Class
-	public FamilyMedicalHistory familyMedicalHistory;
+	private eFamilyMedicalDisease familyMedicalDisease;
+	private eFamilyMedicalRelationship familyMedicalRelationship;
 
 	// Constructor
 	public Insurant(){
@@ -74,60 +75,14 @@ public class Insurant {
 
 	public eRankOfCar getRankOfCar() {return rankOfCar;}
 	public void setRankOfCar(eRankOfCar rankOfCar) {this.rankOfCar = rankOfCar;}
-
-	public FamilyMedicalHistory getFamilyMedicalHistory() {return familyMedicalHistory;}
-	public void setFamilyMedicalHistory(FamilyMedicalHistory familyMedicalHistory) {this.familyMedicalHistory = familyMedicalHistory;}
-
+	
 	public eRiskOfTripCountry getRiskOfTripCountry() {return riskOfTripCountry;}
 	public void setRiskOfTripCountry(eRiskOfTripCountry riskOfTripCountry) {this.riskOfTripCountry = riskOfTripCountry;}
-	
-	// Public Methods
-	public String writeToFile() {
-		String output = null;
-		if(this.usageOfStructure == null) this.usageOfStructure = eUsageOfStructure.house;
-		if(this.rankOfCar == null) this.rankOfCar = eRankOfCar.high;
-		if(this.typeOfCar == null) this.typeOfCar = eTypeOfCar.etc;
-		if(this.riskOfTripCountry == null) this.riskOfTripCountry = eRiskOfTripCountry.safe;
-		output = this.insurantId + ' ' + this.name + ' ' + this.customerId + ' ' + this.address + ' ' + this.phoneNumber + ' ' + String.valueOf(this.age)+ ' '
-				+ String.valueOf(this.accidentHistory) + ' ' + String.valueOf(this.postedPriceOfStructure) + ' ' + this.usageOfStructure.getNum()
-				+ ' ' + this.gender.getNum() + ' ' + this.job.getNum() + ' ' + this.rankOfCar.getNum() + ' ' + this.typeOfCar.getNum() + ' ' + this.riskOfTripCountry.getNum() + '\n';
-		
-		return output;
-	}
-	
-	public void readFromFile(Scanner scn) {
-		this.insurantId = scn.next();
-		this.name = scn.next();
-		this.customerId = scn.next();
-		this.address = scn.next();
-		this.phoneNumber = scn.next();
-		this.age = scn.nextInt();
-		this.accidentHistory = scn.nextInt();
-		this.postedPriceOfStructure = scn.nextInt();
-		int input = scn.nextInt();
-		for(eUsageOfStructure usageOfStructure : eUsageOfStructure.values()) {
-			if(usageOfStructure.getNum() == input) this.usageOfStructure = usageOfStructure;
-		}
-		input = scn.nextInt();
-		for(eGender gender : eGender.values()) {
-			if(gender.getNum() == input) this.gender = gender;
-		}
-		input = scn.nextInt();
-		for(eJob job : eJob.values()) {
-			if(job.getNum() == input) this.job = job;
-		}
-		input = scn.nextInt();
-		for(eRankOfCar rankOfCar : eRankOfCar.values()) {
-			if(rankOfCar.getNum() == input) this.rankOfCar = rankOfCar;
-		}
-		input = scn.nextInt();
-		for(eTypeOfCar typeOfCar : eTypeOfCar.values()) {
-			if(typeOfCar.getNum() == input) this.typeOfCar = typeOfCar;
-		}
-		
-		input = scn.nextInt();
-		for(eRiskOfTripCountry riskOfTripCountry : eRiskOfTripCountry.values()) {
-			if(riskOfTripCountry.getNum() == input) this.riskOfTripCountry = riskOfTripCountry;
-		}
-	}
+
+	public eFamilyMedicalDisease getFamilyMedicalDisease() {return familyMedicalDisease;}
+	public void setFamilyMedicalDisease(eFamilyMedicalDisease familyMedicalDisease) {this.familyMedicalDisease = familyMedicalDisease;}
+
+	public eFamilyMedicalRelationship getFamilyMedicalRelationship() {return familyMedicalRelationship;}
+	public void setFamilyMedicalRelationship(eFamilyMedicalRelationship familyMedicalRelationship) {this.familyMedicalRelationship = familyMedicalRelationship;}
+
 }
