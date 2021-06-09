@@ -19,6 +19,7 @@ public class CancerInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		for (double rate : newInsurance.getRateOfFamilyMedicalRelationship()) str += "," + rate;
 		str += ")";
 
+		System.out.println(str);
 		if (this.execute(str)) return true;
 		else return false;
 	}

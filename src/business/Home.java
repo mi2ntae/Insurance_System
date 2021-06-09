@@ -628,7 +628,7 @@ public class Home {
 		int unpaidCount = 0;
 		int lifeCount = 0;
 		for(Contract contract : this.contractDAO.select()) {
-			if(contract.isEffectiveness() == true) {
+			if(contract.isEffectiveness() == true && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				if(contract.getUnpaidPeriod() > 0) {
 					unpaidCount++;
 				}
@@ -678,7 +678,7 @@ public class Home {
 	// 미납고객 관리
 	private void manageUnpaidContract() {
 		for(Contract contract : this.contractDAO.select()) {
-			if(contract.isEffectiveness() == true) {
+			if(contract.isEffectiveness() == true && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				if(contract.getUnpaidPeriod() > 0) {
 					Insurance insurance = insuranceDAO.selectInsurance(contract.getInsuranceId());
 					Insurant insurant = insurantDAO.selectInsurant(contract.getInsuranceId());
@@ -697,11 +697,11 @@ public class Home {
 		
 		while(true) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
-			System.out.printf(" 계약 ID를 입력하세요 : ");
+			System.out.printf("계약 ID를 입력하세요 : ");
 			String input = scn.next();
 			if(input.equals("0")) return;
 			Contract contract = this.contractDAO.selectContract(input);
-			if(contract == null || contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0) {
+			if(contract == null || contract.isEffectiveness() != true || contract.getUnpaidPeriod() == 0 || this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				System.out.println("해당 조건의 계약이 없습니다.");
 				continue;
 			}
@@ -741,7 +741,7 @@ public class Home {
 	// 만기 계약 관리
 	private void ManageExpiredContract() {
 		for(Contract contract : this.contractDAO.select()) {
-			if(contract.getLifespan() - time < 0) {
+			if(contract.getLifespan() - time < 0 && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				this.showContractData(contract);
 			}
 		}
@@ -756,9 +756,11 @@ public class Home {
 			contract = this.contractDAO.selectContract(input);
 			if (contract == null) {
 				System.out.println("해당 계약이 존재하지 않습니다");
+			} else if(this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()){
+				System.out.println("------삭제될 계약 입니다------");
+				contract = null;
 			}
 		}
-
 		this.showContractData(contract);
 		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 		Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
@@ -948,7 +950,7 @@ public class Home {
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
 		for(Contract contract : contractDAO.select()) {
-			if (contract.isEffectiveness()) {
+			if (contract.isEffectiveness() && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 				if(customer.getCustomerId().equals(insurant.getCustomerId())) {
 					count++;
@@ -970,6 +972,10 @@ public class Home {
 			contract = this.contractDAO.selectContract(input);
 			if(contract == null || !contract.isEffectiveness()) {
 				System.out.println("찾으시는 ID를 갖는 계약이 없습니다.");
+				continue;
+			} else if(this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
+				System.out.println("------삭제될 계약 입니다-------");
+				contract = null;
 				continue;
 			}
 			if(!this.insurantDAO.selectInsurant(contract.getInsurantId()).getCustomerId().equals(customer.getCustomerId())) {
@@ -1009,7 +1015,7 @@ public class Home {
 		ArrayList<Contract> tempList = new ArrayList<Contract>();
 		boolean flag = false;
 		for(Contract contract : this.contractDAO.select()) {
-			if(contract.isEffectiveness() == false && contract.getLifespan() - time > 0) {
+			if(contract.isEffectiveness() == false && contract.getLifespan() - time > 0 && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				this.showSimpleContract(contract, false);
 				count++;
 				tempList.add(contract);
@@ -2103,9 +2109,9 @@ public class Home {
 			switch (newInsurance.getType()) {
 			case cancerInsurance:
 				System.out.println("가족 병력에 따른 요율을 설정합니다.");
-				double[] tmpRateOfFamilyDisease = new double[eFamilyMedicalDisease.values().length];
-				for (int i = 0; i < eFamilyMedicalDisease.values().length; i++) {
-					System.out.printf(eFamilyMedicalDisease.values()[i].getName()+" : ");
+				double[] tmpRateOfFamilyDisease = new double[eFamilyMedicalDisease.values().length - 1];
+				for (int i = 0; i < eFamilyMedicalDisease.values().length - 1; i++) {
+					System.out.printf(eFamilyMedicalDisease.values()[i + 1].getName()+" : ");
 					try {
 						inputDouble = scn.nextDouble();
 						if (inputDouble < 0) {
@@ -2123,9 +2129,9 @@ public class Home {
 					}
 				}
 				System.out.println("병력이 있는 가족과의 관계에 따른 요율을 설정합니다.");
-				double[] tmpRateOfFamilyRelationship = new double[Constants.eFamilyMedicalDisease.values().length];
-				for (int i = 0; i < Constants.eFamilyMedicalDisease.values().length; i++) {
-					System.out.printf(Constants.eFamilyMedicalDisease.values()[i]+" : ");
+				double[] tmpRateOfFamilyRelationship = new double[Constants.eFamilyMedicalRelationship.values().length - 1];
+				for (int i = 0; i < Constants.eFamilyMedicalRelationship.values().length - 1; i++) {
+					System.out.printf(Constants.eFamilyMedicalRelationship.values()[i + 1].getName()+" : ");
 					try {
 						inputDouble = scn.nextDouble();
 						if (inputDouble < 0) {
