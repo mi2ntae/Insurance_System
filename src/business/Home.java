@@ -79,9 +79,11 @@ public class Home {
 						try {
 							switch (scn.nextInt()) {
 							case 1:
-								System.out.println("ID를 입력하세요 : ");
+								System.out.println("ID를 입력하세요.");
+								System.out.print("ID : ");
 								String id = scn.next();
-								System.out.println("비밀번호를 입력하세요 : ");
+								System.out.println("비밀번호를 입력하세요.");
+								System.out.print("비밀번호 : ");
 								String pw = scn.next();
 								Customer customer = this.loginCustomer(id, pw);
 								if (customer != null) {
@@ -196,9 +198,11 @@ public class Home {
 						try {
 							switch (scn.nextInt()) {
 							case 1:
-								System.out.println("ID를 입력하세요 : ");
+								System.out.println("ID를 입력하세요.");
+								System.out.print("ID : ");
 								String id = scn.next();
-								System.out.println("비밀번호를 입력하세요 : ");
+								System.out.println("비밀번호를 입력하세요.");
+								System.out.print("비밀번호 : ");
 								String pw = scn.next();
 								Employee employee = this.loginEmployee(id, pw);
 								if (employee != null) {
@@ -618,7 +622,7 @@ public class Home {
 					}
 					input = "";
 					while(!input.equals("y") && !input.equals("n")) {
-						System.out.println("------면담결과 보고서를 작성하시겠습니까(y/n)------");
+						System.out.print("면담결과 보고서를 작성하시겠습니까?(y/n) : ");
 						input = scn.next();
 						if(!input.equals("y") && !input.equals("n")) {
 							System.out.println("error : 정해진 문자를 사용해주세요");
@@ -2391,9 +2395,10 @@ public class Home {
 			int rate = 0;
 			while (true) {
 				try {
-					System.out.println("자기부담율을 입력해주세요(1% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+					System.out.println("자기부담율을 입력해주세요(0% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+					System.out.print("자기부담율 : ");
 					rate = scn.nextInt();
-					if (rate > 0 && rate < 100) {
+					if (rate >= 0 && rate < 100) {
 						break;
 					} else {
 						System.out.println("error : 범위내의 숫자를 입력해주세요");
@@ -2416,7 +2421,12 @@ public class Home {
 				System.out.println("0.보장내역 설정 완료하기");
 				int input = scn.nextInt();
 				
-				if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length && !tmpt[input]) {
+				if (input > 0 && input <= newInsurance.getType().getGuaranteePlan().length) {
+					if(tmpt[input]) {
+						System.out.println("error : 이미 추가한 보장내역 입니다.");
+						System.out.println("-------------------------------");
+						continue;
+					}
 					int compensation;
 					switch(newInsurance.getType()) {
 					case dentalInsurance:
@@ -2424,7 +2434,7 @@ public class Home {
 						while (true) {
 							try {
 								System.out.println("해당 항목의 보상금액을 입력해주세요.");
-								System.out.println(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 보상금액 : ");
+								System.out.print(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 보상금액 : ");
 								compensation = scn.nextInt();
 								tmpt[input] = true;
 								break;
@@ -2441,7 +2451,7 @@ public class Home {
 						while (true) {
 							try {
 								System.out.println("해당 항목의 최대 보상 금액을 입력해주세요.");
-								System.out.println(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 최대 보상금액 : ");
+								System.out.print(newInsurance.getType().getGuaranteePlan()[input - 1] + "의 최대 보상금액 : ");
 								compensation = scn.nextInt();
 								tmpt[input] = true;
 								break;
@@ -2454,9 +2464,10 @@ public class Home {
 						int rate = 0;
 						while(true) {
 							try {
-									System.out.println("해당 항목의 자기부담율을 입력해주세요(1% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+									System.out.println("해당 항목의 자기부담율을 입력해주세요(0% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
+									System.out.print("자기부담율 : ");
 									rate = scn.nextInt();
-									if(rate > 0 && rate < 100) {
+									if(rate >= 0 && rate < 100) {
 										break;
 									}else {
 										System.out.println("error : 범위내의 숫자를 입력해주세요");
@@ -2612,7 +2623,7 @@ public class Home {
 								renewInsuranceFee(contract);
 								break;
 							case 3:
-								System.out.println("이대로 보상금을 확정하시고 지급하시겠습니까?(y/n)");
+								System.out.print("이대로 보상금을 확정하시고 지급하시겠습니까?(y/n) : ");
 								String input3 = scn.next();
 								if (input3.equals("y")) {
 									compensationHandler.confirmCompensation(accident, tmptCompensation);
@@ -2689,19 +2700,25 @@ public class Home {
 			System.out.println("성별 : " + insurant.getGender().getName());
 			System.out.println("직업 : " + insurant.getJob().getName());
 			System.out.println("-------<계약 정보>-------");
-			System.out.println("보험료 : " + contract.getFee());
+			System.out.println("보험료 : " + contract.getFee() + "원");
 			System.out.print("특약여부 : ");
 			if(contract.isSpecial()) System.out.println("O");
 			else System.out.println("X");
 			System.out.println("-----<보상처리 리스트>-----");
 			contract.bringAccident();
+			int cnt = 0;
 			for(Accident accident : contract.getAccidentList()) {
-				if(accident.isHandlingStatus()) System.out.println(accident.getAccidentId() + "." + accident.getContent() + " " + accident.getCompensation());
+				if(accident.isHandlingStatus()) {
+					if(cnt == 0)System.out.println("ID     보상정보            보상금액");
+					System.out.printf("%-7s%-14s%d원\n",accident.getAccidentId(),accident.getContent(),accident.getCompensation());
+					cnt++;
+				}
 			}
+			if(cnt == 0) System.out.println("해당 고객의 보상처리 정보가 존재하지 않습니다.");
 			System.out.println("-----------------------");
 			
 			while (true) {
-				System.out.println("해당 가입자의 보험료를 갱신하시겠습니까?(y/n)");
+				System.out.print("해당 가입자의 보험료를 갱신하시겠습니까?(y/n) : ");
 				String input = scn.next();
 				if (input.equals("y")) {
 					System.out.println("보험료를 입력해주세요.");
@@ -2752,7 +2769,7 @@ public class Home {
 						System.out.println("-----------------------");
 						continue menu;
 					}
-					System.out.println("비용 " + fee + "원을 협력업체에 지불 하시겠습니까? (y/n)");
+					System.out.print("비용 " + fee + "원을 협력업체에 지불 하시겠습니까? (y/n) : ");
 					String input = scn.next();
 					if (input.equals("y")) {
 						System.out.println("비용 총 " + fee + "원이 지불되었습니다!");

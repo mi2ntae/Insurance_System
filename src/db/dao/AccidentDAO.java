@@ -6,6 +6,7 @@ import business.contract.Accident;
 
 public interface AccidentDAO {
 	public boolean insert(Accident accident);
+	public boolean insertCompensationCause(Accident accident, String cause);
 	public ArrayList<Accident> select();
 	public ArrayList<Accident> selectByContractId(String contractId);
 	public Accident selectAccident(String accidentId);
