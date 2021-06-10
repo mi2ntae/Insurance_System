@@ -15,6 +15,12 @@ public class AccidentDAOImpl extends DBConnector implements AccidentDAO{
 		return this.execute(sql);
 	}
 	
+	public boolean insertCompensationCause(Accident accident, String cause) {
+		String sql = "INSERT INTO compensationCause(accidentId, cause) values('" 
+				+ accident.getAccidentId() + "', '" + cause + "')";
+		return this.execute(sql);
+	}
+	
 	public ArrayList<Accident> select() {
 		ArrayList<Accident> accidentList = new ArrayList<Accident>();
 
@@ -93,5 +99,4 @@ public class AccidentDAOImpl extends DBConnector implements AccidentDAO{
 		String sql = "DELETE accident WHERE accidentId = '"+accidentId+"';";
 		return this.execute(sql);
 	}
-
 }

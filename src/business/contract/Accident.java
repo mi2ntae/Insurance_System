@@ -43,12 +43,7 @@ public class Accident {
 	public void setDamageCost(int damageCost) {this.damageCost = damageCost;}
 
 	public void setCause(String cause) {
-		File file = new File("data/compensationCause");
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-			writer.append(this.accidentId + " " + cause);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		this.accidentDAO.insertCompensationCause(this, cause);
 	}
 
 
