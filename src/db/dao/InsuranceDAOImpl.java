@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import business.contract.Contract;
+import business.insurance.FireInsurance;
 import business.insurance.Insurance;
 import db.DBConnector;
 import global.Constants;
@@ -86,6 +87,25 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 			}
 			for(Insurance insurance : arrayList) {
 				insurance.setGuaranteePlanList(guaranteePlanDAO.selectById(insurance.getInsuranceId()));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+	
+	public ArrayList<Insurance> selectForConfirm(){
+		ArrayList<Insurance> arrayList = new ArrayList<Insurance>();
+		String sql = "SELECT insuranceId, confirmedStatus, del FROM insurance;";
+		
+		this.read(sql);
+		try {
+			while(rs.next()) {
+				Insurance insurance = new FireInsurance();
+				insurance.setInsuranceId(rs.getString("insuranceId"));
+				insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+				insurance.setDel(rs.getBoolean("del"));
+				arrayList.add(insurance);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
