@@ -1912,13 +1912,14 @@ public class Home {
 				scn.nextLine();
 				continue;
 			}
+			ArrayList<Insurance> insuranceList = this.insuranceDAO.select();
 			
 			returnInsurance:while (true) {
 				System.out.printf("동일한 조건의 보험들을 확인하시겠습니까?(y/n) : ");
 				String inputCondition = scn.next();
 				if (inputCondition.equals("y")) {
 					boolean isEmpty = true;
-					for (Insurance insurance: this.insuranceDAO.select()) {
+					for (Insurance insurance: insuranceList) {
 						if ((insurance.getType() != newInsurance.getType()) || (insurance.getGender() != newInsurance.getGender())) {
 							continue;
 						} else if ((!insurance.isConfirmedStatus()) || (insurance.isDel())) {
@@ -1944,7 +1945,7 @@ public class Home {
 							}
 							boolean isExist = false;
 							Insurance tmpInsurance = null;
-							for (Insurance insurance: this.insuranceDAO.select()) {
+							for (Insurance insurance: insuranceList) {
 								if (inputIndex.equals(insurance.getInsuranceId()) && !insurance.isDel()) {
 									if (insurance.isConfirmedStatus() && insurance.getType() == newInsurance.getType()) {
 										isExist = true;
@@ -1991,10 +1992,11 @@ public class Home {
 	private boolean createDetailInsurance(Insurance newInsurance) {
 		String newId;
 		int max = 0;
-		if (this.insuranceDAO.select().isEmpty()) {
+		ArrayList<Insurance> insuranceList = this.insuranceDAO.select();
+		if (insuranceList.isEmpty()) {
 			newId = "1";
 		} else {
-			for(Insurance temp : this.insuranceDAO.select()) {
+			for(Insurance temp : insuranceList) {
 				if(max < Integer.parseInt(temp.getInsuranceId())) {
 					max = Integer.parseInt(temp.getInsuranceId());
 				}
@@ -2510,8 +2512,8 @@ public class Home {
 			}
 			boolean isExist = false;
 			Insurance tmpInsurance = null;
-			for (Insurance insurance : this.insuranceDAO.select()) {
-				if (inputIndex.equals(insurance.getInsuranceId())) {
+			for (Insurance insurance : this.insuranceDAO.selectForConfirm()) {
+				if (inputIndex.equals(insurance.getInsuranceId()) && !insurance.isDel()) {
 					isExist = true;
 					tmpInsurance = insurance;
 				}
@@ -2944,7 +2946,7 @@ public class Home {
 	private void showInsurance(boolean confirmStatus) {
 		System.out.println("------보험 정보------");
 		for (Insurance insurance: this.insuranceDAO.select()) {
-			if (confirmStatus == insurance.isConfirmedStatus()) {
+			if (confirmStatus == insurance.isConfirmedStatus() && !insurance.isDel()) {
 				System.out.println(insurance.getInsuranceId()+". "+insurance.getName());
 				System.out.println("  기본보험료 : "+insurance.getBasicFee());
 				System.out.println("-------------------");
@@ -3110,6 +3112,10 @@ public class Home {
 						break;
 					}
 				}
+				break;
+			default:
+				System.out.println("error : 범위 내의 숫자를 입력해주세요");
+				System.out.println("-----------------------");	
 				break;
 			}
 			break;

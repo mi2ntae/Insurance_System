@@ -57,4 +57,6 @@ public class DriverInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public Insurance selectInsurance(String insuranceId) {return null;}
 	public boolean updateDel(String insuranceId, boolean del) {return false;}
 	public boolean deleteInsuranceByTime() {return false;}
+	public ArrayList<Insurance> selectForConfirm() {return null;}
+
 }
