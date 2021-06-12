@@ -44,4 +44,5 @@ public class ActualCostInsuranceDAOImpl extends DBConnector implements Insurance
 	public boolean deleteInsuranceByTime() {return false;}
 	public ArrayList<Insurance> selectForConfirm() {return null;}
 	public ArrayList<String> selectInsuranceId(){return null;}
+	public ArrayList<Insurance> selectSimpleData() {return null;}
 }

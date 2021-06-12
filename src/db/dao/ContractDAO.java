@@ -21,5 +21,6 @@ public interface ContractDAO {
 	public boolean updateLifespan(String contractId, int lifespan);
 	public boolean updateUnpaidPeriod(String contractId, int unpaidPeriod);
 	public boolean updateSpecial(String contractId, boolean special);
+	public ArrayList<Contract> selectContractId();
 
 }
