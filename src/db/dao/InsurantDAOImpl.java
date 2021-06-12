@@ -95,6 +95,20 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 		return null;
 	}
+	
+	public String selectCustomerId(String insurantId){
+		String sql = "SELECT customerId FROM insurant WHERE insurantId = '"+insurantId+"';";
+		String customerId = "";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				customerId = (rs.getString("customerId"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return customerId;
+	}
 
 	public boolean updateName(String insurantId, String name) {
 		String str = "UPDATE insurant set name = " + name + " WHERE insurantId = " + insurantId;
@@ -134,7 +148,7 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 
 	public boolean updateAge(String insurantId, int age) {
 		String str = "UPDATE insurant set age = " + age + " WHERE insurantId = " + insurantId;
-		if(this.execute(str)) {
+		if(this.execute(str)) {			
 			return true;
 		} else {
 			return false;

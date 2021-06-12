@@ -1,11 +1,11 @@
 package business.customer;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
+import db.dao.ContractDAO;
 import db.dao.InsurantDAO;
 import db.dao.InsurantDAOImpl;
+import global.Constants;
 
 
 public class Customer {
@@ -47,18 +47,6 @@ public class Customer {
 	public void setPassword(String password) {this.password = password;}
 
 	// Methods
-	public void checkJoinedInsuranceList(){
-
-	}
-
-	public void checkPaymentHistory(){
-
-	}
-
-	public void checkWholeInsuranceList(){
-
-	}
-
 	public void requestInterview(){
 
 	}
@@ -69,4 +57,12 @@ public class Customer {
 	public void createInsurant(Insurant insurant) {
 		this.insurantDAO.insert(insurant);
 	}
+	
+	public void reviveContract(String contractId, ContractDAO contractDAO) {
+		contractDAO.updateUnpaidPeriod(contractId, 0);
+		for (int month = 0; month < Constants.thisMonth-1; month++) {
+			contractDAO.updatePayHistory(contractId, month);
+		}
+	}
+	
 }
