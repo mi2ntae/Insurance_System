@@ -3,11 +3,26 @@ package main;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import business.contract.*;
-import business.customer.*;
-import business.employee.*;
-import business.insurance.*;
-import business.interview.*;
+
+import business.contract.Accident;
+import business.contract.Contract;
+import business.customer.Customer;
+import business.customer.Insurant;
+import business.employee.CompensationHandler;
+import business.employee.Employee;
+import business.employee.InsuranceConfirmer;
+import business.employee.InsuranceDeveloper;
+import business.employee.Salesperson;
+import business.employee.UnderWriter;
+import business.insurance.ActualCostInsurance;
+import business.insurance.CancerInsurance;
+import business.insurance.DentalInsurance;
+import business.insurance.DriverInsurance;
+import business.insurance.FireInsurance;
+import business.insurance.GuaranteePlan;
+import business.insurance.Insurance;
+import business.insurance.TripInsurance;
+import business.interview.Interview;
 import db.DBConnector;
 import db.dao.AccidentDAO;
 import db.dao.AccidentDAOImpl;
@@ -24,7 +39,17 @@ import db.dao.InsurantDAOImpl;
 import db.dao.InterviewDAO;
 import db.dao.InterviewDAOImpl;
 import global.Constants;
-import global.Constants.*;
+import global.Constants.eAge;
+import global.Constants.eEmployeeRole;
+import global.Constants.eFamilyMedicalDisease;
+import global.Constants.eFamilyMedicalRelationship;
+import global.Constants.eGender;
+import global.Constants.eInsuranceType;
+import global.Constants.eJob;
+import global.Constants.eRankOfCar;
+import global.Constants.eRiskOfTripCountry;
+import global.Constants.eTypeOfCar;
+import global.Constants.eUsageOfStructure;
 
 public class Home {
 	private Scanner scn;
@@ -137,6 +162,7 @@ public class Home {
 																this.payFee(contract.getContractId());
 																break;
 															case 3:
+																this.reviveContract(customer);
 																break;
 															case 4:
 																this.requestReConract(contract);
@@ -3616,5 +3642,53 @@ public class Home {
 				System.out.println("error : 정해진 문자를 사용해주세요");
 			}
 		}
+	}
+	
+	public void reviveContract(Customer customer) {
+		ArrayList<Contract> contractList = this.contractDAO.selectIds();
+		ArrayList<Contract> targetList = new ArrayList<Contract>();
+		
+		for(Contract contract: contractList) {
+			if (!contract.isEffectiveness() && customer.getCustomerId().equals(this.insurantDAO.selectCustomerId(contract.getInsurantId()))) {
+				this.showSimpleContract(contract, true);
+				targetList.add(contract);
+			}
+		}
+		menu:while (true) {
+			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+			System.out.printf("부활신청할 보험의 ID를 입력해주세요 : ");
+			String inputId = scn.next();
+			if(inputId.equals("0")) {
+				return;
+			}
+			boolean isExist = false;
+			for(Contract contract: targetList) {
+				if (contract.getContractId().equals(inputId)) {
+					isExist = true;
+				}
+			}
+			if (isExist) {
+				Contract contract = this.contractDAO.selectUnpaidAndFee(inputId);
+				System.out.println(contract.getUnpaidPeriod() * contract.getFee() + "원의 미납 보험금이 있습니다.");
+				System.out.printf("해당 보험을 부활신청하시겠습니까?(y/n) : ");
+				while (true) {
+					String inputDecision = scn.next();
+					if (inputDecision.equals("y")) {
+						customer.reviveContract(contract.getContractId(), contractDAO);
+						System.out.println("해당 계약의 부활신청이 완료되었습니다.");
+						return;
+					} else if (inputDecision.equals("n")) {
+						continue menu;
+					} else {
+						System.out.println("정해진 문자를 입력해주세요.");
+						continue;
+					}
+				}
+			} else {
+				System.out.println("부활신청 대상이 아닌 계약ID입니다. 다시 입력해주세요.");
+				continue menu;
+			}
+		}
+		
 	}
 }

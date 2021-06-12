@@ -10,6 +10,8 @@ public interface ContractDAO {
 	public ArrayList<Contract> selectForTime();
 	public Contract selectContract(String contractId);
 	public ArrayList<Contract> selectByInsurant(String insurantId);
+	public ArrayList<Contract> selectIds();
+	public Contract selectUnpaidAndFee(String contractId);
 	public boolean[] selectPayHistory(String contractId);
 	public boolean updateFee(String contractId, int fee);
 	public boolean updateEffectiveness(String contractId, boolean effectiveness);
