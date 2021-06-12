@@ -8,6 +8,7 @@ public interface InsuranceDAO {
 	
 	public boolean insert(Insurance insurance);
 	public ArrayList<Insurance> select();
+	public ArrayList<String> selectInsuranceId();
 	public Insurance selectInsurance(String insuranceId);
 	public ArrayList<Insurance> selectForConfirm();
 	public boolean updateConfirmedStatus(String insuranceId, boolean confirmedStatus);

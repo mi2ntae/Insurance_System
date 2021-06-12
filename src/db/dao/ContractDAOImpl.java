@@ -55,6 +55,27 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		return contractList;
 	}
 
+	public ArrayList<Contract> selectForTime() {
+		ArrayList<Contract> contractList = new ArrayList<Contract>();
+		
+		String sql = "SELECT contractId, insuranceId, effectiveness, lifespan, unpaidPeriod FROM contract";
+		this.read(sql);
+		try {
+			while (rs.next()) {
+				Contract contract = new Contract();
+				contract.setContractId(rs.getString("contractId"));
+				contract.setInsuranceId(rs.getString("insuranceId"));
+				contract.setEffectiveness(rs.getBoolean("effectiveness"));
+				contract.setLifespan(rs.getInt("lifespan"));
+				contract.setUnpaidPeriod(rs.getInt("unpaidPeriod"));
+				contractList.add(contract);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return contractList;
+	}
+
 	public Contract selectContract(String contractId) {
 		AccidentDAO accidentDAO = new AccidentDAOImpl();
 		String sql = "SELECT * FROM contract where contractId = '"+contractId+"';";
@@ -84,6 +105,8 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		return null;
 	}
 	
+	
+	
 	public ArrayList<Contract> selectByInsurant(String insurantId) {
 		ArrayList<Contract> contractList = new ArrayList<Contract>();
 		AccidentDAO accidentDAO = new AccidentDAOImpl();
@@ -95,12 +118,9 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		try {
 			while (rs.next()) {
 				contract.setContractId(rs.getString("contractId"));
-				contract.setInsurantId(rs.getString("insurantId"));
 				contract.setInsuranceId(rs.getString("insuranceId"));
 				contract.setEffectiveness(rs.getBoolean("effectiveness"));
-				contract.setSpecial(rs.getBoolean("special"));
 				contract.setLifespan(rs.getInt("lifespan"));
-				contract.setFee(rs.getInt("fee"));
 				contract.setUnpaidPeriod(rs.getInt("unpaidPeriod"));
 				contractList.add(contract);
 			}
@@ -113,6 +133,8 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		
 		return contractList;
 	}
+	
+
 	
 	public boolean[] selectPayHistory(String contractId) {
 		boolean[] payHistory = new boolean[12];
@@ -168,4 +190,5 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		String sql = "UPDATE contract SET unpaidPeriod = "+unpaidPeriod+" WHERE contractId = '"+contractId+"';";
 		return this.execute(sql);
 	}
+
 }

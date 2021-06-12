@@ -7,6 +7,7 @@ import business.contract.Contract;
 public interface ContractDAO {
 	public boolean insert(Contract contract);
 	public ArrayList<Contract> select();
+	public ArrayList<Contract> selectForTime();
 	public Contract selectContract(String contractId);
 	public ArrayList<Contract> selectByInsurant(String insurantId);
 	public boolean[] selectPayHistory(String contractId);

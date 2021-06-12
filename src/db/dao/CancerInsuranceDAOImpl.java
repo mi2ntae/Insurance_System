@@ -55,5 +55,6 @@ public class CancerInsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public boolean updateDel(String insuranceId, boolean del) {return false;}
 	public boolean deleteInsuranceByTime() {return false;}
 	public ArrayList<Insurance> selectForConfirm() {return null;}
+	public ArrayList<String> selectInsuranceId(){return null;}
 
 }

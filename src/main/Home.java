@@ -1,4 +1,4 @@
-package business;
+package main;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;
@@ -136,6 +136,7 @@ public class Home {
 															case 3:
 																break;
 															case 4:
+																this.requestReConract(contract);
 																break;
 															case 0:
 																break checkInsuranceList;
@@ -416,7 +417,7 @@ public class Home {
 						time++;
 						Constants.thisMonth += 1;
 					}
-					for(Contract contract : this.contractDAO.select()) {
+					for(Contract contract : this.contractDAO.selectForTime()) {
 						if(contract.getLifespan() - time < 0) {
 							this.contractDAO.updateEffectiveness(contract.getContractId(), false);
 						} else {
@@ -446,7 +447,7 @@ public class Home {
 			}
 		}
 	}
-	
+
 	//우편물발송하기
 	private void sendPost() {
 		for(Customer customer : this.customerDAO.select()) {
@@ -2738,7 +2739,7 @@ public class Home {
 				} else if (input.equals("n")) {
 					break;
 				} else {
-					System.out.println("잘못 입력하셨습니다. 'y' 혹은 'n'을 입력해 주세요.");
+					System.out.println("error : 정해진 문자를 사용해주세요");
 				}
 			}
 			
@@ -2779,7 +2780,7 @@ public class Home {
 						System.out.println("취소되었습니다.");
 						break;
 					} else {
-						System.out.println("잘못 입력하셨습니다. 'y' 혹은 'n'을 입력해 주세요.");
+						System.out.println("error : 정해진 문자를 사용해주세요");
 					}
 					break menu;
 				}catch(InputMismatchException e) {
@@ -3371,9 +3372,53 @@ public class Home {
 				}
 				break;
 			default:
-				System.out.println("잘못 입력하셨습니다. 다시 입력해주세요");
+				System.out.println("error : 잘못 입력하셨습니다. 다시 입력해주세요");
 				break;
 			}
 		}
+	}
+	
+	private void requestReConract(Contract contract) {
+		while(true) {
+			System.out.print("해당 계약에 대한 정보를 수정하시고 계약 신청을 계속 하시겠습니까? (y/n) : ");
+			String input = scn.next();
+			if(input.equals("y")) {
+				while (true) {
+					System.out.println("수정하실 정보를 선택해주세요.");
+					System.out.println("1.이름");
+					System.out.println("2.성별");
+					System.out.println("3.전화번호");
+					System.out.println("4.주소");
+					System.out.println("5.특약여부");
+					System.out.println("6.수정내용 저장하고 다음 단계로");
+					System.out.println("0.돌아가기");
+					switch (scn.nextInt()) {
+					case 1:
+						System.out.print("새로운 이름을 입력해주세요.\n이름 :");
+						
+						break;
+					case 2:
+						break;
+					case 3:
+						break;
+					case 4:
+						break;
+					case 5:
+						break;
+					case 6:
+						break;
+					case 0:
+						break;
+					default:
+						break;
+					}
+				}
+			}else if(input.equals("n")) {
+				break;
+			}else {
+				System.out.println("error : 정해진 문자를 사용해주세요");
+			}
+		}
+		
 	}
 }

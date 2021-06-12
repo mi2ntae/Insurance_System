@@ -94,6 +94,21 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		return arrayList;
 	}
 	
+	public ArrayList<String> selectInsuranceId(){
+		ArrayList<String> arrayList = new ArrayList<String>();
+		String sql = "SELECT insuranceId FROM insurance;";
+		
+		this.read(sql);
+		try {
+			while(rs.next()) {
+				arrayList.add(rs.getString("insuranceId"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+	
 	public ArrayList<Insurance> selectForConfirm(){
 		ArrayList<Insurance> arrayList = new ArrayList<Insurance>();
 		String sql = "SELECT insuranceId, confirmedStatus, del FROM insurance;";
@@ -191,19 +206,19 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		String sql = "";
 		ContractDAO contractDAO = new ContractDAOImpl();
 		InsuranceDAO insuranceDAO = new InsuranceDAOImpl();
-		for (Insurance insurance: insuranceDAO.select()) {
+		for (String insuranceId: insuranceDAO.selectInsuranceId()) {
 			boolean isOver = true;
 			boolean isContract = false;
 			ArrayList<Contract> tmpContract = new ArrayList<Contract>();
-			for (Contract contract: contractDAO.select()) {
-				if (insurance.getInsuranceId().equals(contract.getInsuranceId())) {
+			for (Contract contract: contractDAO.selectForTime()) {
+				if (insuranceId.equals(contract.getInsuranceId())) {
 					isContract = true;
 					tmpContract.add(contract);
 					break;
 				}
 			}
 			if (!isContract) {
-				sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insurance.getInsuranceId()+";";
+				sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insuranceId+";";
 				super.execute(sql);
 			} else {
 				for (Contract contract: tmpContract) {
@@ -212,7 +227,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 					}
 				}
 				if (isOver) {
-					sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insurance.getInsuranceId()+";";
+					sql = "DELETE FROM insurance WHERE del = true AND insuranceId = "+insuranceId+";";
 					super.execute(sql);
 				} 
 			}
