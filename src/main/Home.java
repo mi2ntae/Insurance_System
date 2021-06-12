@@ -122,20 +122,24 @@ public class Home {
 										try {
 											switch (scn.nextInt()) {
 											case 1:
-												while (this.showAllInsurance()) {
-													String input = "";
-													while(!input.equals("y") && !input.equals("n")) {
-														System.out.printf("보험을 가입하시겠습니까?(y/n) : ");
-														input = scn.next();
-														if (input.equals("y")) {
-															this.contractInsurance(customer);
-															break;
-														} else if (input.equals("n")) {
-															break;
-														} else {
-															System.out.println("error : 정해진 문자를 사용해주세요");
-															System.out.println("-----------------------");
-															continue;
+												Insurance insurance = null;
+												while (insurance == null) {
+													insurance = this.showAllInsurance();
+													if(insurance != null) {
+														String input = "";
+														while(!input.equals("y") && !input.equals("n")) {
+															System.out.printf("보험을 가입하시겠습니까?(y/n) : ");
+															input = scn.next();
+															if (input.equals("y")) {
+																this.contractInsurance(customer, insurance);
+																break;
+															} else if (input.equals("n")) {
+																break;
+															} else {
+																System.out.println("error : 정해진 문자를 사용해주세요");
+																System.out.println("-----------------------");
+																continue;
+															}
 														}
 													}
 												}
@@ -554,6 +558,7 @@ public class Home {
 					temp = this.scn.nextInt();
 					if(temp < 1 || temp > 30) {
 						System.out.println("error : 범위 내의 숫자를 입력해주세요");
+						System.out.println("----------------------");
 					}
 				} catch (InputMismatchException e) {
 					System.out.println("error : 숫자를 입력해주세요");
@@ -631,7 +636,7 @@ public class Home {
 			}
 			customer = this.customerDAO.selectCustomer(input);
 			if(customer == null) {
-				System.out.println("------존재하지 않은 고객입니다------");
+				System.out.println("--------존재하지 않은 고객입니다--------");
 			} else {
 				boolean flag = false;
 				for(Interview interview : this.interviewDAO.select()) {
@@ -846,183 +851,6 @@ public class Home {
 		// 우편보내기
 		this.sendPost();
 	}
-	
-	// 계약 정보 수정
-	private void changeContractData(Contract contract) {
-		Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
-		Insurance insurance  = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
-
-		System.out.print("이름 : ");
-		String name = scn.next();
-		insurant.setName(name);
-
-		System.out.print("나이 : ");
-		int age = scn.nextInt();
-		insurant.setAge(age);
-		
-		System.out.print("주소 : ");
-		String address = scn.next();
-		insurant.setAddress(address);
-		
-		System.out.print("전화번호 : ");
-		String phoneNum = scn.next();
-		insurant.setPhoneNumber(phoneNum);
-		
-		if(insurance.getType() == eInsuranceType.fireInsurance) {
-			System.out.print("건물가격 : ");
-			long postedPriceOfStructure = scn.nextLong();
-			insurant.setPostedPriceOfStructure(postedPriceOfStructure);
-			
-			System.out.println("건물용도\n1.집\n2.학원\n3.공장\n4.창고\n5.사무실\n6.공공시설");
-			eUsageOfStructure usageOfStructure = null;
-			while (usageOfStructure == null) {
-				switch (scn.nextInt()) {
-				default:
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					break;
-				case 1:
-					usageOfStructure = eUsageOfStructure.house;
-					break;
-				case 2:
-					usageOfStructure = eUsageOfStructure.study;
-					break;
-				case 3:
-					usageOfStructure = eUsageOfStructure.factory;
-					break;
-				case 4:
-					usageOfStructure = eUsageOfStructure.warehouse;
-					break;
-				case 5:
-					usageOfStructure = eUsageOfStructure.office;
-					break;
-				case 6:
-					usageOfStructure = eUsageOfStructure.publicFacility;
-					break;
-				}
-			}
-			insurant.setUsageOfStructure(usageOfStructure);
-		}
-		
-		if(insurance.getType() != eInsuranceType.fireInsurance) {
-			System.out.println("직업\n1.사무직\n2.운전자\n3.현장직\n4.학생\n5.교사\n6.군인\n7.기타");
-			eJob job = null;
-			while(job == null) {
-				switch(scn.nextInt()) {
-				default :
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					break;
-				case 1 :
-					job = eJob.officeWorker;
-					break;
-				case 2 :
-					job = eJob.driver;
-					break;
-				case 3 :
-					job = eJob.factoryWorker;
-					break;
-				case 4 :
-					job = eJob.student;
-					break;
-				case 5 :
-					job = eJob.teacher;
-					break;
-				case 6 :
-					job = eJob.soldier;
-					break;
-				case 7 :
-					job = eJob.etc;
-					break;
-				}
-			}
-			insurant.setJob(job);
-		}
-		
-		if(insurance.getType() == eInsuranceType.driverInsurance) {
-			System.out.println("자동차등급\n1.최고급\n2.고급\n3.보급형\n4.저가");
-			eRankOfCar rankOfCar = null;
-			while(rankOfCar == null) {
-				switch(scn.nextInt()) {
-				default :
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					break;
-				case 1 :
-					rankOfCar = eRankOfCar.Luxury;
-					break;
-				case 2 :
-					rankOfCar = eRankOfCar.high;
-					break;
-				case 3 :
-					rankOfCar = eRankOfCar.middle;
-					break;
-				case 4 :
-					rankOfCar = eRankOfCar.low;
-					break;
-				}
-			}
-			insurant.setRankOfCar(rankOfCar);
-			
-			System.out.println("자동차종류\n1.버스\n2.승합차\n3.SUV\n4.외제차\n5.기타");
-			eTypeOfCar typeOfCar = null;
-			while(typeOfCar == null) {
-				switch(scn.nextInt()) {
-				default :
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					break;
-				case 1 :
-					typeOfCar = eTypeOfCar.bus;
-					break;
-				case 2 :
-					typeOfCar = eTypeOfCar.van;
-					break;
-				case 3 :
-					typeOfCar = eTypeOfCar.suv;
-					break;
-				case 4 :
-					typeOfCar = eTypeOfCar.foreign;
-					break;
-				case 5 :
-					typeOfCar = eTypeOfCar.etc;
-					break;
-				}
-			}
-			insurant.setTypeOfCar(typeOfCar);
-		}
-		
-		if(insurance.getType() == eInsuranceType.tripInsurance) {
-			System.out.println("여행국가 위험등급\n1.안전\n2.1등급\n3.2등급\n4.3등급");
-			eRiskOfTripCountry riskOfTripCountry = null;
-			while(riskOfTripCountry == null) {
-				switch(scn.nextInt()) {
-				default :
-					System.out.println("error : 범위 내의 숫자를 입력해주세요");
-					break;
-				case 1 :
-					riskOfTripCountry = eRiskOfTripCountry.safe;
-					break;
-				case 2 :
-					riskOfTripCountry = eRiskOfTripCountry.first;
-					break;
-				case 3 :
-					riskOfTripCountry = eRiskOfTripCountry.second;
-					break;
-				case 4 :
-					riskOfTripCountry = eRiskOfTripCountry.third;
-					break;
-				}
-			}
-			insurant.setRiskOfTripCountry(riskOfTripCountry);
-		}
-		
-		if(insurance.getType() == eInsuranceType.driverInsurance) {
-			System.out.print("사고횟수 : ");
-			int accidentHistory = scn.nextInt();
-			insurant.setAccidentHistory(accidentHistory);
-		}
-		Insurance tmptInsurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
-		this.contractDAO.updateLifespan(contract.getContractId(), time + tmptInsurance.getWarrantyPeriod());
-		this.contractDAO.updateFee(contract.getContractId(), 0);
-		this.contractDAO.updateUnpaidPeriod(contract.getContractId(), 0);
-	}
 
 	// 가입한 보험 리스트 보기
 	private Contract showSubscribedInsurance(Customer customer) {
@@ -1214,7 +1042,7 @@ public class Home {
 	
 
 	// 전체 보험 리스트 확인하기
-	private boolean showAllInsurance() {
+	private Insurance showAllInsurance() {
 		eInsuranceType type = null;
 		while (type == null) {
 			System.out.println("1.운전자 보험\n2.치아 보험\n3.실비 보험\n4.화재 보험\n5.암 보험\n6.여행 보험\n7.전체보기\n0.돌아가기");
@@ -1223,7 +1051,7 @@ public class Home {
 				input = scn.nextInt();
 				switch (input) {
 				case 0:
-					return false;
+					return null;
 				case 1:
 					type = eInsuranceType.driverInsurance;
 					break;
@@ -1257,27 +1085,25 @@ public class Home {
 			}
 		}
 		boolean flag = false;
-		if(!this.insuranceDAO.select().isEmpty()) {
-			for(Insurance insurance : this.insuranceDAO.select()) {
-				if(!insurance.isDel() && insurance.isConfirmedStatus()) {
-					if(insurance.getType() == type) {
-						flag = true;
-					} else if(type == null) {
-						flag = true;
-					}
+		for (Insurance insurance : this.insuranceDAO.selectForConfirm()) {
+			if (!insurance.isDel() && insurance.isConfirmedStatus()) {
+				if (insurance.getType() == type) {
+					flag = true;
+				} else if (type == null) {
+					flag = true;
 				}
 			}
 		}
 		if(flag) {
 			System.out.println("-----------보험리스트-----------");
 			if(type == null) {
-				for (Insurance insurance: this.insuranceDAO.select()) {
+				for (Insurance insurance: this.insuranceDAO.selectSimpleData()) {
 					if(!insurance.isDel() && insurance.isConfirmedStatus()) {
 						this.showSimpleInsuranceData(insurance);
 					}
 				}
 			} else {
-				for (Insurance insurance: this.insuranceDAO.select()) {
+				for (Insurance insurance: this.insuranceDAO.selectSimpleData()) {
 					if(insurance.getType() == type) {
 						if(!insurance.isDel() && insurance.isConfirmedStatus()) {
 							this.showSimpleInsuranceData(insurance);
@@ -1298,10 +1124,10 @@ public class Home {
 				System.out.println("------보험이 존재하지 않습니다------");
 				insurance = null;
 			}
-			return true;
+			return insurance;
 		} else {
 			System.out.println("------보험이 존재하지 않습니다------");
-			return false;
+			return null;
 		}
 	}
 	
@@ -1314,69 +1140,67 @@ public class Home {
 	
 
 	// 보험 가입하기
-	private void contractInsurance(Customer customer) {
-		Insurance insurance = null;
-		while (insurance == null) {
-			System.out.printf("가입할 보험 ID를 입력해주세요 : ");
-			String input = scn.next();
-			insurance = this.insuranceDAO.selectInsurance(input);
-			if (insurance != null) {
-				if (insurance.isConfirmedStatus() && !insurance.isDel()) {
-					Insurant insurant = this.selectInsurant(customer, insurance);
-					if (customer != null) {
-						for (Contract temp : this.contractDAO.select()) {
-							if (temp.getInsuranceId().equals(insurance.getInsuranceId())
-									&& this.insurantDAO.selectInsurant(temp.getInsurantId()).getInsurantId()
-											.equals(insurant.getInsurantId())) {
-								if (temp.isEffectiveness()) {
-									System.out.println("-----------이미 가입된 보험입니다-----------");
-								} else {
-									System.out.println("-----------이미 신청된 보험입니다-----------");
-								}
-								return;
-							}
-						}
-						Contract contract = new Contract();
-						int warrantyPeriod = insurance.getWarrantyPeriod();
-
-						contract.setLifespan((warrantyPeriod / 12) * 100 + warrantyPeriod % 12 + time);
-						//time
-						if (this.contractDAO.select().isEmpty()) {
-							contract.setContractId(Integer.toString(1));
-						} else {
-							int max = 0;
-							for(Contract temp : this.contractDAO.select()) {
-								if(max < Integer.parseInt(temp.getContractId())) {
-									max = Integer.parseInt(temp.getContractId());
-								}
-							}
-							contract.setContractId(Integer.toString(max + 1));
-						}
-						//time
-						input = "";
-						if (insurance.isSpecialContract()) {
-							while (!input.equals("y") && !input.equals("n")) {
-								System.out.println("특약을 가입하시겠습니까?(y/n) : ");
-								input = scn.next();
-							}
-							if (input.equals("y")) {
-								contract.setSpecial(true);
+	private void contractInsurance(Customer customer, Insurance insurance) {
+		if (insurance != null) {
+			if (insurance.isConfirmedStatus() && !insurance.isDel()) {
+				Insurant insurant = this.selectInsurant(customer, insurance);
+				if (customer != null) {
+					for (Contract temp : this.contractDAO.select()) {
+						if (temp.getInsuranceId().equals(insurance.getInsuranceId())
+								&& this.insurantDAO.selectInsurant(temp.getInsurantId()).getInsurantId()
+										.equals(insurant.getInsurantId())) {
+							if (temp.isEffectiveness()) {
+								System.out.println("-----------이미 가입된 보험입니다-----------");
 							} else {
-								contract.setSpecial(false);
+								System.out.println("-----------이미 신청된 보험입니다-----------");
 							}
+							return;
+						}
+					}
+					Contract contract = new Contract();
+					int warrantyPeriod = insurance.getWarrantyPeriod();
+
+					contract.setLifespan((warrantyPeriod / 12) * 100 + warrantyPeriod % 12 + time);
+					// time
+					if (this.contractDAO.selectContractId().isEmpty()) {
+						contract.setContractId(Integer.toString(1));
+					} else {
+						int max = 0;
+						for (Contract temp : this.contractDAO.selectContractId()) {
+							if (max < Integer.parseInt(temp.getContractId())) {
+								max = Integer.parseInt(temp.getContractId());
+							}
+						}
+						contract.setContractId(Integer.toString(max + 1));
+					}
+					// time
+					String input = "";
+					if (insurance.isSpecialContract()) {
+						while (!input.equals("y") && !input.equals("n")) {
+							System.out.printf("특약을 가입하시겠습니까?(y/n) : ");
+							input = scn.next();
+							if (!input.equals("y") && !input.equals("n")) {
+								System.out.println("error : 정해진 문자를 사용해주세요");
+								System.out.println("------------------------------");
+							}
+						}
+						if (input.equals("y")) {
+							contract.setSpecial(true);
 						} else {
 							contract.setSpecial(false);
 						}
-						contract.joinInsurance(insurance, insurant);
-						this.contractDAO.insert(contract);
-						System.out.println("!!!!보험가입 신청이 완료되었습니다!!!!");
+					} else {
+						contract.setSpecial(false);
 					}
-				} else {
-					System.out.println("해당 보험이 존재하지 않습니다");
+					contract.joinInsurance(insurance, insurant);
+					this.contractDAO.insert(contract);
+					System.out.println("!!!!보험가입 신청이 완료되었습니다!!!!");
 				}
 			} else {
 				System.out.println("해당 보험이 존재하지 않습니다");
 			}
+		} else {
+			System.out.println("해당 보험이 존재하지 않습니다");
 		}
 	}
 
@@ -1399,6 +1223,7 @@ public class Home {
 				}
 				boolean flag = false;
 				while (!flag) {
+					System.out.printf("보험에 가입할 가입자 ID를 입력해주세요 : ");
 					String InsurantId = scn.next();
 					selectedinsurant = this.insurantDAO.selectInsurant(InsurantId);
 					if (selectedinsurant != null) {
@@ -1411,39 +1236,58 @@ public class Home {
 				}
 				switch (insurance.getType()) {
 				case driverInsurance:
-					if (selectedinsurant.getRankOfCar() == eRankOfCar.none) {
-						this.setRankOfCar(selectedinsurant);
+					if(selectedinsurant.getRankOfCar() == eRankOfCar.none && selectedinsurant.getTypeOfCar() == eTypeOfCar.none) {
+						if (selectedinsurant.getRankOfCar() == eRankOfCar.none) {
+							this.setRankOfCar(selectedinsurant);
+						}
+						if(selectedinsurant.getTypeOfCar() == eTypeOfCar.none) {
+							this.setTypeOfCar(selectedinsurant);
+						}
+						this.setAccidentHistory(selectedinsurant);
+					} else {
+						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
-					if(selectedinsurant.getTypeOfCar() == eTypeOfCar.none) {
-						this.setTypeOfCar(selectedinsurant);
-					}
-					this.setAccidentHistory(selectedinsurant);
 					break;
 				case dentalInsurance:
 					break;
 				case actualCostInsurance:
 					if(selectedinsurant.getJob() == eJob.none) {
 						this.setJob(selectedinsurant);
+					} else {
+						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
 					break;
 				case fireInsurance:
 					if(selectedinsurant.getUsageOfStructure() == eUsageOfStructure.none) {
 						this.setPostedPriceAndUseage(selectedinsurant);
+					} else {
+						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
 					break;
 				case cancerInsurance:
-					if(selectedinsurant.getFamilyMedicalDisease() == eFamilyMedicalDisease.none && selectedinsurant.getFamilyMedicalRelationship()== eFamilyMedicalRelationship.none) {
-						this.setDiseaseAndRelationship(selectedinsurant);
+					if (selectedinsurant.getFamilyMedicalDisease() == eFamilyMedicalDisease.none
+							&& selectedinsurant.getFamilyMedicalRelationship() == eFamilyMedicalRelationship.none) {
+						if (selectedinsurant.getJob() == eJob.none) {
+							this.setJob(selectedinsurant);
+						}
+						if (selectedinsurant.getFamilyMedicalDisease() == eFamilyMedicalDisease.none
+								&& selectedinsurant.getFamilyMedicalRelationship() == eFamilyMedicalRelationship.none) {
+							this.setDiseaseAndRelationship(selectedinsurant);
+						}
+					} else {
+						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
 					break;
 				case tripInsurance:
-					if(selectedinsurant.getRiskOfTripCountry() == eRiskOfTripCountry.none) {
+					if (selectedinsurant.getRiskOfTripCountry() == eRiskOfTripCountry.none) {
 						this.setRiskOfTripCountry(selectedinsurant);
+					} else {
+						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
 					break;
 				}
 			} else {
-				if(input.equals("1") && customer.getInsurantList().isEmpty()) {
+				if (input.equals("1") && customer.getInsurantList().isEmpty()) {
 					System.out.println("가입자가 존재하지 않아 가입자를 생성합니다");
 				}
 				selectedinsurant = this.createInsurant(customer, insurance);
@@ -1618,10 +1462,10 @@ public class Home {
 		private void setPostedPriceAndUseage(Insurant insurant) {
 			long postedPriceOfStructure = Long.MIN_VALUE;
 			try {
-				while(postedPriceOfStructure > 0) {
+				while(postedPriceOfStructure < 0) {
 					System.out.print("건물가격 : ");
 					postedPriceOfStructure = scn.nextLong();
-					if(postedPriceOfStructure > 0) {
+					if(postedPriceOfStructure < 0) {
 						System.out.println("error : 양의 정수를 입력해주세요");
 						System.out.println("-----------------------");
 					}

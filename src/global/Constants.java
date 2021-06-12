@@ -233,10 +233,10 @@ public class Constants {
 	
 	public static enum eFamilyMedicalRelationship {
 		none(0, "null"),
-		one(0, "1촌"),
-		two(0, "2촌"),
-		three(0, "3촌"),
-		four(0, "4촌");
+		one(1, "1촌"),
+		two(2, "2촌"),
+		three(3, "3촌"),
+		four(4, "4촌");
 		
 		
 		final private int num;

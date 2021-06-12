@@ -47,11 +47,8 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	public ArrayList<Insurance> select() {
 		ArrayList<Insurance> arrayList = new ArrayList<Insurance>();
 		GuaranteePlanDAO guaranteePlanDAO = new GuaranteePlanDAOImpl();
-
 		String sql = "SELECT * FROM insurance";
-		
 		this.read(sql);
-		
 		try {
 			while (rs.next()) {
 				int input = rs.getInt("type");
@@ -111,7 +108,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 	
 	public ArrayList<Insurance> selectForConfirm(){
 		ArrayList<Insurance> arrayList = new ArrayList<Insurance>();
-		String sql = "SELECT insuranceId, confirmedStatus, del FROM insurance;";
+		String sql = "SELECT insuranceId, confirmedStatus, del, type FROM insurance;";
 		
 		this.read(sql);
 		try {
@@ -120,6 +117,7 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 				insurance.setInsuranceId(rs.getString("insuranceId"));
 				insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
 				insurance.setDel(rs.getBoolean("del"));
+				for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == rs.getInt("type")) insurance.setType(type);
 				arrayList.add(insurance);
 			}
 		} catch (SQLException e) {
@@ -127,6 +125,29 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		}
 		return arrayList;
 	}
+	
+	public ArrayList<Insurance> selectSimpleData(){
+		ArrayList<Insurance> arrayList = new ArrayList<Insurance>();
+		String sql = "SELECT insuranceId, confirmedStatus, del, type, name, basicFee FROM insurance;";
+		
+		this.read(sql);
+		try {
+			while(rs.next()) {
+				Insurance insurance = new FireInsurance();
+				insurance.setInsuranceId(rs.getString("insuranceId"));
+				insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+				insurance.setDel(rs.getBoolean("del"));
+				insurance.setName(rs.getString("name"));
+				insurance.setBasicFee(rs.getInt("basicFee"));
+				for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == rs.getInt("type")) insurance.setType(type);
+				arrayList.add(insurance);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return arrayList;
+	}
+	
 	
 	public Insurance selectInsurance(String insuranceId) {
 		String sql = "SELECT * FROM insurance WHERE insuranceId = '" + insuranceId + "'";
