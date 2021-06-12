@@ -70,7 +70,7 @@ public class Constants {
 	}
 
 	public static enum eJob {
-		none(0, "null"),
+		none(0, "none"),
 		officeWorker(1, "사무직"),
 		driver(2, "운송업"),
 		factoryWorker(3, "현장직"),
