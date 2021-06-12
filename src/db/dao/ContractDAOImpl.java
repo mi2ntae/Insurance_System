@@ -185,10 +185,15 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 		return this.execute(sql);
 	}
 	
-	@Override
 	public boolean updateUnpaidPeriod(String contractId, int unpaidPeriod) {
 		String sql = "UPDATE contract SET unpaidPeriod = "+unpaidPeriod+" WHERE contractId = '"+contractId+"';";
 		return this.execute(sql);
+	}
+
+	public boolean updateSpecial(String contractId, boolean special) {
+		String sql = "UPDATE contract SET special = "+ special +" WHERE contractId = '"+contractId+"';";
+		return this.execute(sql);
+		
 	}
 
 }

@@ -23,6 +23,7 @@ public interface InsurantDAO {
 	public boolean updateTypeOfCar(String insurantId, int typeOfCar);
 	public boolean updateRankOfCar(String insurantId, int rankOfCar);
 	public boolean updateRiskOfTripCountry(String insurantId, int riskOfTripCountry);
+	public boolean updateForRecontract(Insurant insurant);
 	
 	public boolean delete(String insurantId);
 }

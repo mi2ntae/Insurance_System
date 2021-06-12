@@ -96,7 +96,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		return null;
 	}
 
-	@Override
 	public boolean updateName(String insurantId, String name) {
 		String str = "UPDATE insurant set name = " + name + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -106,7 +105,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateAddress(String insurantId, String address) {
 		String str = "UPDATE insurant set address = " + address + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -116,7 +114,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updatePhoneNumber(String insurantId, String phoneNumber) {
 		String str = "UPDATE insurant set phoneNumber = " + phoneNumber + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -126,7 +123,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean delete(String insurantId) {
 		String str = "DELETE FROM insurant WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -136,7 +132,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateAge(String insurantId, int age) {
 		String str = "UPDATE insurant set age = " + age + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -146,7 +141,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateAccidentHistory(String insurantId, int accidentHistory) {
 		String str = "UPDATE insurant set accidentHistory = " + accidentHistory + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -156,7 +150,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updatePostedPriceOfStructure(String insurantId, long postedPriceOfStructure) {
 		String str = "UPDATE insurant set postedPriceOfStructure = " + postedPriceOfStructure + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -166,7 +159,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateUsageOfStructure(String insurantId, int usageOfStructure) {
 		String str = "UPDATE insurant set usageOfStructure = " + usageOfStructure + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -176,7 +168,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateGender(String insurantId, int gender) {
 		String str = "UPDATE insurant set gender = " + gender + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -186,7 +177,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateJob(String insurantId, int job) {
 		String str = "UPDATE insurant set job = " + job + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -196,7 +186,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateTypeOfCar(String insurantId, int typeOfCar) {
 		String str = "UPDATE insurant set typeOfCar = " + typeOfCar + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -206,7 +195,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateRankOfCar(String insurantId, int rankOfCar) {
 		String str = "UPDATE insurant set rankOfCar = " + rankOfCar + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -216,7 +204,6 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 
-	@Override
 	public boolean updateRiskOfTripCountry(String insurantId, int riskOfTripCountry) {
 		String str = "UPDATE insurant set riskOfTripCountry = " + riskOfTripCountry + " WHERE insurantId = " + insurantId;
 		if(this.execute(str)) {
@@ -225,6 +212,14 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 			return false;
 		}
 	}
+	
+	public boolean updateForRecontract(Insurant insurant) {
+		String str = "UPDATE insurant set name = '" + insurant.getName() + "', phoneNumber = '" + insurant.getPhoneNumber() + "', address= '" + insurant.getAddress()
+				 + "' WHERE insurantId = '" + insurant.getInsurantId() + "'";
+		if(this.execute(str)) return true;
+		else return false;
+	}
+
 
 	@Override
 	public Insurant selectInsurant(String insurantId) {
@@ -303,3 +298,4 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		return insurant;
 	}
 }
+

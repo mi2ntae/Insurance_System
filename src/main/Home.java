@@ -1314,7 +1314,7 @@ public class Home {
 						}
 						contract.joinInsurance(insurance, insurant);
 						this.contractDAO.insert(contract);
-						System.out.println("!!!!보험가입 '신청'이 완료되었습니다!!!!");
+						System.out.println("!!!!보험가입 신청이 완료되었습니다!!!!");
 					}
 				} else {
 					System.out.println("해당 보험이 존재하지 않습니다");
@@ -3379,46 +3379,128 @@ public class Home {
 	}
 	
 	private void requestReConract(Contract contract) {
-		while(true) {
+		int tmptTime = contract.getLifespan() - this.time;
+		if (tmptTime >= 100) tmptTime = ((tmptTime / 100) * 12) + (tmptTime % 100);
+		if (tmptTime >= 3) {
+			System.out.println("아직 계약 만료기간이 아닙니다.");
+			System.out.println("계약 만료 2개월 전부터 재계약 신청이 가능합니다.");
+			return;
+		}
+		menu : while(true) {
 			System.out.print("해당 계약에 대한 정보를 수정하시고 계약 신청을 계속 하시겠습니까? (y/n) : ");
 			String input = scn.next();
+			Contract tmptContract = contract;
+			Insurant insurant = insurantDAO.selectInsurant(contract.getInsurantId());
 			if(input.equals("y")) {
-				while (true) {
+				int cnt = 0;
+				menu2 : while (true) {
 					System.out.println("수정하실 정보를 선택해주세요.");
 					System.out.println("1.이름");
-					System.out.println("2.성별");
-					System.out.println("3.전화번호");
-					System.out.println("4.주소");
-					System.out.println("5.특약여부");
-					System.out.println("6.수정내용 저장하고 다음 단계로");
+					System.out.println("2.전화번호");
+					System.out.println("3.주소");
+					System.out.println("4.특약여부");
+					System.out.println("5.수정내용 저장하고 다음 단계로");
 					System.out.println("0.돌아가기");
 					switch (scn.nextInt()) {
 					case 1:
 						System.out.print("새로운 이름을 입력해주세요.\n이름 :");
-						
+						insurant.setName(scn.next());
+						cnt++;
 						break;
 					case 2:
+						System.out.print("새로운 전화번호를 입력해주세요.\n전화번호 :");
+						insurant.setPhoneNumber(scn.next());
+						cnt++;
 						break;
 					case 3:
+						System.out.print("새로운 주소를 입력해주세요.\n주소 :");
+						insurant.setAddress(scn.next());
+						cnt++;
 						break;
 					case 4:
+						if(tmptContract.isSpecial()) {
+							System.out.print("특약가입을 취소하시겠습니까?(y/n) :");
+							roop : while(true) {
+								input = scn.next();
+								if(input.equals("y")) {
+									tmptContract.setSpecial(false);
+									cnt++;
+									break roop;
+								}
+								else if(input.equals("n")) break roop;
+								else System.out.println("error : 정해진 문자를 사용해주세요");
+							}
+						}else {
+							System.out.print("특약에 가입하시겠습니까?(y/n) :");
+							roop : while(true) {
+								input = scn.next();
+								if(input.equals("y")) {
+									tmptContract.setSpecial(true);
+									cnt++;
+									break roop;
+								}
+								else if(input.equals("n")) break roop;
+								else System.out.println("error : 정해진 문자를 사용해주세요");
+							}
+						}
 						break;
 					case 5:
-						break;
-					case 6:
+						if(cnt==0) {
+							System.out.println("수정하신 정보가 없습니다.");
+							System.out.print("정보 수정 없이 다음 단계를 진행하시겠습까? (y/n) : ");
+							input = scn.next();
+							if(input.equals("y")) break menu2;
+							else if(input.equals("n")) break;
+							else System.out.println("error : 정해진 문자를 사용해주세요");
+						}else {
+							System.out.println("--------<수정된 계약 정보>--------");
+							System.out.println("가입자 이름 : " + insurant.getName());
+							System.out.println("가입자 전화번호 : " + insurant.getPhoneNumber());
+							System.out.println("가입자 주소 : " + insurant.getAddress());
+							System.out.print("특약여부 : ");
+							if(tmptContract.isSpecial()) System.out.println("O");
+							else System.out.println("X");
+							System.out.println("------------------------------");
+							System.out.print("이대로 저장을 하고 다음 단계를 진행하시겠습니까? (y/n) : ");
+							input = scn.next();
+							if(input.equals("y")) {
+								if(insurantDAO.updateForRecontract(insurant) && 
+								contractDAO.updateSpecial(tmptContract.getContractId(), tmptContract.isSpecial())) {
+									System.out.println("정보 수정이 완료되었습니다!");
+								}
+								break menu;
+							}
+							else if(input.equals("n")) break;
+							else System.out.println("error : 정해진 문자를 사용해주세요");
+						}
 						break;
 					case 0:
-						break;
+						break menu2;
 					default:
 						break;
 					}
 				}
 			}else if(input.equals("n")) {
-				break;
+				break menu;
 			}else {
 				System.out.println("error : 정해진 문자를 사용해주세요");
 			}
 		}
-		
+		while(true) {
+			Insurance insurance = this.insuranceDAO.selectInsurance(contract.getInsuranceId());
+			this.showInsuranceData(insurance);
+			System.out.print("보험 재계약을 신청하시겠습니까? (y/n) : ");
+			String input = scn.next();
+			if (input.equals("y")) {
+				tmptTime = ((insurance.getWarrantyPeriod() / 12) * 100) + (insurance.getWarrantyPeriod() % 12);
+				contractDAO.updateLifespan(contract.getContractId(), contract.getLifespan() + tmptTime);
+				System.out.println("!!!!보험 재계약 신청이 완료되었습니다!!!!");
+				return;
+			} else if (input.equals("n")) {
+				return;
+			} else {
+				System.out.println("error : 정해진 문자를 사용해주세요");
+			}
+		}
 	}
 }
