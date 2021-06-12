@@ -1001,8 +1001,14 @@ public class Home {
 	// 가입한 보험 리스트 보기
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
+		for(Insurant insurant : customer.getInsurantList()) {
+			for(Contract contract : contractDAO.selectByInsurant(insurant.getInsurantId())) {
+				
+			}
+			
+		}
 		for(Contract contract : contractDAO.select()) {
-			if (contract.isEffectiveness() && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
+			if (contract.isEffectiveness()) {
 				Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
 				if(customer.getCustomerId().equals(insurant.getCustomerId())) {
 					count++;
@@ -2027,12 +2033,12 @@ public class Home {
 				scn.nextLine();
 				continue;
 			}
-			ArrayList<Insurance> insuranceList = this.insuranceDAO.select();
 			
 			returnInsurance:while (true) {
 				System.out.printf("동일한 조건의 보험들을 확인하시겠습니까?(y/n) : ");
 				String inputCondition = scn.next();
 				if (inputCondition.equals("y")) {
+					ArrayList<Insurance> insuranceList = this.insuranceDAO.select();
 					boolean isEmpty = true;
 					for (Insurance insurance: insuranceList) {
 						if ((insurance.getType() != newInsurance.getType()) || (insurance.getGender() != newInsurance.getGender())) {
@@ -2107,13 +2113,13 @@ public class Home {
 	private boolean createDetailInsurance(Insurance newInsurance) {
 		String newId;
 		int max = 0;
-		ArrayList<Insurance> insuranceList = this.insuranceDAO.select();
-		if (insuranceList.isEmpty()) {
+		ArrayList<String> insuranceIdList = this.insuranceDAO.selectInsuranceId();
+		if (insuranceIdList.isEmpty()) {
 			newId = "1";
 		} else {
-			for(Insurance temp : insuranceList) {
-				if(max < Integer.parseInt(temp.getInsuranceId())) {
-					max = Integer.parseInt(temp.getInsuranceId());
+			for(String insuranceId : insuranceIdList) {
+				if(max < Integer.parseInt(insuranceId)) {
+					max = Integer.parseInt(insuranceId);
 				}
 			}
 			newId = Integer.toString(max+1);
