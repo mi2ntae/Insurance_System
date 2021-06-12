@@ -1001,12 +1001,7 @@ public class Home {
 	// 가입한 보험 리스트 보기
 	private Contract showSubscribedInsurance(Customer customer) {
 		int count = 0;
-		for(Insurant insurant : customer.getInsurantList()) {
-			for(Contract contract : contractDAO.selectByInsurant(insurant.getInsurantId())) {
-				
-			}
-			
-		}
+		
 		for(Contract contract : contractDAO.select()) {
 			if (contract.isEffectiveness()) {
 				Insurant insurant = this.insurantDAO.selectInsurant(contract.getInsurantId());
