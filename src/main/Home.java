@@ -1252,11 +1252,14 @@ public class Home {
 					if(selectedinsurant.getRankOfCar() == eRankOfCar.none && selectedinsurant.getTypeOfCar() == eTypeOfCar.none) {
 						if (selectedinsurant.getRankOfCar() == eRankOfCar.none) {
 							this.setRankOfCar(selectedinsurant);
+							this.insurantDAO.updateRankOfCar(selectedinsurant.getInsurantId(), selectedinsurant.getRankOfCar().getNum());
 						}
 						if(selectedinsurant.getTypeOfCar() == eTypeOfCar.none) {
 							this.setTypeOfCar(selectedinsurant);
+							this.insurantDAO.updateTypeOfCar(selectedinsurant.getInsurantId(), selectedinsurant.getTypeOfCar().getNum());
 						}
 						this.setAccidentHistory(selectedinsurant);
+						this.insurantDAO.updateAccidentHistory(selectedinsurant.getInsurantId(), selectedinsurant.getAccidentHistory());
 					} else {
 						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
@@ -1266,6 +1269,7 @@ public class Home {
 				case actualCostInsurance:
 					if(selectedinsurant.getJob() == eJob.none) {
 						this.setJob(selectedinsurant);
+						this.insurantDAO.updateJob(selectedinsurant.getInsurantId(), selectedinsurant.getJob().getNum());
 					} else {
 						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
@@ -1273,6 +1277,8 @@ public class Home {
 				case fireInsurance:
 					if(selectedinsurant.getUsageOfStructure() == eUsageOfStructure.none) {
 						this.setPostedPriceAndUseage(selectedinsurant);
+						this.insurantDAO.updatePostedPriceOfStructure(selectedinsurant.getInsurantId(), selectedinsurant.getPostedPriceOfStructure());
+						this.insurantDAO.updateUsageOfStructure(selectedinsurant.getInsurantId(), selectedinsurant.getUsageOfStructure().getNum());
 					} else {
 						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
@@ -1282,10 +1288,13 @@ public class Home {
 							&& selectedinsurant.getFamilyMedicalRelationship() == eFamilyMedicalRelationship.none) {
 						if (selectedinsurant.getJob() == eJob.none) {
 							this.setJob(selectedinsurant);
+							this.insurantDAO.updateJob(selectedinsurant.getInsurantId(), selectedinsurant.getJob().getNum());
 						}
 						if (selectedinsurant.getFamilyMedicalDisease() == eFamilyMedicalDisease.none
 								&& selectedinsurant.getFamilyMedicalRelationship() == eFamilyMedicalRelationship.none) {
 							this.setDiseaseAndRelationship(selectedinsurant);
+							this.insurantDAO.updateFamilyMedicalDisease(selectedinsurant.getInsurantId(), selectedinsurant.getFamilyMedicalDisease().getNum());
+							this.insurantDAO.updateFamilyMedicalRelationship(selectedinsurant.getInsurantId(), selectedinsurant.getFamilyMedicalRelationship().getNum());
 						}
 					} else {
 						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
@@ -1294,6 +1303,8 @@ public class Home {
 				case tripInsurance:
 					if (selectedinsurant.getRiskOfTripCountry() == eRiskOfTripCountry.none) {
 						this.setRiskOfTripCountry(selectedinsurant);
+						this.insurantDAO.updateRiskOfTripCountry(selectedinsurant.getInsurantId(), selectedinsurant.getRiskOfTripCountry().getNum());
+						
 					} else {
 						System.out.println("----------기존의 가입자 정보로 가입합니다----------");
 					}
