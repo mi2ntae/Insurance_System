@@ -121,7 +121,7 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 	}
 	
 	public ArrayList<Contract> selectIds(){
-		String sql = "SELECT contractId, insuranceId, insurantId, effectiveness FROM contract;";
+		String sql = "SELECT contractId, insuranceId, insurantId, effectiveness, unpaidPeriod FROM contract;";
 		ArrayList<Contract> contractList = new ArrayList<Contract>();
 
 		this.read(sql);
@@ -132,6 +132,7 @@ public class ContractDAOImpl extends DBConnector implements ContractDAO{
 				contract.setInsuranceId(rs.getString("insuranceId"));
 				contract.setInsurantId(rs.getString("insurantId"));
 				contract.setEffectiveness(rs.getBoolean("effectiveness"));
+				contract.setUnpaidPeriod(rs.getInt("unpaidPeriod"));
 				contractList.add(contract);
 			}
 		} catch (SQLException e) {

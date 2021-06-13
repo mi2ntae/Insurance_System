@@ -3499,8 +3499,10 @@ public class Home {
 		
 		for(Contract contract: contractList) {
 			if (!contract.isEffectiveness() && customer.getCustomerId().equals(this.insurantDAO.selectCustomerId(contract.getInsurantId()))) {
-				this.showSimpleContract(contract, true);
-				targetList.add(contract);
+				if (contract.getUnpaidPeriod() >= 3) {
+					this.showSimpleContract(contract, true);
+					targetList.add(contract);
+				}
 			}
 		}
 		menu:while (true) {
