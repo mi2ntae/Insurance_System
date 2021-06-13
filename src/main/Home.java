@@ -2494,11 +2494,10 @@ public class Home {
 			}
 			boolean isExist = false;
 			Insurance tmpInsurance = null;
-			for (Insurance insurance : this.insuranceDAO.selectForConfirm()) {
-				if (inputIndex.equals(insurance.getInsuranceId()) && !insurance.isDel()) {
-					isExist = true;
-					tmpInsurance = insurance;
-				}
+			Insurance insurance = this.insuranceDAO.selectInsurance(inputIndex);
+			if (!insurance.isDel() && insurance != null) {
+				isExist = true;
+				tmpInsurance = insurance;
 			}
 			
 			if (isExist && tmpInsurance.isConfirmedStatus()) {
