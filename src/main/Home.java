@@ -611,7 +611,7 @@ public class Home {
 			}else {
 				interview.setInterviewId(Integer.toString(Integer.parseInt(this.interviewDAO.select().get(this.interviewDAO.select().size() - 1 ).getInterviewId()) + 1));
 			}
-			this.interviewDAO.insert(interview);
+			customer.requestInterview(this.interviewDAO,interview);	
 			System.out.println("------면담 신청이 완료되었습니다------");
 	}
 	
@@ -714,6 +714,7 @@ public class Home {
 	
 	// 가입자 리스트 보기
 	private void showSubscriberList() {
+		this.contractManager = new ContractManager(this.contractDAO);
 		int unpaidCount = 0;
 		int lifeCount = 0;
 		for(Contract contract : this.contractDAO.select()) {
@@ -824,7 +825,7 @@ public class Home {
 				}
 			}
 		}
-		this.contractDAO.updateEffectiveness(contract.getContractId(), false);
+		this.contractManager.manageUnpaidContract(contract);
 		System.out.println("------보험계약을 종료시켰습니다------");
 	}
 

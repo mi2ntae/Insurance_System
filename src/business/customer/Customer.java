@@ -2,9 +2,11 @@ package business.customer;
 
 import java.util.ArrayList;
 
+import business.interview.Interview;
 import db.dao.ContractDAO;
 import db.dao.InsurantDAO;
 import db.dao.InsurantDAOImpl;
+import db.dao.InterviewDAO;
 import global.Constants;
 
 
@@ -47,8 +49,8 @@ public class Customer {
 	public void setPassword(String password) {this.password = password;}
 
 	// Methods
-	public void requestInterview(){
-		
+	public void requestInterview(InterviewDAO interviewDAO, Interview interview){
+		interviewDAO.insert(interview);
 	}
 
 	public void createInsurant(Insurant insurant) {
