@@ -11,6 +11,6 @@ public interface EmployeeDAO {
 	public Employee selectEmployeeByIdPw(String employeeId, String password);
 	public Employee selectSlaesPerson(String employeeId);
 	public ArrayList<Employee> selectSlaesPersons();
-	public boolean updateSaleHistory(String employeeId, int saleHistory);
+	public boolean updateSaleHistory(String employeeId);
 	public boolean delete(String employeeId);
 }

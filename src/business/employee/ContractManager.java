@@ -8,10 +8,6 @@ public class ContractManager extends Employee {
 
 	}
 
-	public void checkInsurant(){
-
-	}
-
 	public void manageExpiredContract(Contract contract){
 
 	}
@@ -19,9 +15,5 @@ public class ContractManager extends Employee {
 	public void manageUnpaidContract(Contract contract){
 
 	}
-
-	public void sendMail(){
-
-	}
-
+	
 }

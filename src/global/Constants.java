@@ -11,8 +11,8 @@ import db.dao.TripInsuranceDAOImpl;
 
 public class Constants {
 	
-	public static int thisYear = 2025;
-	public static int thisMonth = 4;
+	public static int thisYear = 2027;
+	public static int thisMonth = 5;
 	
 	public static enum eAge {
 		kids(1, "영유아"),
