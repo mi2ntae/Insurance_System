@@ -27,4 +27,8 @@ public interface InsurantDAO {
 	public boolean updateForRecontract(Insurant insurant);
 	
 	public boolean delete(String insurantId);
+	public boolean updateFamilyMedicalRelationship(String insurantId, int familyMedicalRelationship);
+	public boolean updateFamilyMedicalDisease(String insurantId, int familyMedicalDisease);
+		
+		
 }

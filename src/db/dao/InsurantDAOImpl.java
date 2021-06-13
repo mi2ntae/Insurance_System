@@ -227,6 +227,24 @@ public class InsurantDAOImpl extends DBConnector implements InsurantDAO {
 		}
 	}
 	
+	public boolean updateFamilyMedicalRelationship(String insurantId, int familyMedicalRelationship) {
+		String str = "UPDATE insurant set familyMedicalRelationship = " + familyMedicalRelationship + " WHERE insurantId = " + insurantId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public boolean updateFamilyMedicalDisease(String insurantId, int familyMedicalDisease) {
+		String str = "UPDATE insurant set familyMedicalDisease = " + familyMedicalDisease + " WHERE insurantId = " + insurantId;
+		if(this.execute(str)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	public boolean updateForRecontract(Insurant insurant) {
 		String str = "UPDATE insurant set name = '" + insurant.getName() + "', phoneNumber = '" + insurant.getPhoneNumber() + "', address= '" + insurant.getAddress()
 				 + "' WHERE insurantId = '" + insurant.getInsurantId() + "'";
