@@ -122,6 +122,7 @@ public class Home {
 										System.out.println("2.고객 만족 설문조사 작성하기");
 										System.out.println("3.가입한 보험 리스트 확인하기");
 										System.out.println("4.면담 신청하기");
+										System.out.println("5.보험 부활 신청하기");
 										System.out.println("0.로그아웃");
 										try {
 											switch (scn.nextInt()) {
@@ -158,8 +159,7 @@ public class Home {
 														try {
 															System.out.println("1.사고접수하기");
 															System.out.println("2.보험료 납부내역 확인하기");
-															System.out.println("3.보험 부활 신청하기");
-															System.out.println("4.보험 재계약 신청하기");
+															System.out.println("3.보험 재계약 신청하기");
 															System.out.println("0.돌아가기");
 															int input = scn.nextInt();
 															switch (input) {
@@ -168,11 +168,8 @@ public class Home {
 																break;
 															case 2:
 																this.payFee(contract.getContractId());
-																break;
+																break;									
 															case 3:
-																this.reviveContract(customer);
-																break;
-															case 4:
 																this.requestReConract(contract);
 																break;
 															case 0:
@@ -194,6 +191,9 @@ public class Home {
 											case 4:
 												// 면담신청
 												this.requestInterview(customer);
+												break;
+											case 5:
+												this.reviveContract(customer);
 												break;
 											case 0:
 												break login;
@@ -3504,6 +3504,10 @@ public class Home {
 					targetList.add(contract);
 				}
 			}
+		}
+		if (targetList.isEmpty()) {
+			System.out.println("부활신청할 계약이 존재하지 않습니다!!");
+			return;
 		}
 		menu:while (true) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
