@@ -4,8 +4,8 @@ import business.insurance.*;
 
 public class Constants {
 	
-	public static int thisYear = 2027;
-	public static int thisMonth = 5;
+	public static int thisYear = 2021;
+	public static int thisMonth = 6;
 	
 	public static enum eAge {
 		kids(1, "영유아"),

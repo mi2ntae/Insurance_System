@@ -207,13 +207,19 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		
 		this.read(sql);
 		try {
-			while(rs.next()) {
-				Insurance insurance = new FireInsurance();
-				insurance.setInsuranceId(rs.getString("insuranceId"));
-				insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
-				insurance.setDel(rs.getBoolean("del"));
-				for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == rs.getInt("type")) insurance.setType(type);
-				arrayList.add(insurance);
+			while (rs.next()) {
+				int input = rs.getInt("type");
+				for (eInsuranceType insuranceType : eInsuranceType.values()) {
+					if (insuranceType.getNum() == input) {
+						Insurance insurance = insuranceType.getSelectedInsurance().newInstance();
+						insurance.setInsuranceId(rs.getString("insuranceId"));
+						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+						insurance.setDel(rs.getBoolean("del"));
+						for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == input) insurance.setType(type);
+						arrayList.add(insurance);
+					}
+
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -228,14 +234,20 @@ public class InsuranceDAOImpl extends DBConnector implements InsuranceDAO{
 		this.read(sql);
 		try {
 			while(rs.next()) {
-				Insurance insurance = new FireInsurance();
-				insurance.setInsuranceId(rs.getString("insuranceId"));
-				insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
-				insurance.setDel(rs.getBoolean("del"));
-				insurance.setName(rs.getString("name"));
-				insurance.setBasicFee(rs.getInt("basicFee"));
-				for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == rs.getInt("type")) insurance.setType(type);
-				arrayList.add(insurance);
+				int input = rs.getInt("type");
+				for (eInsuranceType insuranceType : eInsuranceType.values()) {
+					if (insuranceType.getNum() == input) {
+						Insurance insurance = insuranceType.getSelectedInsurance().newInstance();
+						insurance.setInsuranceId(rs.getString("insuranceId"));
+						insurance.setConfirmedStatus(rs.getBoolean("confirmedStatus"));
+						insurance.setDel(rs.getBoolean("del"));
+						insurance.setName(rs.getString("name"));
+						insurance.setBasicFee(rs.getInt("basicFee"));
+						for (eInsuranceType type : eInsuranceType.values()) if (type.getNum() == input) insurance.setType(type);
+						arrayList.add(insurance);
+					}
+
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

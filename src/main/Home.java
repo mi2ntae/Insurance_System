@@ -1172,14 +1172,14 @@ public class Home {
 
 					contract.setLifespan((warrantyPeriod / 12) * 100 + warrantyPeriod % 12 + time);
 					// time
-					ArrayList<Contract> ids = this.contractDAO.selectContractId();
+					ArrayList<String> ids = this.contractDAO.selectContractId();
 					if (ids.isEmpty()) {
 						contract.setContractId(Integer.toString(1));
 					} else {
 						int max = 0;
-						for (Contract temp : ids) {
-							if (max < Integer.parseInt(temp.getContractId())) {
-								max = Integer.parseInt(temp.getContractId());
+						for (String id : ids) {
+							if (max < Integer.parseInt(id)) {
+								max = Integer.parseInt(id);
 							}
 						}
 						contract.setContractId(Integer.toString(max + 1));
@@ -2007,7 +2007,8 @@ public class Home {
 		
 		while (true) {
 			System.out.printf("만드실 보험의 이름을 입력해주세요 : ");
-			newInsurance.setName(scn.next());
+			scn.nextLine();
+			newInsurance.setName(scn.nextLine());
 			while(true) {
 				try {
 					int inputFee = 0;
