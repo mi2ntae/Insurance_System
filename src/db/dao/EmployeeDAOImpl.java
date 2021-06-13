@@ -124,7 +124,7 @@ public class EmployeeDAOImpl extends DBConnector implements EmployeeDAO{
 	public ArrayList<Employee> selectSlaesPersons() {
 		ArrayList<Employee> employeeList = new ArrayList<Employee>();
 
-		String sql = "SELECT * FROM employee WHERE role = 3 ORDER BY saleHistory ASC";
+		String sql = "SELECT * FROM employee WHERE role = 3 ORDER BY saleHistory DESC";
 		this.read(sql);
 		try {
 			while (rs.next()) {
@@ -149,8 +149,8 @@ public class EmployeeDAOImpl extends DBConnector implements EmployeeDAO{
 	}
 
 	@Override
-	public boolean updateSaleHistory(String employeeId, int saleHistory) {
-		String sql = "UPDATE employee SET saleHistory = "+saleHistory+" WHERE employeeId = '"+employeeId+"';";
+	public boolean updateSaleHistory(String employeeId) {
+		String sql = "UPDATE employee SET saleHistory = saleHistory + 1 WHERE employeeId = '"+employeeId+"';";
 		return this.execute(sql);
 	}
 

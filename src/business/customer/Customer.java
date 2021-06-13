@@ -48,10 +48,7 @@ public class Customer {
 
 	// Methods
 	public void requestInterview(){
-
-	}
-
-	public void writeSurvey(){
+		
 	}
 
 	public void createInsurant(Insurant insurant) {

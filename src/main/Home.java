@@ -9,6 +9,7 @@ import business.contract.Contract;
 import business.customer.Customer;
 import business.customer.Insurant;
 import business.employee.CompensationHandler;
+import business.employee.ContractManager;
 import business.employee.Employee;
 import business.employee.InsuranceConfirmer;
 import business.employee.InsuranceDeveloper;
@@ -66,6 +67,9 @@ public class Home {
 	private InsuranceDeveloper insuranceDeveloper;
 	private InsuranceConfirmer insuranceConfirmer;
 	private Salesperson salesperson;
+	private UnderWriter underWriter;
+	private ContractManager contractManager;
+	private CompensationHandler compensationHandler;
 
 	int time = Constants.thisYear * 100 + Constants.thisMonth;
 	
@@ -457,6 +461,9 @@ public class Home {
 							if(contract.isEffectiveness()) {
 								this.contractDAO.updateUnpaidPeriod(contract.getContractId(), contract.getUnpaidPeriod() + 1);
 							}
+							if (contract.getUnpaidPeriod() >= 3) {
+								this.contractDAO.updateEffectiveness(contract.getContractId(), false);
+							}
 						}
 					}
 					if (!insuranceDAO.deleteInsuranceByTime()) {
@@ -610,8 +617,8 @@ public class Home {
 	
 	// 면담 신청 리스트 확인하기
 	private void checkInterviewList(Employee employee) {
-		Salesperson salesperson = new Salesperson(this.interviewDAO);
-		salesperson.setEmployeeId(employee.getEmployeeId());
+		this.salesperson = new Salesperson(this.interviewDAO);
+		
 		int count = 0;
 		for(Interview interview : this.interviewDAO.select()) {
 			if(!interview.isConfirmedStatus()) {
@@ -625,6 +632,7 @@ public class Home {
 		}
 		if(count == 0) {
 			System.out.println("------신청된 면담이 없습니다.------");
+			return;
 		}
 		Customer customer = null;
 		while(customer == null) {
@@ -672,7 +680,8 @@ public class Home {
 								
 							}
 						}
-						this.writeReport(temp, salesperson);
+						this.writeReport(temp, employee);
+						this.employeeDAO.updateSaleHistory(employee.getEmployeeId());
 					} else {
 						return;
 					}
@@ -684,13 +693,13 @@ public class Home {
 		}	
 	}
 	
-	private void writeReport(Interview interview, Salesperson salesperson) {
+	private void writeReport(Interview interview, Employee salesperson) {
 		System.out.println("면담 내용을 입력하세요");
 		String input = scn.nextLine() + "\n";
 		System.out.print("내용 : ");
 		input = scn.nextLine() + "\n";
 		this.interviewDAO.updateSalespersonId(interview.getInterviewId(), salesperson.getEmployeeId());
-		salesperson.writeReport(interview, input);
+		this.salesperson.writeReport(interview, input);
 		System.out.println("------완료되었습니다------");
 	}
 
@@ -917,7 +926,7 @@ public class Home {
 	
 	// 보험 계약 심사하기
 	private void judgeContract() {
-		UnderWriter underwriter = new UnderWriter(contractDAO);
+		this.underWriter = new UnderWriter(contractDAO);
 		int count = 0;
 		ArrayList<Contract> tempList = new ArrayList<Contract>();
 		boolean flag = false;
@@ -971,7 +980,7 @@ public class Home {
 				}
 				switch (input) {
 				case 1:
-					underwriter.approveContract(contract);
+					underWriter.approveContract(contract);
 					contract.connectContractDAO(this.contractDAO);
 					contractDAO.updateFee(contract.getContractId(),insurance.calculateFee(insurant));
 					for (int i = 0; i < Constants.thisMonth; i++) {
@@ -980,7 +989,7 @@ public class Home {
 					System.out.println("------승인 되었습니다------");
 					break;
 				case 2:
-					underwriter.refuseContract(contract);
+					underWriter.refuseContract(contract);
 					System.out.println("------거부 되었습니다------");
 					break;
 				default:
@@ -1162,11 +1171,12 @@ public class Home {
 
 					contract.setLifespan((warrantyPeriod / 12) * 100 + warrantyPeriod % 12 + time);
 					// time
-					if (this.contractDAO.selectContractId().isEmpty()) {
+					ArrayList<Contract> ids = this.contractDAO.selectContractId();
+					if (ids.isEmpty()) {
 						contract.setContractId(Integer.toString(1));
 					} else {
 						int max = 0;
-						for (Contract temp : this.contractDAO.selectContractId()) {
+						for (Contract temp : ids) {
 							if (max < Integer.parseInt(temp.getContractId())) {
 								max = Integer.parseInt(temp.getContractId());
 							}
@@ -1229,6 +1239,8 @@ public class Home {
 					if (selectedinsurant != null) {
 						if(selectedinsurant.getCustomerId().equals(customer.getCustomerId())) {
 							flag = true;
+						} else {
+							System.out.println("해당 보험가입자가 존재하지 않습니다");
 						}
 					} else {
 						System.out.println("해당 보험가입자가 존재하지 않습니다");
@@ -1619,9 +1631,9 @@ public class Home {
 			}
 			insurant.setAge(age);
 			
-			
+			scn.nextLine();
 			System.out.print("주소 : ");
-			String address = scn.next();
+			String address = scn.nextLine();
 			insurant.setAddress(address);
 
 			
@@ -2356,7 +2368,7 @@ public class Home {
 					}
 				}
 				((ActualCostInsurance) newInsurance).setSelfBurdenRate((double)rate/100);
-				return true;
+				break;
 			default:
 				break;
 			}
@@ -2364,6 +2376,9 @@ public class Home {
 		}
 		
 		this.insuranceDeveloper.finishInsurance(newInsurance);
+		if (newInsurance.getType() == eInsuranceType.actualCostInsurance) {
+			return true;
+		}
 		// 보장내역 설정
 		boolean[] tmpt = new boolean[10];
 		System.out.println("보장 내역을 설정합니다.");
@@ -2379,27 +2394,6 @@ public class Home {
 
 	// 보장내역 설정하기
 	private void makeGuaranteePlan(Insurance newInsurance, boolean special, boolean[] tmpt) {
-		if(newInsurance.getType() == eInsuranceType.actualCostInsurance) {
-			int rate = 0;
-			while (true) {
-				try {
-					System.out.println("자기부담율을 입력해주세요(0% ~ 99% 중 숫자만 입력 / ex) 자기부담 30% -> 30)");
-					System.out.print("자기부담율 : ");
-					rate = scn.nextInt();
-					if (rate >= 0 && rate < 100) {
-						break;
-					} else {
-						System.out.println("error : 범위내의 숫자를 입력해주세요");
-						System.out.println("-----------------------------");
-					}
-				} catch (InputMismatchException e) {
-					System.out.println("error : 숫자를 입력해주세요");
-					System.out.println("-----------------------");
-					scn.nextLine();
-				}
-			}
-			((ActualCostInsurance) newInsurance).setSelfBurdenRate((1-((double)rate/100)));
-		}
 		while (true) {
 			try {
 				System.out.println("보장을 원하시는 항목을 선택해주세요.");
@@ -2533,7 +2527,7 @@ public class Home {
 	
 	// 보상 처리
 	private void handleCompensation() {
-		CompensationHandler compensationHandler = new CompensationHandler();
+		this.compensationHandler = new CompensationHandler();
 		menu : while (true) {
 			int cnt = 0;
 			for(Accident accident : this.accidentDAO.select()) {
@@ -3133,7 +3127,7 @@ public class Home {
 				case 1:
 					while (true) {
 						System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
-						System.out.println("찾으시는 영업사원의 ID를 입력해주세요");
+						System.out.printf("찾으시는 영업사원의 ID를 입력해주세요 : ");
 						String input2 = scn.next();
 						Employee salesperson = this.employeeDAO.selectSlaesPerson(input2);
 						if(input2.equals("0")) break;
@@ -3143,15 +3137,13 @@ public class Home {
 							for(Interview interview : this.interviewDAO.select()) {
 								if(salesperson.getEmployeeId().equals(interview.getSalespersonId())) {
 									cnt2++;
-									Insurant insurant = this.insurantDAO.selectByCustomerId(interview.getCustomerId());
+									Customer customer = this.customerDAO.selectCustomer(interview.getCustomerId());
+									System.out.println("면담 ID : " + interview.getInterviewId());
 									System.out.println("면담일자 : " + interview.getDate());
-									System.out.println("고객 ID : " + insurant.getCustomerId());
-									System.out.println("가입자 이름 : " + insurant.getName());
-									System.out.println("성별 : " + insurant.getGender().getName());
-									System.out.println("나이 : " + insurant.getAge());
-									System.out.println("직업 : " + insurant.getJob().getName());
-									System.out.println("전화번호 : " + insurant.getPhoneNumber());
-									System.out.println("주소 : " + insurant.getAddress());
+									System.out.println("고객 ID : " + customer.getCustomerId());
+									System.out.println("전화번호 : " + customer.getPhoneNumber());
+									System.out.println("주소 : " + customer.getAddress());
+									System.out.print("면담내용 : " + interview.getContent());
 									System.out.println("-----------------------------");
 								}
 							}
@@ -3170,15 +3162,13 @@ public class Home {
 					for(Interview interview : this.interviewDAO.select()) {
 						if(employee.getEmployeeId().equals(interview.getSalespersonId())) {
 							cnt2++;
-							Insurant insurant = this.insurantDAO.selectByCustomerId(interview.getCustomerId());
+							Customer customer = this.customerDAO.selectCustomer(interview.getCustomerId());
+							System.out.println("면담 ID : " + interview.getInterviewId());
 							System.out.println("면담일자 : " + interview.getDate());
-							System.out.println("고객 ID : " + insurant.getCustomerId());
-							System.out.println("가입자 이름 : " + insurant.getName());
-							System.out.println("성별 : " + insurant.getGender().getName());
-							System.out.println("나이 : " + insurant.getAge());
-							System.out.println("직업 : " + insurant.getJob().getName());
-							System.out.println("전화번호 : " + insurant.getPhoneNumber());
-							System.out.println("주소 : " + insurant.getAddress());
+							System.out.println("고객 ID : " + customer.getCustomerId());
+							System.out.println("전화번호 : " + customer.getPhoneNumber());
+							System.out.println("주소 : " + customer.getAddress());
+							System.out.print("면담내용 : " + interview.getContent());
 							System.out.println("-----------------------------");
 						}
 					}
@@ -3363,6 +3353,7 @@ public class Home {
 		}
 	}
 	
+	// 보험 재계약하기
 	private void requestReConract(Contract contract) {
 		int tmptTime = contract.getLifespan() - this.time;
 		if (tmptTime >= 100) tmptTime = ((tmptTime / 100) * 12) + (tmptTime % 100);
@@ -3398,13 +3389,13 @@ public class Home {
 						cnt++;
 						break;
 					case 3:
-						System.out.print("새로운 주소를 입력해주세요.\n주소 :");
+						System.out.print("새로운 주소를 입력해주세요.\n주소 : ");
 						insurant.setAddress(scn.next());
 						cnt++;
 						break;
 					case 4:
 						if(tmptContract.isSpecial()) {
-							System.out.print("특약가입을 취소하시겠습니까?(y/n) :");
+							System.out.print("특약가입을 취소하시겠습니까?(y/n) : ");
 							roop : while(true) {
 								input = scn.next();
 								if(input.equals("y")) {
@@ -3416,7 +3407,7 @@ public class Home {
 								else System.out.println("error : 정해진 문자를 사용해주세요");
 							}
 						}else {
-							System.out.print("특약에 가입하시겠습니까?(y/n) :");
+							System.out.print("특약에 가입하시겠습니까?(y/n) : ");
 							roop : while(true) {
 								input = scn.next();
 								if(input.equals("y")) {
@@ -3434,7 +3425,7 @@ public class Home {
 							System.out.println("수정하신 정보가 없습니다.");
 							System.out.print("정보 수정 없이 다음 단계를 진행하시겠습까? (y/n) : ");
 							input = scn.next();
-							if(input.equals("y")) break menu2;
+							if(input.equals("y")) break menu;
 							else if(input.equals("n")) break;
 							else System.out.println("error : 정해진 문자를 사용해주세요");
 						}else {
@@ -3479,7 +3470,7 @@ public class Home {
 			if (input.equals("y")) {
 				tmptTime = ((insurance.getWarrantyPeriod() / 12) * 100) + (insurance.getWarrantyPeriod() % 12);
 				contractDAO.updateLifespan(contract.getContractId(), contract.getLifespan() + tmptTime);
-				System.out.println("!!!!보험 재계약 신청이 완료되었습니다!!!!");
+				System.out.println("!!!!보험 재계약이 완료되었습니다!!!!");
 				return;
 			} else if (input.equals("n")) {
 				return;
@@ -3489,6 +3480,7 @@ public class Home {
 		}
 	}
 	
+	// 계약 부활신청하기
 	public void reviveContract(Customer customer) {
 		ArrayList<Contract> contractList = this.contractDAO.selectIds();
 		ArrayList<Contract> targetList = new ArrayList<Contract>();
@@ -3501,7 +3493,7 @@ public class Home {
 		}
 		menu:while (true) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
-			System.out.printf("부활신청할 보험의 ID를 입력해주세요 : ");
+			System.out.printf("부활신청할 계약의 ID를 입력해주세요 : ");
 			String inputId = scn.next();
 			if(inputId.equals("0")) {
 				return;
@@ -3515,7 +3507,7 @@ public class Home {
 			if (isExist) {
 				Contract contract = this.contractDAO.selectUnpaidAndFee(inputId);
 				System.out.println(contract.getUnpaidPeriod() * contract.getFee() + "원의 미납 보험금이 있습니다.");
-				System.out.printf("해당 보험을 부활신청하시겠습니까?(y/n) : ");
+				System.out.printf("해당 계약을 부활신청하시겠습니까?(y/n) : ");
 				while (true) {
 					String inputDecision = scn.next();
 					if (inputDecision.equals("y")) {

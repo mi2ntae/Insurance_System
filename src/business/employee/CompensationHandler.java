@@ -12,10 +12,6 @@ public class CompensationHandler extends Employee {
 
 	}
 
-	public void payCooperativeFirm(){
-
-	}
-
 	public void renewFee(){
 
 	}

@@ -6,21 +6,9 @@ import db.dao.InterviewDAO;
 public class Salesperson extends Employee{
 	
 	private InterviewDAO interviewDAO;
-
+	
 	public Salesperson(InterviewDAO interviewDAO){
 		this.interviewDAO = interviewDAO;
-	}
-
-	public void checkInterviewList(){
-
-	}
-
-	public void checkPerformance(){
-
-	}
-
-	public void checkWholeInsuranceList(){
-
 	}
 
 	public void writeReport(Interview interview,String input){
