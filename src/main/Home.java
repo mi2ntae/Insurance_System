@@ -444,6 +444,7 @@ public class Home {
 					}
 					break;
 				case 3 :
+					// Time++
 					if (Constants.thisMonth+1 > 12) {
 						Constants.thisYear += 1;
 						Constants.thisMonth = 1;
@@ -466,9 +467,7 @@ public class Home {
 							}
 						}
 					}
-					if (!insuranceDAO.deleteInsuranceByTime()) {
-						System.out.println("삭제 요청된 보험을 지울 수 없음. DB오류");
-					}
+					insuranceDAO.deleteInsuranceByTime();
 					break;
 				case 0:
 					System.out.println("시스템을 종료합니다.");
@@ -622,6 +621,7 @@ public class Home {
 		int count = 0;
 		for(Interview interview : this.interviewDAO.select()) {
 			if(!interview.isConfirmedStatus()) {
+				System.out.println("------------------------------");
 				count++;
 				Customer customer = this.customerDAO.selectCustomer(interview.getCustomerId());
 				System.out.println("주소 : " + customer.getAddress());
@@ -634,6 +634,7 @@ public class Home {
 			System.out.println("------신청된 면담이 없습니다.------");
 			return;
 		}
+		System.out.println("------------------------------");
 		Customer customer = null;
 		while(customer == null) {
 			System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
@@ -831,10 +832,12 @@ public class Home {
 
 	// 만기 계약 관리
 	private void ManageExpiredContract() {
+		ArrayList<Contract> tempList = new ArrayList<Contract>();
 		for(Contract contract : this.contractDAO.select()) {
 			if(contract.getLifespan() - time < 0 && !this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()) {
 				this.showContractData(contract);
 				System.out.println();
+				tempList.add(contract);
 			}
 		}
 		Contract contract = null;
@@ -845,12 +848,13 @@ public class Home {
 			if (input.equals("0")) {
 				return;
 			}
-			contract = this.contractDAO.selectContract(input);
-			if (contract == null) {
+			for(Contract temp : tempList) {
+				if(temp.getContractId().equals(input)) {
+					contract = this.contractDAO.selectContract(input);
+				}
+			}
+			if(contract == null) {
 				System.out.println("해당 계약이 존재하지 않습니다");
-			} else if(this.insuranceDAO.selectInsurance(contract.getInsuranceId()).isDel()){
-				System.out.println("------삭제될 계약 입니다------");
-				contract = null;
 			}
 		}
 		this.showContractData(contract);
@@ -859,7 +863,16 @@ public class Home {
 		this.showInsurantData(insurant, insurance.getType());
 		
 		// 우편보내기
-		this.sendPost();
+		Customer customer = this.customerDAO.selectCustomer(insurant.getCustomerId());
+		String input = this.scn.nextLine();
+		System.out.println("(이전으로 돌아가려면 0을 입력하세요)");
+		System.out.printf("발신할 내용을 입력해 주세요 : ");
+		input = this.scn.nextLine();
+		if(input.equals("0")) {
+			return;
+		}
+		System.out.println(customer.getAddress() + "(으)로 '" + input + "'의 내용의 우편이 발송되었습니다");
+
 	}
 
 	// 가입한 보험 리스트 보기
@@ -3401,8 +3414,9 @@ public class Home {
 						cnt++;
 						break;
 					case 3:
+						scn.nextLine();
 						System.out.print("새로운 주소를 입력해주세요.\n주소 : ");
-						insurant.setAddress(scn.next());
+						insurant.setAddress(scn.nextLine());
 						cnt++;
 						break;
 					case 4:
